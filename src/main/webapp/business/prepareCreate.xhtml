@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/pageTemplate.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <b:row>
+        <b:column  span="12">
+            <div class="subhead">
+                <h2 class="subhead-heading">建立业务</h2>
+                <p class="subhead-description">
+                    将要建立业务 <strong>#{businessOperationController.businessInstance.defineName} - #{businessOperationController.businessInstance.id}</strong>! 请核对业务信息，正确无误后点确认并建立业务！
+                </p>
+            </div>
+            <b:messages globalOnly="false" styleClass="top-messages"/>
+        </b:column>
+
+    </b:row>
+
+
+    <b:row>
+
+        <b:column span="12">
+            <p>
+                #{businessOperationController.test}
+                <h:outputText value="#{businessOperationController.businessInstance.memo}"/>
+            </p>
+
+            <c:forEach items="#{businessOperationController.viewDependencies}" var="_dependency">
+                <ui:include src="#{_dependency}"/>
+            </c:forEach>
+
+            <c:forEach items="#{businessOperationController.viewGroups}" var="_group">
+
+                <b:panel title="#{_group.name}" look="default" styleClass="full-panel">
+                    <c:forEach items="#{_group.subscribes}" var="_subscribe">
+                        <ui:include src="#{_subscribe.page}">
+                            <c:forEach items="#{_subscribe.params}" var="_param">
+                                <ui:param name="#{_param.key}" value="#{_param.value}"/>
+                            </c:forEach>
+                        </ui:include>
+                    </c:forEach>
+                </b:panel>
+
+
+            </c:forEach>
+
+
+            <hr/>
+            <h:form styleClass="action-panel" id="create_business_form">
+
+
+                <b:commandButton look="success" value="建立业务" ajax="false" styleClass="right" action="#{businessOperationController.taskComplete}">
+                    <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                </b:commandButton>
+
+
+            </h:form>
+        </b:column>
+
+
+    </b:row>
+
+
+</ui:composition>

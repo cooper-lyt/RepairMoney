@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <b:row styleClass="details-info">
+        <b:column span="4">
+            <h:outputLabel for="notice_number" value="通知单号"/>
+            <h:outputText id="notice_number" value="#{(empty paymentBusinessController.paymentBusiness.paymentNotice) ? '' : paymentBusinessController.paymentBusiness.paymentNotice.id}"/>
+        </b:column>
+
+        <b:column span="4">
+            <h:outputLabel for="notice_time" value="交款日期"/>
+            <h:outputText id="notice_time" value="#{paymentBusinessController.paymentBusiness.operationDate}">
+                <f:convertDateTime pattern="#{messages.displayDateTimePattern}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="4">
+            <h:outputLabel for="payment_bank" value="交款银行"/>
+            <h:outputText id="payment_bank" value="#{( empty paymentBusinessController.paymentBusiness.bankAccountDetails) ? '' : paymentBusinessController.paymentBusiness.bankAccountDetails.bankAccount.accountName}">
+            </h:outputText>
+        </b:column>
+
+        <b:column span="3">
+            <h:outputLabel for="payment_type" value="交款方式"/>
+            <h:outputText id="payment_type" value="#{enumHelper.getLabel(paymentBusinessController.paymentBusiness.paymentType)}">
+            </h:outputText>
+        </b:column>
+
+
+        <b:column span="3">
+            <h:outputLabel for="notice_must_money" value="应缴金额"/>
+            <h:outputText id="notice_must_money" value="#{paymentBusinessController.paymentBusiness.mustMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="3">
+            <h:outputLabel for="notice_money" value="实缴金额"/>
+            <h:outputText id="notice_money" value="#{paymentBusinessController.paymentBusiness.money}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="3">
+            <h:outputLabel for="payment_person" value="交款人"/>
+            <h:outputText id="payment_person" value="#{paymentBusinessController.paymentBusiness.payPerson}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+
+
+    </b:row>
+
+
+    <c:forEach items="#{paymentBusinessController.paymentBusiness.paymentBusinessList}" var="_pay">
+        <ui:include src="/frame/house.xhtml">
+            <ui:param name="_house" value="#{_pay.house}"/>
+        </ui:include>
+        <b:row styleClass="details-info">
+            <b:column span="3">
+                <h:outputLabel for="item_must_money" value="应缴金额"/>
+                <h:outputText id="item_must_money" value="#{_pay.mustMoney}">
+                    <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                </h:outputText>
+            </b:column>
+            <b:column span="3">
+                <h:outputLabel for="item_money" value="实缴金额"/>
+                <h:outputText id="item_money" value="#{_pay.money}">
+                    <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                </h:outputText>
+            </b:column>
+            <b:column span="6">
+                <h:outputLabel for="item_calc_details" value="计算方式"/>
+                <h:outputText id="item_calc_details" value="#{_pay.calcDetails}"/>
+            </b:column>
+            <b:column span="12">
+                <h:outputLabel for="item_description" value="备注"/>
+                <h:outputText id="item_description" value="#{_pay.memo}"/>
+            </b:column>
+        </b:row>
+    </c:forEach>
+
+
+
+
+
+</ui:composition>

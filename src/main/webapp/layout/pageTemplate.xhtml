@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html   lang="zh-cmn-Hans"
+        xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <f:view contentType="text/html" encoding="UTF-8">
+<h:head>
+
+
+
+    <title>#{messages.application_title}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+    <link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
+
+    <h:outputScript library="omnifaces" name="fixviewstate.js" target="head" />
+    <h:outputScript library="bsf" name="js/button.js"/>
+    <h:outputStylesheet library="github" name="bootstrap.min.css"/>
+    <h:outputStylesheet library="github" name="theme.css" position="last"/>
+    <h:outputStylesheet library="fontawesome" name="all.min.css"/>
+    <h:outputStylesheet name="style.css" />
+    <h:outputStylesheet>
+        .navbar .navbar-header .navbar-brand{
+            padding: 10px 15px;
+        }
+    </h:outputStylesheet>
+
+    <ui:insert name="custom-header"/>
+
+</h:head>
+
+
+
+        <h:body style="padding-top: 50px;">
+
+    <b:navBar inverse="true" brandImg="#{request.contextPath}/images/logo-icon.png"
+              brand-href="#{request.contextPath}/home.xhtml" position="top" sticky="true">
+        <b:container>
+            <p class="navbar-text">#{messages.application_title}</p>
+            <b:navbarLinks pull="right">
+
+                <b:navLink iconAwesome="cog" styleClass="todo-disable" tooltip="设置" value=" " href="#{request.contextPath}/logout"/>
+                <b:navLink iconAwesome="sign-out-alt" tooltip="退出" value=" " href="?GLO=true"/>
+            </b:navbarLinks>
+
+        </b:container>
+    </b:navBar>
+
+
+    <ui:insert name="context">
+        <b:container style="min-height:400px">
+            <ui:insert/>
+        </b:container>
+    </ui:insert>
+
+    <b:container styleClass="site-footer-container">
+        <div class="site-footer" role="contentinfo">
+
+
+            <span class="site-footer-mark">
+                <b:iconAwesome name="home" size="lg"/>
+            </span>
+
+            <ul class="site-footer-links">
+                <li>© 2016 <span title="Cooper's soft">Cooper's soft</span>, Studio.</li>
+            </ul>
+        </div>
+    </b:container>
+
+
+</h:body>
+    </f:view>
+</html>

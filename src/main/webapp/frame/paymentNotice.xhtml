@@ -1,0 +1,79 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <b:row styleClass="details-info">
+        <b:column span="4">
+            <h:outputLabel for="notice_id" value="通知单编号"/>
+            <h:outputText id="notice_id" value="#{_notice.id}"/>
+        </b:column>
+        <b:column span="4">
+            <h:outputLabel for="notice_must_money" value="应缴金额"/>
+            <h:outputText id="notice_must_money" value="#{_notice.mustMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+        <b:column span="4">
+            <h:outputLabel for="notice_money" value="实缴金额"/>
+            <h:outputText id="notice_money" value="#{_notice.money}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+        <b:column span="4">
+            <h:outputLabel for="notice_time" value="日期"/>
+            <h:outputText id="notice_time" value="#{_notice.noticeTime}">
+                <f:convertDateTime pattern="#{messages.displayDateTimePattern}"/>
+            </h:outputText>
+        </b:column>
+        <b:column span="8" tooltip="#{_notice.empCode}">
+            <h:outputLabel for="notice_emp" value="制单人"/>
+            <h:outputText id="notice_emp" value="#{_notice.empName}"/>
+        </b:column>
+        <b:column span="12">
+            <h:outputLabel for="notice_description" value="备注"/>
+            <h:outputText id="notice_description" value="#{_notice.description}"/>
+        </b:column>
+
+    </b:row>
+
+    <c:forEach var="_item" items="#{_notice.noticeItemList}">
+    <f:subview id="#{_item.id}">
+        <ui:include src="house.xhtml">
+            <ui:param name="_house" value="#{_item.house}"/>
+        </ui:include>
+        <b:row styleClass="details-info">
+            <b:column span="3">
+                <h:outputLabel for="item_must_money" value="应缴金额"/>
+                <h:outputText id="item_must_money" value="#{_item.mustMoney}">
+                    <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                </h:outputText>
+            </b:column>
+            <b:column span="3">
+                <h:outputLabel for="item_money" value="实缴金额"/>
+                <h:outputText id="item_money" value="#{_item.money}">
+                    <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                </h:outputText>
+            </b:column>
+            <b:column span="6">
+                <h:outputLabel for="item_calc_details" value="计算方式"/>
+                <h:outputText id="item_calc_details" value="#{_item.calcDetails}"/>
+            </b:column>
+            <b:column span="12">
+                <h:outputLabel for="item_description" value="备注"/>
+                <h:outputText id="item_description" value="#{_item.description}"/>
+            </b:column>
+        </b:row>
+
+    </f:subview>
+    </c:forEach>
+
+
+
+</ui:composition>

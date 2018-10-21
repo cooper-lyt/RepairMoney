@@ -1,0 +1,66 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:outputScript>
+        <![CDATA[
+        $(function(){
+            moment.locale("zh");
+
+
+            disableBankInput();
+            $('select.js-payment-type-input').on('change', disableBankInput);
+        });
+
+        function disableBankInput() {
+            if ($('select.js-payment-type-input').val() == 'BANK'){
+                $('.js-payment-bank-input').prop('disabled', false);
+                $('.js-payment-bank-input').selectpicker('refresh');
+            }else{
+                $('.js-payment-bank-input').prop('disabled', true);
+                $('.js-payment-bank-input').selectpicker('refresh');
+            }
+        }
+        ]]>
+    </h:outputScript>
+
+    <div class="form-group">
+        <h:outputLabel for="payment_type_input" styleClass="control-label" value="交款方式"/>
+        <div class="input-group">
+            <span class="input-group-btn">
+                <h:selectOneMenu id="payment_type_input" value="#{paymentBusinessController.paymentType}"
+                                 styleClass="input-group-first selectpicker select-menu-btn js-payment-type-input">
+                    <f:selectItems var="_type" value="#{paymentTypes}" itemValue="#{_type}" itemLabel="#{enumHelper.getLabel(_type)}"/>
+                </h:selectOneMenu>
+            </span>
+
+            <h:selectOneMenu value="#{paymentBusinessController.bank}"
+                             styleClass="selectpicker edit-select form-control js-payment-bank-input" pt:placeholder="交款银行">
+                <f:selectItem noSelectionOption="true" itemLabel="选择交款银行"/>
+                <f:selectItems var="_bank" value="#{bankAccounts}" itemValue="#{_bank.bankAccountId}" itemLabel="#{_bank.bankName}"/>
+
+            </h:selectOneMenu>
+
+        </div>
+    </div>
+
+    <b:dateTimePicker  required="true" format="YYYY-MM-DD" value="#{paymentBusinessController.paymentBusiness.operationDate}" label="交款日期" renderLabel="true">
+    </b:dateTimePicker>
+    <b:message/>
+
+
+
+    <b:inputText value="#{paymentBusinessController.paymentBusiness.payPerson}" label="交款人/单位" renderLabel="true"/>
+    <b:message/>
+
+</ui:composition>

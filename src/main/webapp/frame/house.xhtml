@@ -1,0 +1,163 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <b:row styleClass="details-info">
+        <b:column span="3">
+            <h:outputLabel for="house_map_number" value="图号"/>
+            <h:outputText id="house_map_number" value="#{_house.mapNumber}"/>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="house_block_number" value="丘号"/>
+            <h:outputText id="house_block_number" value="#{_house.blockNumber}"/>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="house_build_number" value="幢号"/>
+            <h:outputText id="house_build_number" value="#{_house.buildNumber}"/>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="house_order" value="房号"/>
+            <h:outputText id="house_order" value="#{_house.houseOrder}"/>
+        </b:column >
+        <b:column span="3">
+            <h:outputLabel for="house_code" value="房屋编号"/>
+            <h:outputText id="house_code" value="#{_house.houseCode}"/>
+        </b:column>
+        <b:column span="9">
+            <h:outputLabel for="house_address" value="地址"/>
+            <h:outputText id="house_address" value="#{_house.houseAddress}"/>
+        </b:column>
+
+        <b:column span="3" tooltip="#{_house.districtCode}">
+            <h:outputLabel for="house_district" value="行政区"/>
+            <h:outputText id="house_district" value="#{_house.districtName}"/>
+        </b:column>
+        <b:column span="9" tooltip="#{_house.sectionCode}">
+            <h:outputLabel for="house_section" value="物业区域"/>
+            <h:outputText id="house_section" value="#{_house.sectionName}"/>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="house_build_type" value="楼幢类型"/>
+            <h:outputText id="house_build_type" value="#{enumHelper.getLabel(_house.buildType)}"/>
+        </b:column>
+        <b:column span="9" tooltip="#{_house.buildCode}">
+            <h:outputLabel for="house_build" value="楼幢"/>
+            <h:outputText id="house_build" value="#{_house.buildName}"/>
+        </b:column>
+
+        <b:column span="3">
+            <h:outputLabel for="house_unit" value="单元"/>
+            <h:outputText id="house_unit" value="#{_house.unitName}"/>
+
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="house_floor_count" value="总层数"/>
+            <h:outputText id="house_floor_count" value="#{_house.floorCount}"/>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="house_floor_name" value="所在层名称"/>
+            <h:outputText id="house_floor_name" value="#{_house.floorName}"/>
+        </b:column>
+
+        <b:column span="3">
+            <h:outputLabel for="house_floor_index" value="实际层"/>
+            <h:outputText id="house_floor_index" value="#{_house.inFloor}"/>
+        </b:column>
+
+
+        <b:column span="3">
+
+            <h:outputLabel for="house_area" value="建筑面积"/>
+            <h:outputText id="house_area" value="#{_house.houseArea}" >
+                <f:convertNumber pattern="#0.00"/>
+            </h:outputText>
+        </b:column>
+        <b:column span="3">
+
+            <h:outputLabel for="house_use_area" value="套内面积"/>
+            <h:outputText id="house_use_area" value="#{_house.useArea}" >
+                <f:convertNumber pattern="#0.00"/>
+            </h:outputText>
+        </b:column>
+        <b:column span="3">
+
+            <h:outputLabel for="house_comm_area" value="公摊面积"/>
+            <h:outputText id="house_comm_area" value="#{_house.commArea}">
+                <f:convertNumber pattern="#0.00"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="3">
+
+            <h:outputLabel for="house_sale_money" value="购房金额"/>
+
+            <h:outputText id="house_sale_money" value="#{_house.saleMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="3">
+
+            <h:outputLabel for="house_type" value="房屋类型"/>
+            <h:outputText id="house_type" value="#{enumHelper.getLabel(_house.houseType)}"/>
+
+        </b:column>
+        <b:column span="3">
+
+            <h:outputLabel for="house_structure" value="房屋结构"/>
+            <h:outputText id="house_structure" value="#{_house.structure}"/>
+
+        </b:column>
+        <b:column span="6">
+
+            <h:outputLabel for="house_use_type" value="房屋用途"/>
+            <h:outputText id="house_use_type" value="#{enumHelper.getLabel(_house.useType)} - #{_house.designType}"/>
+
+        </b:column>
+
+
+
+    </b:row>
+
+
+
+    <c:forEach var="_owner" items="#{_house.ownerPersonList}">
+        <f:subview>
+
+
+        <b:row styleClass="details-info">
+            <b:column span="3">
+                <h:outputLabel for="owner_name" value="业主姓名"/>
+                <h:outputText id="owner_name" value="#{_owner.name}"/>
+
+            </b:column>
+            <b:column span="3">
+                <h:outputLabel for="credentials_type" value="证件类型"/>
+                <h:outputText id="credentials_type" value="#{enumHelper.getLabel(_owner.credentialsType)}"/>
+
+            </b:column>
+            <b:column span="3">
+                <h:outputLabel for="credentials" value="证件号"/>
+                <h:outputText id="credentials" value="#{_owner.credentialsNumber}"/>
+
+            </b:column>
+
+            <b:column span="3">
+                <h:outputLabel for="owner_tel" value="联系电话"/>
+                <h:outputText id="owner_tel" value="#{_owner.tel}"/>
+
+            </b:column>
+        </b:row>
+        </f:subview>
+    </c:forEach>
+
+
+</ui:composition>

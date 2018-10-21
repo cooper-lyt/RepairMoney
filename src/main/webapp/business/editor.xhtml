@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/pageTemplate.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:outputStylesheet library="bootstrap-select" name="css/bootstrap-select.min.css"/>
+    <h:outputStylesheet library="bootstrap-select" name="css/bootstrap-select-plug.css"/>
+
+
+    <b:modal id="cancel_confirm" title="放弃任务确认" size="modal-sm">
+        <p>确定要放弃#{(businessOperationController.persistent) ? '处理任务:':'建立业务:'}#{(businessOperationController.persistent) ? businessOperationController.taskName : businessOperationController.businessInstance.defineName} </p>
+        <p>放弃任务后未保存的数据将会丢失！</p>
+        <f:facet name="footer">
+
+            <o:form>
+                <b:button value="取消" dismiss="modal" />
+                <b:commandButton rendered="#{not businessOperationController.persistent}" action="#{businessOperationController.cancel}" look="danger" value="确认放弃">
+                    <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                </b:commandButton>
+                <!-- //TODO 退回任务列表 -->
+                <b:commandButton rendered="#{ businessOperationController.persistent}" look="danger" value="确认放弃">
+                    <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                </b:commandButton>
+            </o:form>
+        </f:facet>
+    </b:modal>
+
+    <b:row>
+        <b:column offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
+
+            <b:row>
+                <b:column span="12">
+                    <div class="setup-header">
+                        <h1>#{businessOperationController.businessInstance.defineName} - #{(businessOperationController.persistent) ? businessOperationController.taskName : "建立" }</h1>
+                        <ol class="steps">
+                            <c:forEach varStatus="_pageStatus" items="#{businessOperationController.editorGroups}" var="_editPage">
+                                <li class="#{(businessOperationController.editorGroups.size() lt 4) ? 'text-md-left' : 'text-center'}  #{(businessOperationController.pageIndex gt _pageStatus.index) ? 'complete' : ''} #{(businessOperationController.pageIndex eq _pageStatus.index) ? 'current' : ''} ">
+                                    <span class="#{(empty _editPage.icon) ? 'fas fa-pencil-ruler' : _editPage.icon}" />
+                                    <strong class="step">第#{_pageStatus.index + 1}步:</strong>
+                                    #{_editPage.name}
+                                </li>
+                            </c:forEach>
+                            <li class="#{(businessOperationController.editorGroups.size() lt 4) ? 'text-md-left' : 'text-center'}">
+                                <span class="fas fa-flag-checkered"/>
+                                <strong class="step">第#{businessOperationController.editorGroups.size()+ 1}步:</strong>
+                                #{(businessOperationController.taskName eq "_CREATE") ? "创建业务" : "完成任务"}
+                            </li>
+
+                        </ol>
+                    </div>
+                </b:column>
+                <b:column span="12">
+                    <b:messages globalOnly="true" styleClass="top-messages"/>
+                </b:column>
+                <b:column span="12">
+                    <o:form acceptcharset="UTF-8" >
+                        <c:forEach items="#{businessOperationController.editorDependencies}" var="_dependency">
+                            <ui:include src="#{_dependency}"/>
+                        </c:forEach>
+                        <c:forEach items="#{businessOperationController.editor}" var="_editor">
+                            <ui:include src="#{_editor.page}">
+                                <c:forEach items="#{_editor.params.entrySet()}" var="_page_param">
+                                    <ui:param name="#{_page_param.key}" value="#{_page_param.value}"/>
+                                </c:forEach>
+                            </ui:include>
+                        </c:forEach>
+
+                        <c:if test="#{(not businessOperationController.persistent)  and (not businessOperationController.hasNext)}">
+                            <b:inputTextarea rows="4" value="#{businessOperationController.businessInstance.memo}" label="备注" renderLabel="true"/>
+                        </c:if>
+
+                        <hr/>
+                        <div class="action-panel">
+
+                            <b:commandButton look="success"  value="保存" action="#{businessOperationController.save}" styleClass="left">
+                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                            </b:commandButton>
+
+                            <b:commandButton look="primary" value="下一步" styleClass="right" action="#{businessOperationController.next}">
+                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                            </b:commandButton>
+
+                            <b:commandButton look="default" styleClass="right" disabled="#{not businessOperationController.hasPrevious}"
+                                             value="上一步" action="#{businessOperationController.previous}">
+                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                            </b:commandButton>
+
+                            <b:button value="放弃" styleClass="right" look="warning" pt:data-target="#cancel_confirm" pt:data-toggle="modal" />
+
+
+                        </div>
+                    </o:form>
+                </b:column>
+
+            </b:row>
+
+
+        </b:column>
+
+    </b:row>
+
+
+    <h:outputScript library="bootstrap-select" name="js/bootstrap-select.min.js"/>
+    <h:outputScript library="bootstrap-select" name="js/i18n/defaults-zh_CN.min.js"/>
+    <h:outputScript library="github" name="locale/moment-with-zh.js"  />
+
+    <h:outputScript library="bsf" name="js/dropdown.js"/>
+
+</ui:composition>

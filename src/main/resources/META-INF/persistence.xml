@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Persistence deployment descriptor for prod profile -->
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+
+
+    <persistence-unit name="entityManagerFactory" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/RepairMoneyDS</jta-data-source>
+
+        <class>cc.coopersoft.house.repair.data.model.PaymentEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.PaymentNoticeEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.BusinessEmpEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.BankAccountEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.BusinessEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.HouseEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.HouseAccountEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.IncomeBusinessEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.PaymentBusinessEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.PaymentNoticeItemEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.AccountDetailsEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.AccountIncomeEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.BankAccountDetailsEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.FixingPayEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.FixingRepairEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.InterestRateEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.RefundBusinessEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.UseBusinessEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.FixingEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.ModifyBusinessEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.RepairVoteEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.SplitHouseEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.UseAndHouseEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.FixingTypeEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.OwnerPersonEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.PutAccountBookEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.PutAccountBusinessEntity</class>
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.jdbc.batch_size" value="27"/>
+            <property name="hibernate.id.new_generator_mappings" value="false"/>
+
+            <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+
+        </properties>
+    </persistence-unit>
+
+
+    <persistence-unit name="frameworkEntityManagerFactory" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/SystemDS</jta-data-source>
+        <class>cc.coopersoft.framework.data.model.BusinessCategoryEntity</class>
+        <class>cc.coopersoft.framework.data.model.BusinessDefineEntity</class>
+        <class>cc.coopersoft.framework.data.model.BusinessNeedFileEntity</class>
+        <class>cc.coopersoft.framework.data.model.BusinessReportEntity</class>
+        <class>cc.coopersoft.framework.data.model.NumberPoolEntity</class>
+        <class>cc.coopersoft.framework.data.model.ReportEntity</class>
+        <class>cc.coopersoft.framework.data.model.RoleBizEntity</class>
+        <class>cc.coopersoft.framework.data.model.SubscribeGroupEntity</class>
+        <class>cc.coopersoft.framework.data.model.SystemParamEntity</class>
+        <class>cc.coopersoft.framework.data.model.TaskActionEntity</class>
+        <class>cc.coopersoft.framework.data.model.SubscribeEntity</class>
+        <class>cc.coopersoft.framework.data.model.WordEntity</class>
+        <class>cc.coopersoft.framework.data.model.WordCategoryEntity</class>
+
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.jdbc.batch_size" value="27"/>
+            <property name="hibernate.id.new_generator_mappings" value="false"/>
+
+            <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/BUSSINESS_SYSTEM"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+
+        </properties>
+    </persistence-unit>
+
+</persistence>

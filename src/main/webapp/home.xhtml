@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/pageTemplate.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+      <b:row style="padding-top: 30px;">
+
+            <b:column span="3" ng:role="main">
+
+
+                  <b:panel look="primary" title="住宅专项维修资金管理系统">
+                        <b:listLinks>
+                              <b:navLink header="基础数据" />
+                              <b:navLink href="#" value="房屋数据管理"
+                                         icon="globe" iconAlign="right"/>
+                              <b:navLink></b:navLink>
+
+                              <b:navLink header="资金交存"/>
+                              <b:navLink outcome="/collect/payment.xhtml"  value="交款" icon="link">
+                                    <f:param name="businessDefineId" value="BP"/>
+                              </b:navLink>
+                              <b:navLink outcome="/collect/collect.xhtml" value="退款" icon="link"></b:navLink>
+
+                              <b:navLink></b:navLink>
+                              <b:navLink header="资金使用"/>
+                              <b:navLink value="使用用申请" outcome="/collect/collect.xhtml"
+                                         icon="tag" iconAlign="right"/>
+                              <b:navLink></b:navLink>
+
+                              <b:navLink header="综合收益"/>
+                              <b:navLink value="计息" outcome="/collect/collect.xhtml"
+                                         icon="tag" iconAlign="right"/>
+                              <b:navLink></b:navLink>
+
+                              <b:navLink header="资金核算"/>
+                              <b:navLink value="过账" outcome="/collect/collect.xhtml"
+                                         icon="tag" iconAlign="right"/>
+                              <b:navLink></b:navLink>
+
+                              <b:navLink header="统计分析"/>
+                              <b:navLink value="综合统计" outcome="/collect/collect.xhtml"
+                                         icon="tag" iconAlign="right"/>
+                              <b:navLink></b:navLink>
+
+                              <b:navLink header="预警"/>
+                              <b:navLink value="风险预警" outcome="/collect/collect.xhtml"
+                                         icon="tag" iconAlign="right"/>
+                              <b:navLink></b:navLink>
+
+                              <!-- 公共服务 -->
+
+
+                              <b:navLink header="档案"/>
+                              <b:navLink value="账户查询" outcome="/collect/collect.xhtml"
+                                         icon="tag" iconAlign="right"/>
+
+
+                              <b:messages />
+
+                        </b:listLinks>
+                  </b:panel>
+            </b:column>
+
+
+            <b:column span="9" ng:role="complementary" hidden="sm" styleClass="operation-list">
+                  <ui:remove>
+                        #{loginUser.name}
+                  </ui:remove>
+            </b:column>
+
+
+
+      </b:row>
+</ui:composition>

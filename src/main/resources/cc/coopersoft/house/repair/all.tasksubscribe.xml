@@ -1,0 +1,19 @@
+<subscribes>
+
+    <view>
+        <subscribe id="paymentItem" name="交款分户信息" page="/subscribe/view/paymentHouse.xhtml">
+            <!-- params -->
+        </subscribe>
+    </view>
+
+    <editor>
+        <subscribe id="payment" name="交款信息" page="/subscribe/editor/chargeInfo.xhtml" class="cc.coopersoft.house.repair.controller.PaymentBusinessController">
+            <!-- params -->
+        </subscribe>
+    </editor>
+
+    <action>
+        <subscribe id="payment.create.data" name="建立交款信息" class="cc.coopersoft.house.repair.services.PaymentService"/>
+    </action>
+
+</subscribes>

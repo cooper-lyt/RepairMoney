@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/pageTemplate.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+
+    <b:row styleClass="page-form">
+        <b:column offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
+            <div class="subhead">
+                <h2 class="subhead-heading">交款通知单</h2>
+                <p class="subhead-description">
+                    通过交款通知单交款, 输入交款通知单编号开始交款.
+                </p>
+            </div>
+            <b:messages globalOnly="true" styleClass="top-messages"/>
+        </b:column>
+
+        <b:column offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
+            <o:form id="notict_form">
+                <b:inputText ng:autofocus="autofocus" value="#{paymentBusinessCreate.noticeNumber}"  autocomplete="off"
+                             label="交款通知单编号" placeholder="交款通知单编号" renderLabel="true" required="true">
+                    <f:facet name="append">
+                        <b:commandButton look="primary" value="交款" icon="yen" action="#{paymentBusinessCreate.viewNotice}">
+                            <f:param name="businessDefineId" value="BP"/>
+                        </b:commandButton>
+                    </f:facet>
+                </b:inputText>
+                <b:message/>
+            </o:form>
+        </b:column>
+    </b:row>
+
+
+</ui:composition>
