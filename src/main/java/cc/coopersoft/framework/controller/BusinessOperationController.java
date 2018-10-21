@@ -65,13 +65,6 @@ public class BusinessOperationController  implements java.io.Serializable {
         }
     }
 
-    public String getTest(){
-        try {
-            return new String(getBusinessInstance().getMemo().getBytes("ISO-8859-1"),"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return "n/a";
-        }
-    }
 
     public BusinessDefineEntity getBusinessDefine() {
         return businessOperationService.getBusinessDefine();
