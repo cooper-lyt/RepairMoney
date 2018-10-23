@@ -9,6 +9,21 @@
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
+    <b:modal id="cancel_confirm" title="放弃任务确认" size="modal-sm">
+        <p>确定要放弃建立业务#{businessOperationController.businessInstance.defineName} </p>
+        <p>放弃任务后未保存的数据将会丢失！</p>
+        <f:facet name="footer">
+
+            <o:form>
+                <b:button value="取消" dismiss="modal" />
+                <b:commandButton action="#{businessOperationController.cancel}" look="danger" value="确认放弃">
+                    <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                </b:commandButton>
+            </o:form>
+        </f:facet>
+    </b:modal>
+
+
     <b:row>
         <b:column  span="12">
             <div class="subhead">
@@ -58,7 +73,7 @@
                     <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                 </b:commandButton>
 
-
+                <b:button value="放弃" styleClass="right" look="warning" pt:data-target="#cancel_confirm" pt:data-toggle="modal" />
             </h:form>
         </b:column>
 

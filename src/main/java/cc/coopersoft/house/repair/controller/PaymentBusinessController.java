@@ -5,6 +5,7 @@ import cc.coopersoft.framework.controller.BusinessOperationController;
 import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.services.TaskEditSubscribeComponent;
 import cc.coopersoft.framework.services.ValidMessage;
+import cc.coopersoft.framework.tools.UUIDGenerator;
 import cc.coopersoft.house.repair.data.model.*;
 import cc.coopersoft.house.repair.services.BankAccountService;
 
@@ -48,7 +49,7 @@ public class PaymentBusinessController implements TaskEditSubscribeComponent,jav
             getPaymentBusiness().setBankAccountDetails(null);
         }
         if(PaymentType.BANK.equals(type) && (getBankAccountDetails() == null)){
-            getPaymentBusiness().setBankAccountDetails(new BankAccountDetailsEntity(BankAccountDetailsEntity.Type.PAYMENT));
+            getPaymentBusiness().setBankAccountDetails(new BankAccountDetailsEntity(UUIDGenerator.getUUID(),BankAccountDetailsEntity.Type.PAYMENT));
 
         }
     }

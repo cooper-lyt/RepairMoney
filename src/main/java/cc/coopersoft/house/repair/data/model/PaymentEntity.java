@@ -33,6 +33,7 @@ public class PaymentEntity implements java.io.Serializable{
 
     public PaymentEntity(BusinessEntity businessEntity) {
         this.business = businessEntity;
+        //this.id = businessEntity.getId();
     }
 
     @Id
@@ -137,8 +138,8 @@ public class PaymentEntity implements java.io.Serializable{
     }
 
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "BANK_OPER_ORDER", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "BANK_OPER_ORDER")
     public BankAccountDetailsEntity getBankAccountDetails() {
         return bankAccountDetails;
     }
@@ -157,8 +158,8 @@ public class PaymentEntity implements java.io.Serializable{
         this.paymentNotice = paymentNoticeEntity;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "ID")
     @MapsId
     public BusinessEntity getBusiness() {
         return business;

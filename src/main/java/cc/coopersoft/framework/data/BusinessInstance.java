@@ -68,4 +68,12 @@ public interface BusinessInstance {
     BusinessStatus getStatus();
 
     void setStatus(BusinessStatus status);
+
+    String getSearchKey();
+
+    void setSearchKey(String searchKey);
+
+    String getSummary();
+
+    void setSummary(String summary);
 }

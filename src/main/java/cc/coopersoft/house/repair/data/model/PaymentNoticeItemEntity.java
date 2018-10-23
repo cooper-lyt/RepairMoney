@@ -82,6 +82,7 @@ public class PaymentNoticeItemEntity implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "NOTICE", nullable = false)
+    @NotNull
     public PaymentNoticeEntity getPaymentNotice() {
         return paymentNotice;
     }

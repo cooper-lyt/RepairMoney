@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "HOUSE_ACCOUNT", schema = "WXZJ")
@@ -31,7 +31,10 @@ public class HouseAccountEntity {
     private BigDecimal mustMoney;
     private String houseCode;
 
+    private HouseEntity house;
 
+
+    private Set<AccountDetailsEntity> accountDetails = new HashSet<>(0);
 
     @Id
     @Column(name = "ACCOUNT_NUMBER", length = 128, nullable = false, unique = true)
@@ -163,6 +166,37 @@ public class HouseAccountEntity {
 
     public void setHouseCode(String houseCode) {
         this.houseCode = houseCode;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "houseAccount")
+    public Set<AccountDetailsEntity> getAccountDetails() {
+        return accountDetails;
+    }
+
+    public void setAccountDetails(Set<AccountDetailsEntity> accountDetails) {
+        this.accountDetails = accountDetails;
+    }
+
+    @Transient
+    public List<AccountDetailsEntity> getAccountDetailsList(){
+        List<AccountDetailsEntity> result = new ArrayList<>(getAccountDetails());
+        Collections.sort(result, new Comparator<AccountDetailsEntity>() {
+            @Override
+            public int compare(AccountDetailsEntity o1, AccountDetailsEntity o2) {
+                return o1.getOperationTime().compareTo(o2.getOperationTime());
+            }
+        });
+        return result;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "HOUSE", nullable = false)
+    public HouseEntity getHouse() {
+        return house;
+    }
+
+    public void setHouse(HouseEntity houseEntity) {
+        this.house = houseEntity;
     }
 
     @Override

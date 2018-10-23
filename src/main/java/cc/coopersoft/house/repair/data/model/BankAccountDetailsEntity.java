@@ -37,9 +37,10 @@ public class BankAccountDetailsEntity implements java.io.Serializable{
     public BankAccountDetailsEntity() {
     }
 
-    public BankAccountDetailsEntity(Type type) {
+    public BankAccountDetailsEntity(String bankOperationOrder,Type type) {
         this.type = type;
         this.direction = type.direction;
+        this.bankOperationOrder = bankOperationOrder;
     }
 
     @Id

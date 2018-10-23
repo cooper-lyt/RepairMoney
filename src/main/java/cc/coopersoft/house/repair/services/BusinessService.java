@@ -29,7 +29,7 @@ public class BusinessService extends SimpleEntityService<BusinessEntity,String> 
 
     @Override
     public BusinessInstance saveEntity(BusinessInstance businessInstance) {
-        return saveEntity(businessInstance);
+        return saveEntity((BusinessEntity) businessInstance);
     }
 
     @Override

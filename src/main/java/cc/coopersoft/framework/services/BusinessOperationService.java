@@ -10,12 +10,14 @@ import cc.coopersoft.framework.data.model.SubscribeGroupEntity;
 import cc.coopersoft.framework.data.model.TaskActionEntity;
 import cc.coopersoft.framework.data.repository.BusinessDefineRepository;
 import cc.coopersoft.framework.tools.DataHelper;
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -158,6 +160,7 @@ public class BusinessOperationService implements java.io.Serializable {
             businessInstance.setDefineId(businessDefine.getId());
             businessInstance.setDefineName(businessDefine.getName());
             businessInstance.setDefineVersion(businessDefine.getDefineVersion());
+            businessInstance.setStatus(BusinessInstance.BusinessStatus.RUNNING);
         }
     }
 
@@ -234,13 +237,14 @@ public class BusinessOperationService implements java.io.Serializable {
         return doActionComponent(beforeActions);
     }
 
+    @Transactional
     public ValidResult savePage(){
         if (pageIndex != null) {
             ValidResult result = doActionComponent(getEditor());
 
             if (result.isPass() && isPersistent()) {
-                persistentEditor(getEditor());
                 businessInstanceService.saveEntity(businessInstance);
+                persistentEditor(getEditor());
             }
             return result;
         }else
@@ -264,7 +268,7 @@ public class BusinessOperationService implements java.io.Serializable {
         loadPage();
     }
 
-
+    @Transactional
     public ValidResult taskComplete(){
         for (TaskSubscribeGroup tsg: editorGroups){
             for(TaskSubscribe ts: tsg.getSubscribes()){
@@ -283,8 +287,12 @@ public class BusinessOperationService implements java.io.Serializable {
         }
         ValidResult result = doActionComponent(afterActions);
         if (result.isPass()){
-            persistentAllEditor();
+            businessInstance.setDataTime(new Date());
+            if (DataHelper.empty(businessDefine.getWfName())){
+                businessInstance.setStatus(BusinessInstance.BusinessStatus.COMPLETE);
+            }
             businessInstanceService.saveEntity(businessInstance);
+            persistentAllEditor();
         }
         return result;
     }

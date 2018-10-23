@@ -5,6 +5,7 @@ import cc.coopersoft.framework.SubscribeComponent;
 import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.services.TaskActionComponent;
 import cc.coopersoft.framework.services.ValidMessage;
+import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.framework.tools.HttpJsonDataGet;
 import cc.coopersoft.house.repair.data.model.*;
 import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
@@ -12,7 +13,6 @@ import cc.coopersoft.house.repair.data.repository.PaymentNoticeRepository;
 
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +43,7 @@ public class PaymentService implements TaskActionComponent,java.io.Serializable 
         PaymentNoticeEntity result = paymentNoticeRepository.findBy(noticeNumber.trim());
         if (result == null){
             result = remoteDataService.getPaymentNotice(noticeNumber.trim());
+
         }
         return result;
     }
@@ -98,11 +99,17 @@ public class PaymentService implements TaskActionComponent,java.io.Serializable 
 
             case NOTICE:
                 result.setPayment(new PaymentEntity(result));
+                result.getPayment().setPaymentNotice(paymentNotice);
                 result.getPayment().setMustMoney(paymentNotice.getMustMoney());
                 result.getPayment().setMoney(paymentNotice.getMoney());
+
                 int itemCount = paymentNotice.getNoticeItems().size();
                 int i = 0;
                 for(PaymentNoticeItemEntity item: paymentNotice.getNoticeItems()){
+                    if(DataHelper.empty(result.getPayment().getSectionCode())){
+                        result.getPayment().setSectionCode(item.getHouse().getSectionCode());
+                        result.getPayment().setSectionName(item.getHouse().getSectionName());
+                    }
                     HouseAccountEntity houseAccountEntity = houseAccountRepository.findOptionalByHouseCode(item.getHouse().getHouseCode());
                     PaymentBusinessEntity.Type type = (houseAccountEntity == null) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
                     String id = String.valueOf(i++);
@@ -120,8 +127,10 @@ public class PaymentService implements TaskActionComponent,java.io.Serializable 
                             result.getPayment(),
                             item.getHouse()
                     );
+                    item.getHouse().setDataTime(new Date());
                     result.getPayment().getPaymentBusinesses().add(paymentBusinessEntity);
                 }
+
 
 
         }

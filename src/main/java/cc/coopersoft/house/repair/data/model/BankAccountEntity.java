@@ -4,8 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "BANK_ACCOUNT")
@@ -27,7 +26,7 @@ public class BankAccountEntity {
     private BigDecimal product;
     private BigDecimal totalProduct;
     private Date productDate;
-    private Timestamp createTime;
+    private Date createTime;
     private AccountStatus status;
 
     @Id
@@ -201,11 +200,11 @@ public class BankAccountEntity {
     @Basic
     @Column(name = "CREATE_TIME",nullable = false)
     @NotNull
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

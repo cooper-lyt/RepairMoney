@@ -22,6 +22,8 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
     private Date dataTime;
     private BusinessStatus status;
     private boolean isReg;
+    private String searchKey;
+    private String summary;
 
     private PaymentEntity payment;
 
@@ -176,6 +178,27 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
         this.status = status;
     }
 
+
+    @Column(name = "SEARCH_KEY",length = 1024)
+    @Size(max = 1024)
+    public String getSearchKey() {
+        return searchKey;
+    }
+
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
+    }
+
+    @Column(name = "SUMMARY",length = 1024)
+    @Size(max = 1024)
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
     @OneToOne(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     public PaymentEntity getPayment() {
@@ -185,6 +208,8 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
     public void setPayment(PaymentEntity paymentEntity) {
         this.payment = paymentEntity;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

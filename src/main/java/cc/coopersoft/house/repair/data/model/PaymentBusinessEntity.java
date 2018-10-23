@@ -32,7 +32,8 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     private Type type;
 
     private PaymentEntity paymentEntity;
-    private String operOrder;
+    private AccountDetailsEntity accountDetails;
+
 
 
     private HouseEntity house;
@@ -118,16 +119,16 @@ public class PaymentBusinessEntity implements java.io.Serializable{
         this.mustMoney = mustMoney;
     }
 
-    @Basic
-    @Column(name = "OPER_ORDER")
-    public String getOperOrder() {
-        return operOrder;
+
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "OPER_ORDER")
+    public AccountDetailsEntity getAccountDetails() {
+        return accountDetails;
     }
 
-    public void setOperOrder(String operOrder) {
-        this.operOrder = operOrder;
+    public void setAccountDetails(AccountDetailsEntity accountDetails) {
+        this.accountDetails = accountDetails;
     }
-
 
     @Basic
     @Column(name = "CALC_DETAILS",length = 512)

@@ -184,9 +184,8 @@ public class HouseEntity {
     }
 
     @Basic
-    @Column(name = "FLOOR_NAME",length = 64,nullable = false)
+    @Column(name = "FLOOR_NAME",length = 64)
     @Size(max = 64)
-    @NotNull
     public String getFloorName() {
         return floorName;
     }
@@ -315,8 +314,7 @@ public class HouseEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "USE_TYPE",length = 32,nullable = false)
-    @NotNull
+    @Column(name = "USE_TYPE",length = 32)
     public UseType getUseType() {
         return useType;
     }
@@ -337,8 +335,7 @@ public class HouseEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "BUILD_TYPE", length = 8, nullable = false)
-    @NotNull
+    @Column(name = "BUILD_TYPE", length = 8)
     public BuildType getBuildType() {
         return buildType;
     }
@@ -368,7 +365,7 @@ public class HouseEntity {
     }
 
     @Basic
-    @Column(name = "DATA_TIME")
+    @Column(name = "DATA_TIME", nullable = false)
     @NotNull
     public Date getDataTime() {
         return dataTime;
