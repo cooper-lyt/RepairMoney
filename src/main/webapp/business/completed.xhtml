@@ -1,12 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Title</title>
-</head>
-<body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/pageTemplate.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
 
-</body>
-</html>
+    <b:row style="margin-top: 20px">
+    <b:column offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
+
+        <div class="dashboard-notice" >
+            <b:icon name="info-sign" size="2x" style="color: #4183c4;"/>
+            <h2>#{businessOperationController.businessInstance.defineName}<strong>#{businessOperationController.businessInstance.id}</strong> #{businessOperationController.persistent ? businessOperationController.taskName : ''} #{businessOperationController.persistent ? '任务已处理完成' : '业务已建立'}</h2>
+            <p:outputPanel rendered="false" layout="inline">
+                <p> 您可能需要打印：</p>
+                <!-- TODO: print -->
+            </p:outputPanel>
+
+            <p>接下来你可以：</p>
+            <ul>
+                <c:if test="#{businessOperationController.persistent}">
+                <li>
+                <h:outputLink value="" >
+                    返回任务列表
+                </h:outputLink>
+                </li>
+                </c:if>
+                <c:if test="#{not businessOperationController.persistent}">
+
+
+                <li>
+                <h:outputLink value="#{request.contextPath}#{businessOperationController.businessDefine.startPage}">
+                    <f:param name="businessDefineId" value="#{businessOperationController.businessDefine.id}"/>
+                    再次建立业务 #{businessOperationController.businessDefine.name}
+                </h:outputLink>
+                </li>
+                </c:if>
+                <!-- 接收并处理 业务的下一个环节 -->
+                <li>
+                <h:outputLink value="#{request.contextPath}/home.xhtml">
+                    返回首页
+                </h:outputLink>
+                </li>
+            </ul>
+
+        </div>
+
+    </b:column>
+
+    </b:row>
+</ui:composition>

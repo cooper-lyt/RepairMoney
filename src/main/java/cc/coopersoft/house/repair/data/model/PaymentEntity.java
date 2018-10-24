@@ -33,7 +33,6 @@ public class PaymentEntity implements java.io.Serializable{
 
     public PaymentEntity(BusinessEntity businessEntity) {
         this.business = businessEntity;
-        //this.id = businessEntity.getId();
     }
 
     @Id

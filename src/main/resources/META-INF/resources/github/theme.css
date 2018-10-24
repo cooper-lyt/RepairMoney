@@ -922,6 +922,12 @@ table.floatThead-table {
     margin-top: 0;
 }
 
+.dashboard-notice .fa , .dashboard-notice .glyphicon{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
 .repo-list-description {
     max-width: 550px;
     margin-top: 8px;
