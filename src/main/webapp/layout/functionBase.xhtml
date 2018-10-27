@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/pageTemplate.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:define name="context">
+
+
+        <div class="pagehead datasearch-head">
+            <b:container>
+                <b:row>
+                    <b:column span="3" pt:role="complementary" hidden="sm">
+                        <b:icon size="2x" name="th-list"/>
+                        <span class="function-title">
+                            <ui:insert name="functionTitle">
+
+                                #{functionTitle}
+
+                            </ui:insert>
+                        </span>
+                    </b:column>
+                    <b:column span="9">
+                        <o:form includeViewParams="true">
+                            <div class="flex-table search-form-fluid">
+                                <ui:insert name="functionToolbar"/>
+                            </div>
+                        </o:form>
+                    </b:column>
+                </b:row>
+
+            </b:container>
+        </div>
+        <b:container style="min-height:400px">
+            <ui:insert/>
+        </b:container>
+    </ui:define>
+
+</ui:composition>

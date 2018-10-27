@@ -7,6 +7,12 @@ label {
     font-weight: bold;
 }
 
+ul, ol {
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .row.condensed{
     margin-right: -5px;
     margin-left: -5px;
@@ -268,6 +274,27 @@ label.bf-error {
     font-size: 20px;
     font-weight: normal;
     line-height: 28px;
+}
+
+.datasearch-head .function-title{
+    font-size: 22px;
+    color: #444;
+    cursor: pointer;
+    text-decoration: none;
+    outline: 0;
+    float: left;
+    padding: 0 5px 0 5px;
+}
+
+.datasearch-head .glyphicon, datasearch-head .fa{
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+}
+
+.input-block{
+    display: block;
+    width: 100%;
 }
 
 .flex-table {
@@ -969,8 +996,8 @@ table.floatThead-table {
 
 .repo-list-item {
     position: relative;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 24px;
+    padding-bottom: 24px;
     list-style: none;
 }
 
@@ -1105,6 +1132,14 @@ h2 {
 .flex-items-center {
     -webkit-box-align: center !important;
     align-items: center !important;
+}
+
+.flex-justify-start {
+    justify-content: flex-start!important;
+}
+
+.flex-column {
+    flex-direction: column!important;
 }
 
 .p-3 {
@@ -1296,4 +1331,14 @@ h2 {
 
 .full-panel .panel-body{
     padding: 0;
+}
+
+.context-condensed h1 , .context-condensed h2, .context-condensed h3,.context-condensed h4,.context-condensed h5, .context-condensed h6{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.context-condensed h3{
+    font-size: 20px;
+    font-weight: 600;
 }

@@ -8,11 +8,4 @@
     <!-- Here we just define the context path of the deployment.-->
     <context-root>RepairMoney</context-root>
 
-    <valve>
-        <class-name>org.picketlink.identity.federation.bindings.tomcat.sp.SPPostFormAuthenticator</class-name>
-        <param>
-            <param-name>characterEncoding</param-name>
-            <param-value>UTF-8</param-value>
-        </param>
-    </valve>
 </jboss-web>

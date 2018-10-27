@@ -54,7 +54,7 @@ public class PageResultData<E> {
         this.firstResult = firstResult;
         this.dataCount = dataCount;
         this.pageSize = pageSize;
-        pages = new ArrayList<DataPage>();
+        pages = new ArrayList<>();
         pageCount = dataCount/pageSize;
         if (dataCount%pageSize > 0){
             pageCount++;
@@ -108,5 +108,9 @@ public class PageResultData<E> {
 
     public boolean isEmptyResult(){
         return dataCount == 0;
+    }
+
+    public long getPageCount() {
+        return pageCount;
     }
 }

@@ -53,9 +53,9 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     }
 
     @Id
-    @Column(name = "ID",nullable = false,length = 32,unique = true)
+    @Column(name = "ID",nullable = false,length = 38,unique = true)
     @NotNull
-    @Size(max = 32)
+    @Size(max = 38)
     public String getId() {
         return id;
     }

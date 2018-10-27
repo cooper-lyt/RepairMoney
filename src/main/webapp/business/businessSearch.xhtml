@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/functionBase.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:param name="functionTitle" value="业务查询"/>
+    <ui:define name="functionToolbar">
+        <div class="flex-table-item flex-table-item-primary">
+            <b:inputText autocomplete="false" placeholder="请输入业务关键字" value="#{businessListController.condition}"/>
+        </div>
+        <div class="flex-table-item">
+            <b:commandButton value="搜  索" action="/business/businessSearch?faces-redirect=true&amp;includeViewParams=true">
+                <f:param name="offset" value="0"/>
+                <f:param name="categoryId" value="#{null}"/>
+                <f:param name="defineId" value="#{null}"/>
+            </b:commandButton>
+        </div>
+    </ui:define>
+
+    <ui:define name="custom-header">
+        <f:metadata>
+            <o:viewParam name="offset" value="#{businessListController.offset}"/>
+            <o:viewParam name="condition" value="#{businessListController.condition}"/>
+            <o:viewParam name="categoryId" value="#{businessListController.categoryId}"/>
+            <o:viewParam name="defineId" value="#{businessListController.defineId}"/>
+        </f:metadata>
+    </ui:define>
+
+   <style>
+
+            .business-summary{
+                line-height:14px;
+            }
+
+            .business-summary p{
+                margin: 0;
+                padding: 0 6px 0 0;
+            }
+
+            .business-summary p label{
+                margin-right: 4px;
+            }
+
+   </style>
+
+    <b:row styleClass="context-condensed">
+        <b:column span="3" pt:role="complementary" hidden="sm">
+            <c:if test="#{not businessListController.emptyData}">
+
+
+            <div class="border rounded-1 p-3 mb-3 d-none d-md-block">
+                <h2 class="d-inline-block f5 mb-2 mt-0">
+                    业务种类
+                </h2>
+
+                <ul class="filter-list small" data-pjax="">
+                    <c:forEach items="#{businessListController.businessDefines}" var="_item">
+                        <li>
+                            <span class="bar" style="width: 23%;"></span>
+                            <b:link styleClass="filter-item #{(_item.key eq businessListController.defineId) ? 'selected' : ''}"
+                                    value="#{_item.name}"  outcome="/business/businessSearch.xhtml" includeViewParams="true">
+                                <span class="count">#{_item.count}</span>
+
+                                <f:param name="defineId" value="#{_item.key}"/>
+                                <f:param name="categoryId" value="#{null}"/>
+                                <f:param name="offset" value="0"/>
+                            </b:link>
+                        </li>
+
+                    </c:forEach>
+                </ul>
+            </div>
+            </c:if>
+        </b:column>
+
+        <b:column span="#{businessListController.emptyData ? '12' : '9'}" pt:role="main">
+            <c:if test="#{not businessListController.emptyData}">
+                <div class="d-flex flex-column flex-md-row flex-justify-between border-bottom pb-3 position-relative">
+                    <h3>
+                        共查找到 #{businessListController.resultCount} 条符合条件的业务
+                    </h3>
+                </div>
+
+                <ul class="repo-list">
+                    <c:forEach items="#{businessListController.result.resultData}" var="_business">
+                    <div class="repo-list-item d-flex flex-justify-start row">
+                        <div class="col-12 col-md-12" >
+                            <h3 class="mb-2">
+                              <h:outputLink >
+                                  #{_business.defineName}/#{_business.id}
+                              </h:outputLink>
+
+                                <b:label style="font-size: 60%;" rendered="#{not _business.reg or not (_business.status eq 'COMPLETE')}" severity="#{(_business.status eq 'RUNNING') ? 'primary' : ((_business.status eq 'ABORT') ? 'danger' : ((_business.status eq 'SUSPEND') ? 'warning' : (_business.status eq 'COMPLETE') ? 'success' : 'default'))}"
+                                         text="#{enumHelper.getLabel(_business.status)}"/>
+
+                                <b:label style="font-size: 60%;" severity="success" text="生效" rendered="#{_business.reg}"/>
+                            </h3>
+
+                            <span data-describe="json" class="business-summary col-12 col-md-12 row" data-json="#{_business.summary}">
+
+                            </span>
+
+                            <p class="col-12 col-md-12 d-inline-block text-gray mb-2 pr-4 pl-0">
+                                #{_business.memo}
+                            </p>
+
+
+                            <p class="col-12 col-md-12 f6 text-gray mb-0 mt-2 pl-0 pr-4">
+                                建立时间:<h:outputText value="#{_business.dataTime}"><f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/></h:outputText>
+                                <c:if test="#{_business.reg}">
+                                生效时间:<h:outputText value="#{_business.regTime}"><f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/></h:outputText>
+                                </c:if>
+                            </p>
+                        </div>
+
+
+                    </div>
+                    </c:forEach>
+                </ul>
+
+
+                    <ui:include src="/frame/system/pageNav.xhtml">
+                        <ui:param name="pageResultData" value="#{businessListController.result}"/>
+                    </ui:include>
+
+
+            </c:if>
+
+            <c:if test="#{businessListController.emptyData}">
+
+                    <div class="px-2">
+
+
+                        <div class="blankslate">
+                            <svg height="32" class="octicon octicon-search blankslate-icon" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M15.7 13.3l-3.81-3.83A5.93 5.93 0 0 0 13 6c0-3.31-2.69-6-6-6S1 2.69 1 6s2.69 6 6 6c1.3 0 2.48-.41 3.47-1.11l3.83 3.81c.19.2.45.3.7.3.25 0 .52-.09.7-.3a.996.996 0 0 0 0-1.41v.01zM7 10.7c-2.59 0-4.7-2.11-4.7-4.7 0-2.59 2.11-4.7 4.7-4.7 2.59 0 4.7 2.11 4.7 4.7 0 2.59-2.11 4.7-4.7 4.7z"></path></svg>
+                            <h3>
+                                没有找到符合条件的业务！请检查您的查询条件。
+                            </h3>
+
+                            你可以尝试 <h:link includeViewParams="false" >重置条件 </h:link>.
+                        </div>
+
+
+                    </div>
+
+            </c:if>
+        </b:column>
+    </b:row>
+
+    <h:outputScript name="summaryDisplay.js"/>
+
+</ui:composition>

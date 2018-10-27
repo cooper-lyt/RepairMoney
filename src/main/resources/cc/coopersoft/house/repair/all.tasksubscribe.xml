@@ -15,6 +15,7 @@
     <action>
         <subscribe id="payment.create.data" name="建立交款信息" class="cc.coopersoft.house.repair.services.PaymentService"/>
         <subscribe id="payment.complete" name="完成交款业务" class="cc.coopersoft.house.repair.services.PaymentCompleteService"/>
+        <subscribe id="payment.summary" name="交款业务摘要和查询生成" class="cc.coopersoft.house.repair.services.PaymentBusinessSummaryGenerator"/>
     </action>
 
 </subscribes>
