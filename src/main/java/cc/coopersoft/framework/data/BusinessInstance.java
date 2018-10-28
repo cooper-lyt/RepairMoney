@@ -8,7 +8,7 @@ public interface BusinessInstance {
     public enum Source{
         BUSINESS //业务
         ,IMPORT //导入
-        ,BEFOR_INPUT //补录
+        ,BEFORE_INPUT //补录
         ,OUT_SIDE //外部建立
     }
 

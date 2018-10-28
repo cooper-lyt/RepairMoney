@@ -89,132 +89,53 @@ label.bf-error {
     border-radius: 3px;
 }
 
-.btn-success {
-    color: #fff;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
-    background-color: #60b044;
-    background-image: -webkit-linear-gradient(#8add6d, #60b044);
-    background-image: linear-gradient(#8add6d, #60b044);
-    border-color: #5ca941
+.btn-reversal:not([disabled]):not(:hover):not(:focus){
+    text-shadow: 0 1px 0 #fff;
+    background-image: -webkit-linear-gradient(top,#fff 0,#e0e0e0 100%);
+    background-image: -o-linear-gradient(top,#fff 0,#e0e0e0 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#e0e0e0));
+    background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-color: #dbdbdb;
+    border-color: #ccc;
 }
 
-.btn-success:hover {
-    color: #fff;
-    background-color: #569e3d;
-    background-image: -webkit-linear-gradient(#79d858, #569e3d);
-    background-image: linear-gradient(#79d858, #569e3d);
-    border-color: #4a993e
-}
-
-.btn-success:active, .btn-success.selected {
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
-    background-color: #569e3d;
+.btn-reversal.disabled, .btn-reversal.disabled.active, .btn-reversal.disabled.focus, .btn-reversal.disabled:active, .btn-reversal.disabled:focus, .btn-reversal.disabled:hover, .btn-reversal[disabled], .btn-reversal[disabled].active, .btn-reversal[disabled].focus, .btn-reversal[disabled]:active, .btn-reversal[disabled]:focus, .btn-reversal[disabled]:hover, fieldset[disabled] .btn-reversal, fieldset[disabled] .btn-reversal.active, fieldset[disabled] .btn-reversal.focus, fieldset[disabled] .btn-reversal:active, fieldset[disabled] .btn-reversal:focus, fieldset[disabled] .btn-reversal:hover{
+    border-color: #ccc;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: #e0e0e0;
     background-image: none;
-    border-color: #418737
-}
-
-.btn-success.selected:hover {
-    background-color: #4c8b36
-}
-
-.btn-success:disabled, .btn-success:disabled:hover, .btn-success.disabled, .btn-success.disabled:hover {
-    color: #fefefe;
-    background-color: #add39f;
-    background-image: -webkit-linear-gradient(#c3ecb4, #add39f);
-    background-image: linear-gradient(#c3ecb4, #add39f);
-    border-color: #b9dcac #b9dcac #a7c89b
-}
-
-.btn-default {
-    color: #333;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
-    background-color: #eee;
-    background-image: -webkit-linear-gradient(#fcfcfc, #eee);
-    background-image: linear-gradient(#fcfcfc, #eee);
-    background-color: #eee;
-}
-
-.btn-default:hover {
-    background-color: #ddd;
-    background-image: -webkit-linear-gradient(#eee, #ddd);
-    background-image: linear-gradient(#eee, #ddd);
-    border-color: #ccc
 
 }
 
-.btn-default:active, .btn-default.selected {
-    background-color: #dcdcdc;
-    background-image: none;
-    border-color: #b5b5b5;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15)
-
+.btn-primary.btn-reversal:not(:hover):not(:focus), .btn-primary.btn-reversal.disabled, .btn-primary.btn-reversal.disabled.active, .btn-primary.btn-reversal.disabled.focus, .btn-primary.btn-reversal.disabled:active, .btn-primary.btn-reversal.disabled:focus, .btn-primary.btn-reversal.disabled:hover, .btn-primary.btn-reversal[disabled], .btn-primary.btn-reversal[disabled].active, .btn-primary.btn-reversal[disabled].focus, .btn-primary.btn-reversal[disabled]:active, .btn-primary.btn-reversal[disabled]:focus, .btn-primary.btn-reversal[disabled]:hover, fieldset[disabled] .btn-primary.btn-reversal, fieldset[disabled] .btn-primary.btn-reversal.active, fieldset[disabled] .btn-primary.btn-reversal.focus, fieldset[disabled] .btn-primary.btn-reversal:active, fieldset[disabled] .btn-primary.btn-reversal:focus, fieldset[disabled] .btn-primary.btn-reversal:hover{
+    color: #337ab7;
 }
 
-.btn-default.selected:hover {
-    background-color: #cfcfcf
+.btn-success.btn-reversal:not(:hover):not(:focus), .btn-success.btn-reversal.disabled, .btn-success.btn-reversal.disabled.active, .btn-success.btn-reversal.disabled.focus, .btn-success.btn-reversal.disabled:active, .btn-success.btn-reversal.disabled:focus, .btn-success.btn-reversal.disabled:hover, .btn-success.btn-reversal[disabled], .btn-success.btn-reversal[disabled].active, .btn-success.btn-reversal[disabled].focus, .btn-success.btn-reversal[disabled]:active, .btn-success.btn-reversal[disabled]:focus, .btn-success.btn-reversal[disabled]:hover, fieldset[disabled] .btn-success.btn-reversal, fieldset[disabled] .btn-success.btn-reversal.active, fieldset[disabled] .btn-success.btn-reversal.focus, fieldset[disabled] .btn-success.btn-reversal:active, fieldset[disabled] .btn-success.btn-reversal:focus, fieldset[disabled] .btn-success.btn-reversal:hover{
+    color: #5cb85c;
 }
 
-.btn-default:disabled, .btn-default:disabled:hover, .btn-default.disabled, .btn-default.disabled:hover {
-
-    color: rgba(102, 102, 102, 0.5);
-    background-color: rgba(229, 229, 229, 0.5);
-    background-image: none;
-    border-color: rgba(197, 197, 197, 0.5);
-    box-shadow: none
+.btn-info.btn-reversal:not(:hover):not(:focus), .btn-info.btn-reversal.disabled, .btn-info.btn-reversal.disabled.active, .btn-info.btn-reversal.disabled.focus, .btn-info.btn-reversal.disabled:active, .btn-info.btn-reversal.disabled:focus, .btn-info.btn-reversal.disabled:hover, .btn-info.btn-reversal[disabled], .btn-info.btn-reversal[disabled].active, .btn-info.btn-reversal[disabled].focus, .btn-info.btn-reversal[disabled]:active, .btn-info.btn-reversal[disabled]:focus, .btn-info.btn-reversal[disabled]:hover, fieldset[disabled] .btn-info.btn-reversal, fieldset[disabled] .btn-info.btn-reversal.active, fieldset[disabled] .btn-info.btn-reversal.focus, fieldset[disabled] .btn-info.btn-reversal:active, fieldset[disabled] .btn-info.btn-reversal:focus, fieldset[disabled] .btn-info.btn-reversal:hover{
+    color: #5bc0de;
 }
+
+.btn-warning.btn-reversal:not(:hover):not(:focus), .btn-warning.btn-reversal.disabled, .btn-warning.btn-reversal.disabled.active, .btn-warning.btn-reversal.disabled.focus, .btn-warning.btn-reversal.disabled:active, .btn-warning.btn-reversal.disabled:focus, .btn-warning.btn-reversal.disabled:hover, .btn-warning.btn-reversal[disabled], .btn-warning.btn-reversal[disabled].active, .btn-warning.btn-reversal[disabled].focus, .btn-warning.btn-reversal[disabled]:active, .btn-warning.btn-reversal[disabled]:focus, .btn-warning.btn-reversal[disabled]:hover, fieldset[disabled] .btn-warning.btn-reversal, fieldset[disabled] .btn-warning.btn-reversal.active, fieldset[disabled] .btn-warning.btn-reversal.focus, fieldset[disabled] .btn-warning.btn-reversal:active, fieldset[disabled] .btn-warning.btn-reversal:focus, fieldset[disabled] .btn-warning.btn-reversal:hover{
+    color: #f0ad4e;
+}
+
+.btn-danger.btn-reversal:not(:hover):not(:focus), .btn-danger.btn-reversal.disabled, .btn-danger.btn-reversal.disabled.active, .btn-danger.btn-reversal.disabled.focus, .btn-danger.btn-reversal.disabled:active, .btn-danger.btn-reversal.disabled:focus, .btn-danger.btn-reversal.disabled:hover, .btn-danger.btn-reversal[disabled], .btn-danger.btn-reversal[disabled].active, .btn-danger.btn-reversal[disabled].focus, .btn-danger.btn-reversal[disabled]:active, .btn-danger.btn-reversal[disabled]:focus, .btn-danger.btn-reversal[disabled]:hover, fieldset[disabled] .btn-danger.btn-reversal, fieldset[disabled] .btn-danger.btn-reversal.active, fieldset[disabled] .btn-danger.btn-reversal.focus, fieldset[disabled] .btn-danger.btn-reversal:active, fieldset[disabled] .btn-danger.btn-reversal:focus, fieldset[disabled] .btn-danger.btn-reversal:hover{
+    color: #d9534f;
+}
+
 
 .input-group .form-control:not(:first-child):not(:last-child)>.btn, .input-group-addon:not(:first-child):not(:last-child)>.btn, .input-group-btn:not(:first-child):not(:last-child)>.btn {
     border-radius: 0;
 }
 
-.session-authentication {
-    background-color: #f9f9f9;
-}
-
-.session-authentication .auth-form .btn {
-    margin-top: 20px;
-}
-
-.session-authentication .header-logged-out {
-    padding: 40px 0 20px;
-    background-color: transparent;
-    border-bottom: 0;
-}
-
-.session-authentication .header-logo {
-    display: block;
-    width: 48px;
-    height: 48px;
-    margin: 0 auto;
-    color: #333;
-}
-
-.session-authentication .auth-form-header {
-    padding: 10px 0;
-    margin-bottom: 15px;
-    color: #333;
-    text-align: center;
-    text-shadow: none;
-    background-color: transparent;
-    border: 0;
-}
-
-.session-authentication .auth-form-header h1 {
-    font-size: 24px;
-    font-weight: 300;
-    letter-spacing: -0.5px;
-}
-
-.session-authentication .auth-form label {
-    display: block;
-    margin-bottom: 7px;
-    font-weight: normal;
-}
-
-.session-authentication .auth-form .form-control {
-    margin-top: 5px;
-    margin-bottom: 15px;
-}
 
 .site-footer {
     position: relative;
@@ -931,11 +852,6 @@ table.floatThead-table {
     border-radius: 3px;
 }
 
-.dashboard-notice .fa {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-}
 
 .dashboard-notice h2 {
     margin-top: 9px;
@@ -949,9 +865,9 @@ table.floatThead-table {
     margin-top: 0;
 }
 
-.dashboard-notice .fa , .dashboard-notice .glyphicon{
+.dashboard-notice .brand-icon {
     position: absolute;
-    top: 15px;
+    top: 25px;
     left: 15px;
 }
 
@@ -1341,4 +1257,10 @@ h2 {
 .context-condensed h3{
     font-size: 20px;
     font-weight: 600;
+}
+
+.octicon {
+    display: inline-block;
+    vertical-align: text-top;
+    fill: currentColor;
 }
