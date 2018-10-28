@@ -119,7 +119,7 @@ public class PaymentService implements TaskActionComponent,java.io.Serializable 
                     id = result.getId() + id;
                     PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
                             id,
-                            PaymentBusinessEntity.Status.NORMAL,
+                            PaymentBusinessEntity.Status.PROCESS,
                             item.getMoney(),
                             item.getMustMoney(),
                             item.getCalcDetails(),

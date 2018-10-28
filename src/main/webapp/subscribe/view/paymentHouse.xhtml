@@ -23,7 +23,7 @@
         <b:column span="4">
             <h:outputLabel for="notice_time" value="交款日期"/>
             <h:outputText id="notice_time" value="#{paymentBusinessController.paymentBusiness.operationDate}">
-                <f:convertDateTime pattern="#{messages.displayDateTimePattern}"/>
+                <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>
             </h:outputText>
         </b:column>
 

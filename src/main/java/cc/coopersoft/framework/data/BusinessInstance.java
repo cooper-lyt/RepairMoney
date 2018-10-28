@@ -18,6 +18,7 @@ public interface BusinessInstance {
         ,ABORT   //中止
         ,SUSPEND  //挂起
         ,COMPLETE //完成
+        ,DELETED //撤回
     }
 
 

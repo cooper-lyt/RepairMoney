@@ -1,5 +1,8 @@
 package cc.coopersoft.framework.controller;
 
+import cc.coopersoft.framework.BusinessManagerRole;
+import cc.coopersoft.framework.BusinessRunManagerRole;
+import cc.coopersoft.framework.SystemManagerRole;
 import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.data.TaskSubscribe;
 import cc.coopersoft.framework.data.TaskSubscribeGroup;
@@ -11,6 +14,7 @@ import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.framework.tools.DefaultMessageBundle;
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
+import org.omnifaces.cdi.Param;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Conversation;
@@ -53,17 +57,84 @@ public class BusinessOperationController  implements java.io.Serializable {
     @Inject @DefaultMessageBundle
     private ResourceBundle bundle;
 
+    @Inject @Param(name = BUSINESS_INSTANCE_ID_PARAM_NAME)
+    private String businessId;
+
+    @Inject @Param(name = TASK_PARAM_NAME)
+    private String taskDefineName;
+
+    @Inject @Param(name = "assignTo")
+    private String assignToEmpId;
+
 
     @PostConstruct
     public void initFromParam(){
         String defineId = facesContext.getExternalContext().getRequestParameterMap().get(BUSINESS_DEFINE_ID_PARAM_NAME);
-        String taskName = facesContext.getExternalContext().getRequestParameterMap().get(TASK_PARAM_NAME);
-        String businessId = facesContext.getExternalContext().getRequestParameterMap().get(BUSINESS_INSTANCE_ID_PARAM_NAME);
-        if (!DataHelper.empty(defineId) && !DataHelper.empty(taskName) && !DataHelper.empty(businessId)){
-            businessOperationService.initInstance(defineId,taskName,businessId);
+        taskDefineName = facesContext.getExternalContext().getRequestParameterMap().get(TASK_PARAM_NAME);
+        businessId = facesContext.getExternalContext().getRequestParameterMap().get(BUSINESS_INSTANCE_ID_PARAM_NAME);
+        if (!DataHelper.empty(defineId) && !DataHelper.empty(taskDefineName) && !DataHelper.empty(businessId)){
+            businessOperationService.initInstance(defineId,taskDefineName,businessId);
         }
     }
 
+    public String getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
+    }
+
+    public String getTaskDefineName() {
+        return taskDefineName;
+    }
+
+    public void setTaskDefineName(String taskDefineName) {
+        this.taskDefineName = taskDefineName;
+    }
+
+
+    @BusinessRunManagerRole
+    public Class<? extends ViewConfig> suspendBusiness(){
+        businessOperationService.suspendBusiness();
+        return Business.BusinessView.class;
+    }
+
+    @BusinessRunManagerRole
+    public Class<? extends ViewConfig> terminateBusiness(){
+        businessOperationService.terminateBusiness();
+        return Business.BusinessView.class;
+    }
+
+    @BusinessRunManagerRole
+    public Class<? extends ViewConfig> continueBusiness(){
+        businessOperationService.continueBusiness();
+        return Business.BusinessView.class;
+    }
+
+    @BusinessRunManagerRole
+    public Class<? extends ViewConfig> assignBusiness(){
+        businessOperationService.assignTo(assignToEmpId);
+        return Business.BusinessView.class;
+    }
+
+    @BusinessManagerRole
+    public Class<? extends ViewConfig> revokeBusiness(){
+        businessOperationService.revokeBusiness();
+        return Business.BusinessView.class;
+    }
+
+
+    @SystemManagerRole
+    public Class<? extends ViewConfig> deleteBusiness(){
+        businessOperationService.deleteBusiness();
+        return Business.BusinessDeleted.class;
+    }
+
+    public boolean isHasReport(){
+        //TODO report
+        return false;
+    }
 
     public BusinessDefineEntity getBusinessDefine() {
         return businessOperationService.getBusinessDefine();
@@ -117,6 +188,15 @@ public class BusinessOperationController  implements java.io.Serializable {
             return Business.PrepareComplete.class;
         }
         return Business.PrepareCreate.class;
+    }
+
+    public void viewBusiness(){
+        logger.config("view business instance id:" + businessId);
+        if (!DataHelper.empty(businessId)) {
+            businessOperationService.initInstance(businessId, BusinessOperationService.VIEW_TASK_NAME);
+        }else{
+            businessOperationService.clearInstance();
+        }
     }
 
     public void cancel(){

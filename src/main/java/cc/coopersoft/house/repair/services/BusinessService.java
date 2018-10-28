@@ -38,6 +38,11 @@ public class BusinessService extends SimpleEntityService<BusinessEntity,String> 
     }
 
     @Override
+    public void deleteEntity(BusinessInstance businessInstance) {
+        deleteEntity((BusinessEntity)businessInstance);
+    }
+
+    @Override
     public EntityRepository<BusinessEntity, String> getEntityRepository() {
         return businessRepository;
     }

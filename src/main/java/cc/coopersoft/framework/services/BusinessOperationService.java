@@ -6,6 +6,7 @@ import cc.coopersoft.framework.data.TaskAction;
 import cc.coopersoft.framework.data.TaskSubscribe;
 import cc.coopersoft.framework.data.TaskSubscribeGroup;
 import cc.coopersoft.framework.data.model.BusinessDefineEntity;
+import cc.coopersoft.framework.data.model.DeleteActionEntity;
 import cc.coopersoft.framework.data.model.SubscribeGroupEntity;
 import cc.coopersoft.framework.data.model.TaskActionEntity;
 import cc.coopersoft.framework.data.repository.BusinessDefineRepository;
@@ -136,6 +137,29 @@ public class BusinessOperationService implements java.io.Serializable {
     }
 
 
+    public void initInstance(String instanceId,String taskName){
+        if ((businessInstance != null) && DataHelper.isDirty(businessInstance.getId(),instanceId) ){
+            clearInstance();
+
+        }
+        if (businessInstance == null){
+            logger.config("load business instance id:" + instanceId);
+            businessInstance = businessInstanceService.getEntity(instanceId);
+        }
+        if (businessInstance != null) {
+            if ((businessDefine != null && DataHelper.isDirty(businessInstance.getDefineId(), businessDefine.getId())) || DataHelper.isDirty(taskName, this.taskName)) {
+                clearDefine();
+            }
+            this.taskName = taskName;
+            if (businessDefine == null) {
+                businessDefine = businessDefineRepository.findBy(businessInstance.getDefineId());
+                loadSubscribe();
+            }
+        }else{
+            clearDefine();
+        }
+    }
+
     public void initInstance(String defineId,String taskName, String instanceId){
         initDefine(defineId,taskName);
 
@@ -151,7 +175,7 @@ public class BusinessOperationService implements java.io.Serializable {
         }
     }
 
-    public void initInstance(String defineId,String taskName){
+    public void createInstance(String defineId, String taskName){
         initDefine(defineId,taskName);
         if (businessInstance == null) {
             businessInstance = businessInstanceService.createNew();
@@ -164,7 +188,7 @@ public class BusinessOperationService implements java.io.Serializable {
         }
     }
 
-    public void initDefine(String defineId,String taskName){
+    private void initDefine(String defineId,String taskName){
         if ((defineId == null) || (taskName == null)){
             throw new IllegalArgumentException("defineId is not allow null !");
         }
@@ -179,12 +203,16 @@ public class BusinessOperationService implements java.io.Serializable {
         }
     }
 
-    public void clearInstance(){
+    private void clearDefine(){
         businessDefine = null;
         editorGroups = null;
         viewGroups = null;
         beforeActions = null;
         afterActions = null;
+    }
+
+    public void clearInstance(){
+        clearDefine();
         businessInstance = null;
     }
 
@@ -266,6 +294,52 @@ public class BusinessOperationService implements java.io.Serializable {
         }
         pageIndex = page;
         loadPage();
+    }
+
+    private ValidResult doDeleteActions(){
+        List<TaskAction> actions = new ArrayList<>();
+        for (DeleteActionEntity actionEntity: businessDefine.getDeleteActionList()){
+            actions.add(businessSubscribeConfigService.getAction(actionEntity.getRegName()));
+        }
+        return doActionComponent(actions);
+    }
+
+    @Transactional
+    public void continueBusiness(){
+        //TODO workflow
+    }
+
+    @Transactional
+    public void terminateBusiness(){
+        //TODO workflow
+    }
+
+    @Transactional
+    public void suspendBusiness(){
+        //TODO workflow
+    }
+
+    public void assignTo(String empId){
+        //TODO workflow
+    }
+
+    @Transactional
+    public ValidResult revokeBusiness(){
+        ValidResult result = doDeleteActions();
+        if (result.isPass()){
+            businessInstance.setStatus(BusinessInstance.BusinessStatus.DELETED);
+            businessInstanceService.saveEntity(businessInstance);
+        }
+        return result;
+    }
+
+    @Transactional
+    public ValidResult deleteBusiness(){
+        ValidResult result = doDeleteActions();
+        if (result.isPass()){
+            businessInstanceService.deleteEntity(businessInstance);
+        }
+        return result;
     }
 
     @Transactional

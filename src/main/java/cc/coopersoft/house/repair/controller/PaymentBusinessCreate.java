@@ -95,7 +95,7 @@ public class PaymentBusinessCreate implements java.io.Serializable {
 
     public Class<? extends ViewConfig> paymentByNotice(){
         paymentService.createBusinessByNotice(paymentNotice);
-        businessOperationService.initInstance(
+        businessOperationService.createInstance(
                 facesContext.getExternalContext().getRequestParameterMap().get(BusinessOperationController.BUSINESS_DEFINE_ID_PARAM_NAME),
                 BusinessOperationService.CREATE_TASK_NAME);
         return businessOperationController.taskBegin();

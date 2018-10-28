@@ -18,7 +18,7 @@ public abstract class SimpleEntityService<E,PK extends java.io.Serializable> imp
 
     @Override
     public void deleteEntity(E entity) {
-        getEntityRepository().saveAndFlushAndRefresh(entity);
+        getEntityRepository().removeAndFlush(entity);
     }
 
 

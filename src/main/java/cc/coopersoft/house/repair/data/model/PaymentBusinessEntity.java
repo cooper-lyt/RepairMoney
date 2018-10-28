@@ -15,6 +15,7 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     }
 
     public enum Status {
+        PROCESS, //处理中
         NORMAL, //正常
         MODIFYING, //变更中
         CANCEL, //取消

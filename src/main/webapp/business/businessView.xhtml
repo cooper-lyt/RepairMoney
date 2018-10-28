@@ -1,12 +1,199 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Title</title>
-</head>
-<body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/functionBase.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
 
-</body>
-</html>
+    <ui:define name="custom-header">
+        <f:metadata>
+
+            <o:viewAction action="#{businessOperationController.viewBusiness}"/>
+            <o:viewParam name="businessInstanceId" value="#{businessOperationController.businessId}"/>
+            <o:viewParam name="from" value="#{param.from}"/>
+        </f:metadata>
+    </ui:define>
+
+    <ui:param name="functionTitle" value="业务详情"/>
+    <ui:define name="functionToolbar">
+        <div class="flex-table-item flex-table-item-primary">
+            <b:inputText autocomplete="false" placeholder="业务编号" value="#{businessOperationController.businessId}"/>
+        </div>
+        <div class="flex-table-item">
+            <b:commandButton value="搜  索" action="/business/businessView?faces-redirect=true&amp;includeViewParams=true">
+                <f:param name="from" value="#{param.from}"/>
+            </b:commandButton>
+        </div>
+    </ui:define>
+
+    <c:if test="#{not empty businessOperationController.businessInstance}">
+        <o:form includeViewParams="true">
+            <div class="dashboard-notice #{businessOperationController.businessInstance.source} #{businessOperationController.businessInstance.status} #{businessOperationController.businessInstance.reg ? 'reg' : ''}">
+                <div class="right">
+                    <div class="btn-group" role="group" >
+
+
+                        <c:if test="#{facesContext.externalContext.isUserInRole('BusinessRunManager') or facesContext.externalContext.isUserInRole('BusinessManager')}">
+                            <h:commandButton title="恢复运行" styleClass="btn btn-default"
+                                             disabled="#{not (businessOperationController.businessInstance.status eq 'SUSPEND')}"
+                                             action="#{businessOperationController.continueBusiness}">
+
+                            </h:commandButton>
+
+                            <h:commandButton title="挂起" styleClass="btn btn-default"
+                                             disabled="#{not (businessOperationController.businessInstance.status eq 'RUNNING')}"
+                                             action="#{businessOperationController.suspendBusiness}">
+
+                            </h:commandButton>
+
+                            <h:commandButton title="中止" styleClass="btn btn-default"
+                                             disabled="#{not (businessOperationController.businessInstance.status eq 'RUNNING')}"
+                                             action="#{businessOperationController.terminateBusiness}">
+
+                            </h:commandButton>
+
+                                <div class="btn-group">
+                                    <button type="button" disabled="#{ (businessOperationController.businessInstance.status eq 'RUNNING')? '' : 'disabled'}"
+                                            aria-label="分配任务"
+                                            class="btn btn-default select-menu-button dropdown-toggle #{ (businessOperationController.businessInstance.status eq 'RUNNING')? '' : 'disabled'}" data-toggle="dropdown">
+
+                                        <span class="btn-icon octicon octicon-person"></span>
+
+
+                                    </button>
+
+                                    <div class="dropdown-menu select-menu-modal-holder dropdown-menu-right">
+                                        <div class="select-menu-modal">
+                                            <div class="select-menu-header">
+                                                <span class="select-menu-title">#{messages.assign_title}</span>
+                                                <span class="octicon octicon-x js-menu-close"
+                                                      aria-label="#{messages.close}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                        </c:if>
+                        <h:commandButton title="撤回业务" styleClass="btn btn-default"
+                                         rendered="#{facesContext.externalContext.isUserInRole('BusinessManager')}"
+                                         disabled="#{(businessOperationController.businessInstance.status eq 'DELETED')}"
+                                         action="#{businessOperationController.revokeBusiness}">
+
+                        </h:commandButton>
+
+                        <h:commandButton title="删除业务" styleClass="btn btn-default"
+                                         rendered="#{facesContext.externalContext.isUserInRole('SystemManager')}"
+                                         action="#{businessOperationController.deleteBusiness}">
+
+                        </h:commandButton>
+
+
+
+
+                        <!-- 更正 注销 撤消 define to define self connect in db-->
+
+                        <div class="btn-group">
+                            <button type="button" disabled="#{businessOperationController.hasReport ? '' : 'disabled'}"
+                                    aria-label="打印"
+                                    class="btn btn-default select-menu-button dropdown-toggle #{businessOperationController.hasReport ? '' : 'disabled'}" data-toggle="dropdown">
+
+                                <span class="btn-icon glyphicon glyphicon-print"></span>
+
+                            </button>
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <span class="mega-octicon octicon-repo"></span>
+                <h2><strong>#{businessOperationController.businessInstance.defineName}</strong>
+
+                    #{businessOperationController.businessInstance.id}
+                    <b:label style="font-size: 60%;" rendered="#{not businessOperationController.businessInstance.reg or not (businessOperationController.businessInstance.status eq 'COMPLETE')}" severity="#{(businessOperationController.businessInstance.status eq 'RUNNING') ? 'primary' : ((businessOperationController.businessInstance.status eq 'ABORT') ? 'danger' : ((businessOperationController.businessInstance.status eq 'SUSPEND') ? 'warning' : (businessOperationController.businessInstance.status eq 'COMPLETE') ? 'success' : 'default'))}"
+                             text="#{enumHelper.getLabel(businessOperationController.businessInstance.status)}"/>
+
+                    <b:label style="font-size: 60%;" severity="success" text="生效" rendered="#{businessOperationController.businessInstance.reg}"/>
+                </h2>
+
+                <p class="repo-list-description">
+                    #{businessOperationController.businessInstance.memo}
+                </p>
+
+                <p class="repo-list-meta">
+
+
+                    <h:outputText value="建立时间"/>
+                    <h:outputText value="#{businessOperationController.businessInstance.dataTime}">
+                        <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>
+                    </h:outputText>
+
+                    <h:outputText value="生效时间"
+                                  rendered="#{businessOperationController.businessInstance.reg}"/>
+                    <h:outputText value=" #{businessOperationController.businessInstance.regTime}"
+                                  rendered="#{businessOperationController.businessInstance.reg}">
+                        <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>
+                    </h:outputText>
+                </p>
+            </div>
+        </o:form>
+
+
+        <c:forEach items="#{businessOperationController.viewDependencies}" var="_dependency">
+            <ui:include src="#{_dependency}"/>
+        </c:forEach>
+
+        <b:tabView>
+            <c:forEach items="#{businessOperationController.viewGroups}" var="_view">
+                <b:tab title="#{_view.name}">
+                    <f:facet name="anchor"><span class="#{_view.icon}"/></f:facet>
+                    <c:forEach items="#{_view.subscribes}" var="_sub">
+                        <ui:include src="#{_sub.page}">
+                            <c:forEach items="#{_sub.params}" var="_param">
+                                <ui:param name="#{_param.key}" value="#{_param.value}"/>
+                            </c:forEach>
+                        </ui:include>
+                    </c:forEach>
+                </b:tab>
+
+            </c:forEach>
+
+            <b:tab title="业务操作日志">
+                <f:facet name="anchor"><b:iconAwesome name="business-time"/></f:facet>
+
+            </b:tab>
+
+            <b:tab title="要件附件">
+                <f:facet name="anchor"><b:icon name="file-image"/></f:facet>
+            </b:tab>
+
+        </b:tabView>
+
+
+    </c:if>
+
+    <c:if test="#{empty businessOperationController.businessInstance}">
+
+        <div class="px-2">
+            <div class="blankslate blankslate-large">
+                <svg height="32" class="octicon octicon-search blankslate-icon" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M15.7 13.3l-3.81-3.83A5.93 5.93 0 0 0 13 6c0-3.31-2.69-6-6-6S1 2.69 1 6s2.69 6 6 6c1.3 0 2.48-.41 3.47-1.11l3.83 3.81c.19.2.45.3.7.3.25 0 .52-.09.7-.3a.996.996 0 0 0 0-1.41v.01zM7 10.7c-2.59 0-4.7-2.11-4.7-4.7 0-2.59 2.11-4.7 4.7-4.7 2.59 0 4.7 2.11 4.7 4.7 0 2.59-2.11 4.7-4.7 4.7z"></path></svg>
+                <h3>
+                    没有找到编号为： #{businessOperationController.businessId} 的业务！
+                </h3>
+
+                你可以尝试 <h:link outcome="/business/businessSearch.xhtml" includeViewParams="false" >业务查询</h:link>.
+            </div>
+
+
+        </div>
+    </c:if>
+
+
+
+
+</ui:composition>

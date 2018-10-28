@@ -11,4 +11,8 @@ public interface Business extends ViewConfig {
     class PrepareCreate implements Business {}
 
     class Completed implements Business {}
+
+    class BusinessView implements Business {}
+
+    class BusinessDeleted implements Business {}
 }

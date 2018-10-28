@@ -16,6 +16,8 @@ public interface BusinessInstanceService<T extends BusinessInstance> extends Ent
 
     BusinessInstance saveEntity(BusinessInstance businessInstance);
 
+    void deleteEntity(BusinessInstance businessInstance);
+
     T createNew();
 
     List<T> search(String condition, List<String> defineIds, int offset , int count);

@@ -5,19 +5,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "TASK_ACTION")
-public class TaskActionEntity implements Comparable<TaskActionEntity>,java.io.Serializable{
+@Table(name = "DELETE_ACTION")
+public class DeleteActionEntity implements Comparable<DeleteActionEntity>,java.io.Serializable{
 
-    public enum Type{
-        BEFORE,AFTER
-    }
     private long id;
-    private String taskName;
-    private Type type;
     private String regName;
     private int priority;
 
     private BusinessDefineEntity businessDefine;
+
 
     @Id
     @Column(name = "ID", nullable = false, unique = true)
@@ -29,29 +25,6 @@ public class TaskActionEntity implements Comparable<TaskActionEntity>,java.io.Se
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "TASK_NAME",length = 128, nullable = false)
-    @NotNull
-    @Size(max = 128)
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "TYPE",length = 8, nullable = false)
-    @NotNull
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     @Basic
@@ -88,11 +61,17 @@ public class TaskActionEntity implements Comparable<TaskActionEntity>,java.io.Se
     }
 
     @Override
+    public int compareTo(DeleteActionEntity o) {
+        return Integer.valueOf(priority).compareTo(o.getPriority());
+    }
+
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TaskActionEntity that = (TaskActionEntity) o;
+        DeleteActionEntity that = (DeleteActionEntity) o;
 
 
         if (that.id != id) return false;
@@ -105,10 +84,5 @@ public class TaskActionEntity implements Comparable<TaskActionEntity>,java.io.Se
     public int hashCode() {
         int result = Long.valueOf(id).hashCode();
         return result;
-    }
-
-    @Override
-    public int compareTo(TaskActionEntity o) {
-        return Integer.valueOf(priority).compareTo(o.getPriority());
     }
 }

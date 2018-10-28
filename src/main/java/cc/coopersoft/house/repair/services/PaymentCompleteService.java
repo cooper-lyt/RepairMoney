@@ -56,7 +56,7 @@ public class PaymentCompleteService implements TaskActionComponent {
            accountDetailsEntity.setHouseAccount(account);
            account.getAccountDetails().add(accountDetailsEntity);
            pb.setAccountDetails(accountDetailsEntity);
-
+           pb.setStatus(PaymentBusinessEntity.Status.NORMAL);
        }
 
 

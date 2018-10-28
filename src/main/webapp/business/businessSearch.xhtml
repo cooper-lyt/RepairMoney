@@ -94,9 +94,12 @@
                     <div class="repo-list-item d-flex flex-justify-start row">
                         <div class="col-12 col-md-12" >
                             <h3 class="mb-2">
-                              <h:outputLink >
-                                  #{_business.defineName}/#{_business.id}
-                              </h:outputLink>
+                              <h:link value="#{_business.defineName}/#{_business.id}" includeViewParams="false" outcome="/business/businessView.xhtml" >
+
+                                  <f:param name="businessInstanceId" value="#{_business.id}"/>
+                                  <f:param name="from" value="/business/businessSearch.xhtml"/>
+
+                              </h:link>
 
                                 <b:label style="font-size: 60%;" rendered="#{not _business.reg or not (_business.status eq 'COMPLETE')}" severity="#{(_business.status eq 'RUNNING') ? 'primary' : ((_business.status eq 'ABORT') ? 'danger' : ((_business.status eq 'SUSPEND') ? 'warning' : (_business.status eq 'COMPLETE') ? 'success' : 'default'))}"
                                          text="#{enumHelper.getLabel(_business.status)}"/>

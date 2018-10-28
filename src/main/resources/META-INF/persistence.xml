@@ -68,7 +68,7 @@
         <class>cc.coopersoft.framework.data.model.SubscribeEntity</class>
         <class>cc.coopersoft.framework.data.model.WordEntity</class>
         <class>cc.coopersoft.framework.data.model.WordCategoryEntity</class>
-
+        <class>cc.coopersoft.framework.data.model.DeleteActionEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

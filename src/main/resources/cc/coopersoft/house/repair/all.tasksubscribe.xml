@@ -18,4 +18,8 @@
         <subscribe id="payment.summary" name="交款业务摘要和查询生成" class="cc.coopersoft.house.repair.services.PaymentBusinessSummaryGenerator"/>
     </action>
 
+    <delete>
+
+    </delete>
+
 </subscribes>
