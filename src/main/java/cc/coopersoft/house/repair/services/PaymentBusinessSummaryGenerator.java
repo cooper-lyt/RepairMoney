@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SubscribeComponent
-public class PaymentBusinessSummaryGenerator implements TaskActionComponent {
+public class PaymentBusinessSummaryGenerator implements TaskActionComponent<BusinessEntity> {
 
     @Inject
     public EnumHelper enumHelper;
@@ -26,18 +26,18 @@ public class PaymentBusinessSummaryGenerator implements TaskActionComponent {
     public I18n i18n;
 
     @Override
-    public List<ValidMessage> valid(BusinessInstance businessInstance) {
+    public List<ValidMessage> valid(BusinessEntity businessInstance) {
         return new ArrayList<>(0);
     }
 
     @Override
-    public void doAction(BusinessInstance businessInstance) {
+    public void doAction(BusinessEntity businessInstance) {
         List<BusinessSummary> result = new ArrayList<>();
-        BusinessEntity businessEntity = (BusinessEntity) businessInstance;
+
         String searchKey = "";
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(i18n.getLocale());
         DecimalFormat areaFormat = new DecimalFormat("#0.00");
-        PaymentEntity payment = businessEntity.getPayment();
+        PaymentEntity payment = businessInstance.getPayment();
         if (payment.getBankAccountDetails() != null){
             searchKey += " " + payment.getBankAccountDetails().getBankOperationOrder();
         }

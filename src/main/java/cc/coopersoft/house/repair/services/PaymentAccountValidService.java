@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PaymentAccountValidService implements TaskActionComponent {
+public abstract class PaymentAccountValidService implements TaskActionComponent<BusinessEntity> {
 
     @Inject
     private HouseAccountService houseAccountService;
@@ -22,8 +22,8 @@ public abstract class PaymentAccountValidService implements TaskActionComponent 
 
 
     @Override
-    public List<ValidMessage> valid(BusinessInstance businessInstance) {
-        PaymentEntity payment = ((BusinessEntity) businessInstance).getPayment();
+    public List<ValidMessage> valid(BusinessEntity businessInstance) {
+        PaymentEntity payment = businessInstance.getPayment();
 
         List<String> houseCodes = new ArrayList<>();
         for(PaymentBusinessEntity pb: payment.getPaymentBusinesses()){

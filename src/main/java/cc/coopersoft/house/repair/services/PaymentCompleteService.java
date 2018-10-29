@@ -13,15 +13,15 @@ import java.math.BigDecimal;
 
 @SubscribeComponent
 @RequestScoped
-public class PaymentCompleteService extends PaymentAccountValidService implements TaskActionComponent {
+public class PaymentCompleteService extends PaymentAccountValidService implements TaskActionComponent<BusinessEntity> {
 
     @Inject
     private HouseAccountRepository houseAccountRepository;
 
 
     @Override
-    public void doAction(BusinessInstance businessInstance) {
-       PaymentEntity paymentEntity =((BusinessEntity) businessInstance).getPayment();
+    public void doAction(BusinessEntity businessInstance) {
+       PaymentEntity paymentEntity =businessInstance.getPayment();
        for(PaymentBusinessEntity pb: paymentEntity.getPaymentBusinesses()){
            HouseAccountEntity account = houseAccountRepository.findOptionalByHouseCode(pb.getAccountDetails().getHouse().getHouseCode());
            if (account == null){

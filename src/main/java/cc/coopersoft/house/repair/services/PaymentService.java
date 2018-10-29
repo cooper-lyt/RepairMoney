@@ -21,7 +21,7 @@ import java.util.List;
 
 @ConversationScoped
 @SubscribeComponent
-public class PaymentService implements TaskActionComponent,java.io.Serializable {
+public class PaymentService implements TaskActionComponent<BusinessEntity>,java.io.Serializable {
 
     private enum CreateSource{
         NOTICE
@@ -68,7 +68,7 @@ public class PaymentService implements TaskActionComponent,java.io.Serializable 
     private PaymentNoticeEntity paymentNotice;
 
     @Override
-    public List<ValidMessage> valid(BusinessInstance businessInstance) {
+    public List<ValidMessage> valid(BusinessEntity businessInstance) {
         if (createSource == null){
             throw new IllegalArgumentException("createSource is null");
         }
@@ -93,9 +93,9 @@ public class PaymentService implements TaskActionComponent,java.io.Serializable 
     }
 
     @Override
-    public void doAction(BusinessInstance businessInstance) {
+    public void doAction(BusinessEntity business) {
 
-        BusinessEntity business = (BusinessEntity) businessInstance;
+
         switch (createSource){
 
             case NOTICE:

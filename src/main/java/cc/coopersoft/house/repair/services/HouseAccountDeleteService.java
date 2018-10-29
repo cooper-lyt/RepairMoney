@@ -4,6 +4,7 @@ import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.services.TaskActionComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.house.repair.data.model.AccountDetailsEntity;
+import cc.coopersoft.house.repair.data.model.BusinessEntity;
 import cc.coopersoft.house.repair.data.model.HouseAccountEntity;
 import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
 
@@ -11,7 +12,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class HouseAccountDeleteService implements TaskActionComponent {
+public abstract class HouseAccountDeleteService implements TaskActionComponent<BusinessEntity> {
 
     @Inject
     private HouseAccountRepository houseAccountRepository;
@@ -19,7 +20,7 @@ public abstract class HouseAccountDeleteService implements TaskActionComponent {
     protected abstract List<AccountDetailsEntity> getOperations();
 
     @Override
-    public List<ValidMessage> valid(BusinessInstance businessInstance) {
+    public List<ValidMessage> valid(BusinessEntity businessInstance) {
         String details = "";
         for (AccountDetailsEntity detailsEntity: getOperations() ){
             HouseAccountEntity account = detailsEntity.getHouseAccount();
@@ -42,7 +43,7 @@ public abstract class HouseAccountDeleteService implements TaskActionComponent {
     }
 
     @Override
-    public void doAction(BusinessInstance businessInstance) {
+    public void doAction(BusinessEntity businessInstance) {
         for (AccountDetailsEntity detailsEntity: getOperations() ) {
             HouseAccountEntity account = detailsEntity.getHouseAccount();
             if (account != null) {

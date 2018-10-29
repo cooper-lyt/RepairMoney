@@ -11,33 +11,33 @@ import java.util.Date;
 import java.util.List;
 
 @SubscribeComponent
-public class PaymentInfoService extends PaymentAccountValidService implements TaskEditSubscribeComponent {
+public class PaymentInfoService extends PaymentAccountValidService implements TaskEditSubscribeComponent<BusinessEntity> {
 
 
 
     @Override
-    public void init(BusinessInstance businessInstance) {
-        PaymentEntity payment = ((BusinessEntity) businessInstance).getPayment();
+    public void init(BusinessEntity businessInstance) {
+        PaymentEntity payment = businessInstance.getPayment();
         if (payment.getOperationDate() == null){
             payment.setOperationDate(new Date());
         }
     }
 
     @Override
-    public boolean assertion(BusinessInstance businessInstance) {
-        PaymentEntity payment = ((BusinessEntity) businessInstance).getPayment();
+    public boolean assertion(BusinessEntity businessInstance) {
+        PaymentEntity payment = businessInstance.getPayment();
         return  ((PaymentType.CASH.equals(payment.getPaymentType()) && (payment.getBankAccountDetails() == null)) ||
                 (PaymentType.BANK.equals(payment.getPaymentType()) && payment.getBankAccountDetails() != null));
     }
 
     @Override
-    public void persistent(BusinessInstance businessInstance) {
+    public void persistent(BusinessEntity businessInstance) {
         // do nothing
     }
 
     @Override
-    public List<ValidMessage> valid( BusinessInstance businessInstance) {
-        PaymentEntity payment = ((BusinessEntity) businessInstance).getPayment();
+    public List<ValidMessage> valid(BusinessEntity businessInstance) {
+        PaymentEntity payment = businessInstance.getPayment();
 
         List<ValidMessage> result = new ArrayList<>();
         if (PaymentType.BANK.equals(payment.getPaymentType()) &&
@@ -56,8 +56,8 @@ public class PaymentInfoService extends PaymentAccountValidService implements Ta
     }
 
     @Override
-    public void doAction(BusinessInstance businessInstance) {
-        PaymentEntity payment = ((BusinessEntity) businessInstance).getPayment();
+    public void doAction(BusinessEntity businessInstance) {
+        PaymentEntity payment = businessInstance.getPayment();
         if (PaymentType.BANK.equals(payment.getPaymentType()) && !BusinessInstance.Source.OUT_SIDE.equals(businessInstance.getSource())){
             payment.getBankAccountDetails().setOperationTime(payment.getOperationDate());
         }

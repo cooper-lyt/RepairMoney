@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SubscribeComponent
-public class PaymentDeleteService implements TaskActionComponent {
+public class PaymentDeleteService implements TaskActionComponent<BusinessEntity> {
 
     @Inject
     private PaymentNoticeRepository paymentNoticeRepository;
@@ -22,7 +22,7 @@ public class PaymentDeleteService implements TaskActionComponent {
     private HouseRepository houseRepository;
 
     @Override
-    public List<ValidMessage> valid(BusinessInstance businessInstance) {
+    public List<ValidMessage> valid(BusinessEntity businessInstance) {
         List<ValidMessage> result = new ArrayList<>();
         //TODO 判读是否入账 如果是撤回要冲账，如果是删除则不允许
         PaymentEntity payment = ((BusinessEntity)businessInstance).getPayment();
@@ -32,8 +32,8 @@ public class PaymentDeleteService implements TaskActionComponent {
 
 
     @Override
-    public void doAction(BusinessInstance businessInstance) {
-        PaymentEntity payment = ((BusinessEntity)businessInstance).getPayment();
+    public void doAction(BusinessEntity businessInstance) {
+        PaymentEntity payment = businessInstance.getPayment();
 
             boolean deleteHouse = false;
             if (payment.getPaymentNotice() == null) {
