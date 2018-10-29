@@ -168,7 +168,7 @@ public class HouseAccountEntity {
         this.houseCode = houseCode;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "houseAccount")
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH} ,mappedBy = "houseAccount")
     public Set<AccountDetailsEntity> getAccountDetails() {
         return accountDetails;
     }
@@ -178,16 +178,32 @@ public class HouseAccountEntity {
     }
 
     @Transient
-    public List<AccountDetailsEntity> getAccountDetailsList(){
-        List<AccountDetailsEntity> result = new ArrayList<>(getAccountDetails());
-        Collections.sort(result, new Comparator<AccountDetailsEntity>() {
+    private List<AccountDetailsEntity> getAccountDetailList(List<AccountDetailsEntity> accountDetails){
+        Collections.sort(accountDetails, new Comparator<AccountDetailsEntity>() {
             @Override
             public int compare(AccountDetailsEntity o1, AccountDetailsEntity o2) {
                 return o2.getOperationTime().compareTo(o1.getOperationTime());
             }
         });
-        return result;
+        return accountDetails;
     }
+
+    @Transient
+    public List<AccountDetailsEntity> getAllDetailList(){
+        return getAccountDetailList(new ArrayList<>(getAccountDetails()));
+    }
+
+    @Transient
+    public List<AccountDetailsEntity> getValidDetailsList(){
+        List<AccountDetailsEntity> result = new ArrayList<>();
+        for(AccountDetailsEntity detail: getAccountDetails()){
+            if (!AccountDetailsEntity.Status.DELETED.equals(detail.getStatus())){
+                result.add(detail);
+            }
+        }
+        return getAccountDetailList(result);
+    }
+
 
     @OneToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "HOUSE", nullable = false)

@@ -32,8 +32,11 @@ public class PaymentCompleteService extends PaymentAccountValidService implement
                account.setProductDate(paymentEntity.getOperationDate());
                account.setCreateTime(paymentEntity.getOperationDate());
                account.setStatus(HouseAccountEntity.Status.NORMAL);
-               account.setMustMoney(pb.getMustMoney());
+               //account.setMustMoney(pb.getMustMoney());
                account.setHouseCode(pb.getAccountDetails().getHouse().getHouseCode());
+           }
+           if ((account == null)  || PaymentBusinessEntity.Type.FIRST.equals(pb.getType())){
+               account.setMustMoney(pb.getMustMoney());
            }
            pb.getAccountDetails().setStatus(AccountDetailsEntity.Status.REG);
            pb.getAccountDetails().setBalance(account.getBalance().add(pb.getAccountDetails().getMoney()));

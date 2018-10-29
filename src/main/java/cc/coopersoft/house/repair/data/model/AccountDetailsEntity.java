@@ -27,16 +27,16 @@ public class AccountDetailsEntity implements java.io.Serializable{
     private Status status;
 
     private HouseAccountEntity houseAccount;
-    private BusinessEntity businessEntity;
+    private BusinessEntity business;
     private HouseEntity house;
 
     public AccountDetailsEntity() {
     }
 
-    public AccountDetailsEntity(BusinessEntity businessEntity,AccountOperationDirection direction, String order) {
+    public AccountDetailsEntity(BusinessEntity business, AccountOperationDirection direction, String order) {
         this.order = order;
         this.direction = direction;
-        this.businessEntity = businessEntity;
+        this.business = business;
     }
 
     @Id
@@ -118,9 +118,8 @@ public class AccountDetailsEntity implements java.io.Serializable{
         this.status = status;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade =  {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH},optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,cascade =  {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "ACCOUNT_NUMBER", nullable = false)
-    @NotNull
     public HouseAccountEntity getHouseAccount() {
         return houseAccount;
     }
@@ -132,12 +131,12 @@ public class AccountDetailsEntity implements java.io.Serializable{
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BUSINESS",nullable = false)
     @NotNull
-    public BusinessEntity getBusinessEntity() {
-        return businessEntity;
+    public BusinessEntity getBusiness() {
+        return business;
     }
 
-    public void setBusinessEntity(BusinessEntity businessEntity) {
-        this.businessEntity = businessEntity;
+    public void setBusiness(BusinessEntity businessEntity) {
+        this.business = businessEntity;
     }
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH}, optional = false)

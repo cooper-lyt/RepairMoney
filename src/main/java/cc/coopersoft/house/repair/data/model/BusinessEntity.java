@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "BUSINESS", schema = "WXZJ")
@@ -26,6 +28,7 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
     private String summary;
 
     private PaymentEntity payment;
+    private Set<AccountDetailsEntity> accountDetails = new HashSet<>(0);
 
     public BusinessEntity() {
     }
@@ -197,6 +200,15 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "business")
+    public Set<AccountDetailsEntity> getAccountDetails() {
+        return accountDetails;
+    }
+
+    public void setAccountDetails(Set<AccountDetailsEntity> accountDetailsEntities) {
+        this.accountDetails = accountDetailsEntities;
     }
 
     @OneToOne(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)

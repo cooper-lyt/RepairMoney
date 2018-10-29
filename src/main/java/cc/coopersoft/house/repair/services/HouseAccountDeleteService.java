@@ -23,7 +23,7 @@ public abstract class HouseAccountDeleteService implements TaskActionComponent {
         String details = "";
         for (AccountDetailsEntity detailsEntity: getOperations() ){
             HouseAccountEntity account = detailsEntity.getHouseAccount();
-            List<AccountDetailsEntity> allOperation = account.getAccountDetailsList();
+            List<AccountDetailsEntity> allOperation = account.getValidDetailsList();
             if (account != null && !allOperation.isEmpty()){
                 if (!allOperation.get(0).equals(detailsEntity)){
                     if (!"".equals(details)){
@@ -47,9 +47,11 @@ public abstract class HouseAccountDeleteService implements TaskActionComponent {
             HouseAccountEntity account = detailsEntity.getHouseAccount();
             if (account != null) {
                 account.getAccountDetails().remove(detailsEntity);
-                List<AccountDetailsEntity> allOperation = account.getAccountDetailsList();
+                List<AccountDetailsEntity> allOperation = account.getValidDetailsList();
+
+
                 if (allOperation.isEmpty()){
-                    houseAccountRepository.remove(account);
+
                 }else{
                     AccountDetailsEntity last = allOperation.get(0);
                     account.setBalance(last.getBalance());

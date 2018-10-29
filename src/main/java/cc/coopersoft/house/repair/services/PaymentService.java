@@ -95,49 +95,46 @@ public class PaymentService implements TaskActionComponent,java.io.Serializable 
     @Override
     public void doAction(BusinessInstance businessInstance) {
 
-        BusinessEntity result = (BusinessEntity) businessInstance;
+        BusinessEntity business = (BusinessEntity) businessInstance;
         switch (createSource){
 
             case NOTICE:
-                result.setPayment(new PaymentEntity(result));
-                result.getPayment().setPaymentNotice(paymentNotice);
-                result.getPayment().setMustMoney(paymentNotice.getMustMoney());
-                result.getPayment().setMoney(paymentNotice.getMoney());
+                business.setPayment(new PaymentEntity(business));
+                business.getPayment().setPaymentNotice(paymentNotice);
+                business.getPayment().setMustMoney(paymentNotice.getMustMoney());
+                business.getPayment().setMoney(paymentNotice.getMoney());
 
                 int itemCount = paymentNotice.getNoticeItems().size();
                 int i = 0;
                 for(PaymentNoticeItemEntity item: paymentNotice.getNoticeItems()){
-                    if(DataHelper.empty(result.getPayment().getSectionCode())){
-                        result.getPayment().setSectionCode(item.getHouse().getSectionCode());
-                        result.getPayment().setSectionName(item.getHouse().getSectionName());
+                    if(DataHelper.empty(business.getPayment().getSectionCode())){
+                        business.getPayment().setSectionCode(item.getHouse().getSectionCode());
+                        business.getPayment().setSectionName(item.getHouse().getSectionName());
                     }
                     HouseAccountEntity houseAccountEntity = houseAccountRepository.findOptionalByHouseCode(item.getHouse().getHouseCode());
-                    PaymentBusinessEntity.Type type = (houseAccountEntity == null) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
+                    PaymentBusinessEntity.Type type = ((houseAccountEntity == null) || (HouseAccountEntity.Status.DESTROY.equals(houseAccountEntity.getStatus()))) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
                     String id = String.valueOf(i++);
                     while (id.length() < itemCount){
                         id = '0' + id;
                     }
-                    id = result.getId() + id;
+                    id = business.getId() + id;
                     PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
                             id,
                             item.getMoney(),
                             item.getMustMoney(),
                             item.getCalcDetails(),
                             type,
-                            result.getPayment()
+                            business.getPayment()
                     );
                     item.getHouse().setDataTime(new Date());
-                    result.getPayment().getPaymentBusinesses().add(paymentBusinessEntity);
-
-
+                    business.getPayment().getPaymentBusinesses().add(paymentBusinessEntity);
 
                     AccountDetailsEntity accountDetailsEntity =
-                            new AccountDetailsEntity(result,AccountOperationDirection.IN,UUIDGenerator.getUUID());
+                            new AccountDetailsEntity(business,AccountOperationDirection.IN,UUIDGenerator.getUUID());
                     accountDetailsEntity.setStatus(AccountDetailsEntity.Status.RUNNING);
                     accountDetailsEntity.setHouse(item.getHouse());
                     accountDetailsEntity.setMoney(item.getMoney());
-
-
+                    business.getAccountDetails().add(accountDetailsEntity);
                     paymentBusinessEntity.setAccountDetails(accountDetailsEntity);
 
                 }
