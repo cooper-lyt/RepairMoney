@@ -373,7 +373,7 @@ public class BusinessOperationService implements java.io.Serializable {
 
     private List<String> getDependencies(List<TaskSubscribe> taskSubscribes){
         List<String> result = new ArrayList<>();
-        for (TaskSubscribe ts: getEditor()){
+        for (TaskSubscribe ts: taskSubscribes){
             for(String de: ts.getDependencies()){
                 if (!result.contains(de)){
                     result.add(de);
