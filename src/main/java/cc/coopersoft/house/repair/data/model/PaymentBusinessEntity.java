@@ -34,9 +34,6 @@ public class PaymentBusinessEntity implements java.io.Serializable{
 
     private PaymentEntity paymentEntity;
     private AccountDetailsEntity accountDetails;
-
-
-
     private HouseEntity house;
 
     public PaymentBusinessEntity() {
@@ -164,7 +161,7 @@ public class PaymentBusinessEntity implements java.io.Serializable{
         this.paymentEntity = paymentEntity;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH}, optional = false)
     @JoinColumn(name = "HOUSE",nullable = false)
     public HouseEntity getHouse() {
         return house;

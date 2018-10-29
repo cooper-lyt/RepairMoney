@@ -10,37 +10,23 @@ import java.util.Date;
 @Table(name = "BANK_ACCOUNT_DETAILS")
 public class BankAccountDetailsEntity implements java.io.Serializable{
 
-    public enum Type{
-        PAYMENT(AccountOperationDirection.IN),
-        USE(AccountOperationDirection.OUT),
-        REFUND(AccountOperationDirection.OUT),
-        INCREMENT(AccountOperationDirection.IN),
-        SAVE(AccountOperationDirection.IN),
-        OUT(AccountOperationDirection.OUT);
-
-        public AccountOperationDirection direction;
-
-        Type(AccountOperationDirection direction) {
-            this.direction = direction;
-        }
-    }
 
     private AccountOperationDirection direction;
     private Date operationTime;
     private BigDecimal money;
-    private Type type;
     private String description;
     private String bankOperationOrder;
 
     private BankAccountEntity bankAccount;
+    private BusinessEntity businessEntity;
 
     public BankAccountDetailsEntity() {
     }
 
-    public BankAccountDetailsEntity(String bankOperationOrder,Type type) {
-        this.type = type;
-        this.direction = type.direction;
+    public BankAccountDetailsEntity(BusinessEntity businessEntity ,AccountOperationDirection direction, String bankOperationOrder) {
+        this.direction = direction;
         this.bankOperationOrder = bankOperationOrder;
+        this.businessEntity = businessEntity;
     }
 
     @Id
@@ -86,17 +72,6 @@ public class BankAccountDetailsEntity implements java.io.Serializable{
         this.money = money;
     }
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "TYPE",length = 16, nullable = false)
-    @NotNull
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
     @Basic
     @Column(name = "DESCRIPTION", length = 64)
     @Size(max = 64)
@@ -109,7 +84,7 @@ public class BankAccountDetailsEntity implements java.io.Serializable{
     }
 
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH},optional = false)
     @JoinColumn(name = "BANK_ACCOUNT_ID", nullable = false)
     @NotNull
     public BankAccountEntity getBankAccount() {
@@ -118,6 +93,17 @@ public class BankAccountDetailsEntity implements java.io.Serializable{
 
     public void setBankAccount(BankAccountEntity bankAccount) {
         this.bankAccount = bankAccount;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "BUSINESS",nullable = false)
+    @NotNull
+    public BusinessEntity getBusinessEntity() {
+        return businessEntity;
+    }
+
+    public void setBusinessEntity(BusinessEntity businessEntity) {
+        this.businessEntity = businessEntity;
     }
 
     @Override

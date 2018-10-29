@@ -77,12 +77,15 @@
                             </b:commandButton>
 
                                 <div class="btn-group">
-                                    <b:button iconAwesome="user-tag" pt:disabled="#{ (businessOperationController.businessInstance.status eq 'RUNNING')? '' : 'disabled'}"
-                                            tooltip="分配任务" data-toggle="dropdown">
+                                    <button type="button" disabled="#{ (businessOperationController.businessInstance.status eq 'RUNNING')? '' : 'disabled'}"
+                                            aria-label="打印" data-toggle="dropdown"
+                                            class="btn btn-default dropdown-toggle">
+
+                                        <b:iconAwesome name="user-tag"/>
+                                        <b class="caret"></b>
 
 
-
-                                    </b:button>
+                                    </button>
 
                                     <div class="dropdown-menu select-menu-modal-holder dropdown-menu-right">
                                         <div class="select-menu-modal">
@@ -120,9 +123,10 @@
                         <div class="btn-group">
                             <button type="button" disabled="#{businessOperationController.hasReport ? '' : 'disabled'}"
                                     aria-label="打印"
-                                    class="btn btn-default select-menu-button dropdown-toggle #{businessOperationController.hasReport ? '' : 'disabled'}" data-toggle="dropdown">
+                                    class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
                                 <span class="btn-icon glyphicon glyphicon-print"></span>
+                                <b class="caret"></b>
 
                             </button>
 

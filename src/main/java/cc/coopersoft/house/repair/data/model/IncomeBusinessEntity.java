@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 public class IncomeBusinessEntity {
     private String id;
     private String bankOperOrder;
-    private String putId;
     private BigDecimal capital;
     private Timestamp incomeTime;
     private int accountCount;
@@ -38,16 +37,6 @@ public class IncomeBusinessEntity {
 
     public void setBankOperOrder(String bankOperOrder) {
         this.bankOperOrder = bankOperOrder;
-    }
-
-    @Basic
-    @Column(name = "PUT_ID")
-    public String getPutId() {
-        return putId;
-    }
-
-    public void setPutId(String putId) {
-        this.putId = putId;
     }
 
     @Basic
@@ -141,7 +130,6 @@ public class IncomeBusinessEntity {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (bankOperOrder != null ? !bankOperOrder.equals(that.bankOperOrder) : that.bankOperOrder != null)
             return false;
-        if (putId != null ? !putId.equals(that.putId) : that.putId != null) return false;
         if (capital != null ? !capital.equals(that.capital) : that.capital != null) return false;
         if (incomeTime != null ? !incomeTime.equals(that.incomeTime) : that.incomeTime != null) return false;
         if (beginDate != null ? !beginDate.equals(that.beginDate) : that.beginDate != null) return false;
@@ -157,7 +145,6 @@ public class IncomeBusinessEntity {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (bankOperOrder != null ? bankOperOrder.hashCode() : 0);
-        result = 31 * result + (putId != null ? putId.hashCode() : 0);
         result = 31 * result + (capital != null ? capital.hashCode() : 0);
         result = 31 * result + (incomeTime != null ? incomeTime.hashCode() : 0);
         result = 31 * result + accountCount;

@@ -296,10 +296,12 @@ public class BusinessOperationService implements java.io.Serializable {
         loadPage();
     }
 
-    private ValidResult doDeleteActions(){
+    private ValidResult doDeleteActions(DeleteActionEntity.Type type){
         List<TaskAction> actions = new ArrayList<>();
         for (DeleteActionEntity actionEntity: businessDefine.getDeleteActionList()){
-            actions.add(businessSubscribeConfigService.getAction(actionEntity.getRegName()));
+            if (actionEntity.getType().equals(type)) {
+                actions.add(businessSubscribeConfigService.getAction(actionEntity.getRegName()));
+            }
         }
         return doActionComponent(actions);
     }
@@ -309,10 +311,7 @@ public class BusinessOperationService implements java.io.Serializable {
         //TODO workflow
     }
 
-    @Transactional
-    public void terminateBusiness(){
-        //TODO workflow
-    }
+
 
     @Transactional
     public void suspendBusiness(){
@@ -324,8 +323,19 @@ public class BusinessOperationService implements java.io.Serializable {
     }
 
     @Transactional
+    public ValidResult terminateBusiness(){
+        ValidResult result = doDeleteActions(DeleteActionEntity.Type.ABORT);
+        if (result.isPass()){
+            //TODO workflow
+            businessInstance.setStatus(BusinessInstance.BusinessStatus.ABORT);
+            businessInstanceService.saveEntity(businessInstance);
+        }
+        return result;
+    }
+
+    @Transactional
     public ValidResult revokeBusiness(){
-        ValidResult result = doDeleteActions();
+        ValidResult result = doDeleteActions(DeleteActionEntity.Type.REVOKE);
         if (result.isPass()){
             businessInstance.setStatus(BusinessInstance.BusinessStatus.DELETED);
             businessInstanceService.saveEntity(businessInstance);
@@ -335,7 +345,7 @@ public class BusinessOperationService implements java.io.Serializable {
 
     @Transactional
     public ValidResult deleteBusiness(){
-        ValidResult result = doDeleteActions();
+        ValidResult result = doDeleteActions(DeleteActionEntity.Type.DELETE);
         if (result.isPass()){
             businessInstanceService.deleteEntity(businessInstance);
         }

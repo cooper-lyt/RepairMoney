@@ -10,6 +10,11 @@ import java.util.*;
 @Table(name = "PAYMENT_NOTICE", schema = "WXZJ")
 public class PaymentNoticeEntity implements java.io.Serializable {
 
+    public enum Source{
+        CREATE,
+        OWNER
+    }
+
     private String id;
     private BigDecimal mustMoney;
     private BigDecimal money;
@@ -17,6 +22,8 @@ public class PaymentNoticeEntity implements java.io.Serializable {
     private String empCode;
     private String empName;
     private Date noticeTime;
+    private Source source;
+    private Integer version;
 
 
     private Set<PaymentEntity> payments = new HashSet<PaymentEntity>(0);
@@ -95,6 +102,26 @@ public class PaymentNoticeEntity implements java.io.Serializable {
         this.noticeTime = noticeTime;
     }
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "SOURCE", nullable = false, length = 8)
+    @NotNull
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
+    @Version
+    @Column(name = "VERSION")
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "paymentNotice")
     public Set<PaymentEntity> getPayments() {

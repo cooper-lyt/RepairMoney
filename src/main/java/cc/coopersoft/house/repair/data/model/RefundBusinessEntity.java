@@ -18,7 +18,6 @@ public class RefundBusinessEntity {
     private String status;
     private Integer version;
     private Timestamp refundTime;
-    private String putId;
     private String bankOperOrder;
 
     @Id
@@ -112,16 +111,6 @@ public class RefundBusinessEntity {
     }
 
     @Basic
-    @Column(name = "PUT_ID")
-    public String getPutId() {
-        return putId;
-    }
-
-    public void setPutId(String putId) {
-        this.putId = putId;
-    }
-
-    @Basic
     @Column(name = "BANK_OPER_ORDER")
     public String getBankOperOrder() {
         return bankOperOrder;
@@ -147,7 +136,6 @@ public class RefundBusinessEntity {
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
         if (refundTime != null ? !refundTime.equals(that.refundTime) : that.refundTime != null) return false;
-        if (putId != null ? !putId.equals(that.putId) : that.putId != null) return false;
         if (bankOperOrder != null ? !bankOperOrder.equals(that.bankOperOrder) : that.bankOperOrder != null)
             return false;
 
@@ -165,7 +153,6 @@ public class RefundBusinessEntity {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (refundTime != null ? refundTime.hashCode() : 0);
-        result = 31 * result + (putId != null ? putId.hashCode() : 0);
         result = 31 * result + (bankOperOrder != null ? bankOperOrder.hashCode() : 0);
         return result;
     }

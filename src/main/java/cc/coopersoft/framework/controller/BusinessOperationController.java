@@ -101,12 +101,6 @@ public class BusinessOperationController  implements java.io.Serializable {
     }
 
     @BusinessRunManagerRole
-    public Class<? extends ViewConfig> terminateBusiness(){
-        businessOperationService.terminateBusiness();
-        return Business.BusinessView.class;
-    }
-
-    @BusinessRunManagerRole
     public Class<? extends ViewConfig> continueBusiness(){
         businessOperationService.continueBusiness();
         return Business.BusinessView.class;
@@ -118,17 +112,38 @@ public class BusinessOperationController  implements java.io.Serializable {
         return Business.BusinessView.class;
     }
 
+    @BusinessRunManagerRole
+    public Class<? extends ViewConfig> terminateBusiness(){
+        BusinessOperationService.ValidResult result = businessOperationService.terminateBusiness();
+        sendMessage(result.getMessages());
+        if (result.isPass()){
+            return Business.BusinessView.class;
+        }else{
+            return null;
+        }
+    }
+
     @BusinessManagerRole
     public Class<? extends ViewConfig> revokeBusiness(){
-        businessOperationService.revokeBusiness();
-        return Business.BusinessView.class;
+        BusinessOperationService.ValidResult result = businessOperationService.revokeBusiness();
+        sendMessage(result.getMessages());
+        if (result.isPass()){
+            return Business.BusinessView.class;
+        }else{
+            return null;
+        }
     }
 
 
     @SystemManagerRole
     public Class<? extends ViewConfig> deleteBusiness(){
-        businessOperationService.deleteBusiness();
-        return Business.BusinessDeleted.class;
+        BusinessOperationService.ValidResult result = businessOperationService.deleteBusiness();
+        sendMessage(result.getMessages());
+        if (result.isPass()){
+            return Business.BusinessDeleted.class;
+        }else{
+            return null;
+        }
     }
 
     public boolean isHasReport(){

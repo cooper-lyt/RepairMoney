@@ -137,7 +137,7 @@ public class PaymentEntity implements java.io.Serializable{
     }
 
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "BANK_OPER_ORDER")
     public BankAccountDetailsEntity getBankAccountDetails() {
         return bankAccountDetails;
@@ -147,7 +147,7 @@ public class PaymentEntity implements java.io.Serializable{
         this.bankAccountDetails = bankAccountDetails;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "NOTICE_ID")
     public PaymentNoticeEntity getPaymentNotice() {
         return paymentNotice;

@@ -10,36 +10,24 @@ import java.util.Date;
 @Table(name = "ACCOUNT_DETAILS")
 public class AccountDetailsEntity implements java.io.Serializable{
 
-    public enum Type{
-        PAYMENT(AccountOperationDirection.IN),
-        USE(AccountOperationDirection.OUT),
-        REFUND(AccountOperationDirection.OUT),
-        INCREMENT(AccountOperationDirection.IN);
-
-        public AccountOperationDirection direction;
-
-        Type(AccountOperationDirection direction) {
-            this.direction = direction;
-        }
-    }
 
     private String order;
     private AccountOperationDirection direction;
     private Date operationTime;
     private BigDecimal money;
-    private Type type;
     private BigDecimal balance;
     private String description;
 
     private HouseAccountEntity houseAccount;
+    private BusinessEntity businessEntity;
 
     public AccountDetailsEntity() {
     }
 
-    public AccountDetailsEntity(String order, Type type) {
+    public AccountDetailsEntity(BusinessEntity businessEntity,AccountOperationDirection direction, String order) {
         this.order = order;
-        this.type = type;
-        this.direction = type.direction;
+        this.direction = direction;
+        this.businessEntity = businessEntity;
     }
 
     @Id
@@ -87,16 +75,7 @@ public class AccountDetailsEntity implements java.io.Serializable{
         this.money = money;
     }
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "TYPE",nullable = false, length = 16)
-    @NotNull
-    public Type getType() {
-        return type;
-    }
 
-    public void setType(Type type) {
-        this.type = type;
-    }
 
     @Basic
     @Column(name = "BALANCE", nullable = false)
@@ -121,7 +100,7 @@ public class AccountDetailsEntity implements java.io.Serializable{
     }
 
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,cascade =  {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH},optional = false)
     @JoinColumn(name = "ACCOUNT_NUMBER", nullable = false)
     @NotNull
     public HouseAccountEntity getHouseAccount() {
@@ -130,6 +109,17 @@ public class AccountDetailsEntity implements java.io.Serializable{
 
     public void setHouseAccount(HouseAccountEntity houseAccount) {
         this.houseAccount = houseAccount;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "BUSINESS",nullable = false)
+    @NotNull
+    public BusinessEntity getBusinessEntity() {
+        return businessEntity;
+    }
+
+    public void setBusinessEntity(BusinessEntity businessEntity) {
+        this.businessEntity = businessEntity;
     }
 
     @Override

@@ -8,8 +8,15 @@ import javax.validation.constraints.Size;
 @Table(name = "DELETE_ACTION")
 public class DeleteActionEntity implements Comparable<DeleteActionEntity>,java.io.Serializable{
 
+    public enum Type{
+        ABORT,
+        REVOKE,
+        DELETE
+    }
+
     private long id;
     private String regName;
+    private Type type;
     private int priority;
 
     private BusinessDefineEntity businessDefine;
@@ -47,6 +54,17 @@ public class DeleteActionEntity implements Comparable<DeleteActionEntity>,java.i
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TYPE",nullable = false, length = 6)
+    @NotNull
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

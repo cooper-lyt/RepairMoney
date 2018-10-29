@@ -49,8 +49,7 @@ public class PaymentBusinessController implements TaskEditSubscribeComponent,jav
             getPaymentBusiness().setBankAccountDetails(null);
         }
         if(PaymentType.BANK.equals(type) && (getBankAccountDetails() == null)){
-            getPaymentBusiness().setBankAccountDetails(new BankAccountDetailsEntity(UUIDGenerator.getUUID(),BankAccountDetailsEntity.Type.PAYMENT));
-
+            getPaymentBusiness().setBankAccountDetails(new BankAccountDetailsEntity(getPaymentBusiness().getBusiness(),AccountOperationDirection.IN,UUIDGenerator.getUUID()));
         }
     }
 

@@ -14,7 +14,7 @@
     <b:column offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
 
         <div class="dashboard-notice" >
-            <b:icon name="info-sign" size="2x" style="color: #4183c4;"/>
+            <b:icon name="info-sign" size="2x" styleClass="brand-icon" style="color: #4183c4;"/>
             <h2>#{businessOperationController.businessInstance.defineName}<strong>#{businessOperationController.businessInstance.id}</strong> #{businessOperationController.persistent ? businessOperationController.taskName : ''} #{businessOperationController.persistent ? '任务已处理完成' : '业务已建立'}</h2>
             <p:outputPanel rendered="false" layout="inline">
                 <p> 您可能需要打印：</p>

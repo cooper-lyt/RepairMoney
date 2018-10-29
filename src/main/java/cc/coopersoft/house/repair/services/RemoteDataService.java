@@ -2,10 +2,7 @@ package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.services.SystemParamService;
 import cc.coopersoft.framework.tools.HttpJsonDataGet;
-import cc.coopersoft.house.repair.data.model.HouseEntity;
-import cc.coopersoft.house.repair.data.model.OwnerPersonEntity;
-import cc.coopersoft.house.repair.data.model.PaymentNoticeEntity;
-import cc.coopersoft.house.repair.data.model.PaymentNoticeItemEntity;
+import cc.coopersoft.house.repair.data.model.*;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -30,6 +27,7 @@ public class RemoteDataService implements java.io.Serializable{
                 owner.setHouse(item.getHouse());
             }
         }
+        result.setSource(PaymentNoticeEntity.Source.OWNER);
         return result;
     }
 

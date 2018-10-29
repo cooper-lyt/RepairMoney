@@ -48,7 +48,8 @@ public class PaymentCompleteService implements TaskActionComponent {
            account.setHouse(pb.getHouse());
            account.getHouse().setDataTime(new Date());
 
-           AccountDetailsEntity accountDetailsEntity = new AccountDetailsEntity(UUIDGenerator.getUUID(),AccountDetailsEntity.Type.PAYMENT);
+           AccountDetailsEntity accountDetailsEntity =
+                   new AccountDetailsEntity(paymentEntity.getBusiness(),AccountOperationDirection.IN,UUIDGenerator.getUUID());
            accountDetailsEntity.setOperationTime(paymentEntity.getOperationDate());
            accountDetailsEntity.setMoney(pb.getMoney());
            accountDetailsEntity.setBalance(account.getBalance());

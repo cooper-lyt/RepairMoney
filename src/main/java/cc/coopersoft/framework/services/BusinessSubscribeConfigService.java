@@ -47,15 +47,12 @@ public class BusinessSubscribeConfigService  implements java.io.Serializable{
 
     private Map<String,TaskAction> actions;
 
-    private Map<String,TaskAction> deleteActions;
-
     @PostConstruct
     public void load(){
 
         editors = new HashMap<>();
         views = new HashMap<>();
         actions = new HashMap<>();
-        deleteActions = new HashMap<>();
 
         Reflections reflections = new Reflections(new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage("cc.coopersoft")).addScanners(new ResourcesScanner()));
         Set<String> confings = reflections.getResources(Pattern.compile(".*\\.tasksubscribe\\.xml"));
@@ -113,16 +110,14 @@ public class BusinessSubscribeConfigService  implements java.io.Serializable{
                                     }
 
 
-                                }else if ("ACTION".equals(typeName) || "DELETE".equals(typeName)){
+                                }else if ("ACTION".equals(typeName)){
                                     TaskAction subscribe = new TaskAction();
                                     subscribe.setId(regNode.getAttributes().getNamedItem("id").getNodeValue());
                                     subscribe.setName(regNode.getAttributes().getNamedItem("name").getNodeValue());
                                     subscribe.setClassName(regNode.getAttributes().getNamedItem("class").getNodeValue());
-                                    if ("ACTION".equals(typeName)) {
-                                        actions.put(subscribe.getId(), subscribe);
-                                    }else{
-                                        deleteActions.put(subscribe.getId(),subscribe);
-                                    }
+
+                                    actions.put(subscribe.getId(), subscribe);
+
                                     logger.config("load action subscribe:" + subscribe);
                                 }
 
@@ -179,8 +174,5 @@ public class BusinessSubscribeConfigService  implements java.io.Serializable{
         return actions.get(id);
     }
 
-    public TaskAction getDeleteAction(String id){
-        return deleteActions.get(id);
-    }
 
 }
