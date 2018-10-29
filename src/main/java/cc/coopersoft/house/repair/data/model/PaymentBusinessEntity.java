@@ -14,17 +14,8 @@ public class PaymentBusinessEntity implements java.io.Serializable{
         ,ADD  //续缴
     }
 
-    public enum Status {
-        PROCESS, //处理中
-        NORMAL, //正常
-        MODIFYING, //变更中
-        CANCEL, //取消
-        DELETED //删除
-    }
-
     private String id;
 
-    private Status status;
     private Integer version;
     private String memo;
     private BigDecimal money;
@@ -34,20 +25,18 @@ public class PaymentBusinessEntity implements java.io.Serializable{
 
     private PaymentEntity paymentEntity;
     private AccountDetailsEntity accountDetails;
-    private HouseEntity house;
+
 
     public PaymentBusinessEntity() {
     }
 
-    public PaymentBusinessEntity(String id, Status status, BigDecimal money, BigDecimal mustMoney, String calcDetails, Type type, PaymentEntity paymentEntity, HouseEntity house) {
+    public PaymentBusinessEntity(String id,BigDecimal money, BigDecimal mustMoney, String calcDetails, Type type, PaymentEntity paymentEntity) {
         this.id = id;
-        this.status = status;
         this.money = money;
         this.mustMoney = mustMoney;
         this.calcDetails = calcDetails;
         this.type = type;
         this.paymentEntity = paymentEntity;
-        this.house = house;
     }
 
     @Id
@@ -62,17 +51,6 @@ public class PaymentBusinessEntity implements java.io.Serializable{
         this.id = id;
     }
 
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS",nullable = false,length = 16)
-    @NotNull
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 
     @Version
     @Column(name = "VERSION")
@@ -159,16 +137,6 @@ public class PaymentBusinessEntity implements java.io.Serializable{
 
     public void setPaymentEntity(PaymentEntity paymentEntity) {
         this.paymentEntity = paymentEntity;
-    }
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH}, optional = false)
-    @JoinColumn(name = "HOUSE",nullable = false)
-    public HouseEntity getHouse() {
-        return house;
-    }
-
-    public void setHouse(HouseEntity house) {
-        this.house = house;
     }
 
     @Override

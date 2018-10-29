@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "INCOME_BUSINESS", schema = "WXZJ", catalog = "")
+@Table(name = "INCOME_BUSINESS")
 public class IncomeBusinessEntity {
     private String id;
     private String bankOperOrder;
@@ -17,7 +17,6 @@ public class IncomeBusinessEntity {
     private Date endDate;
     private BigDecimal expectMoney;
     private BigDecimal money;
-    private String status;
 
     @Id
     @Column(name = "ID")
@@ -109,15 +108,6 @@ public class IncomeBusinessEntity {
         this.money = money;
     }
 
-    @Basic
-    @Column(name = "STATUS")
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -136,7 +126,6 @@ public class IncomeBusinessEntity {
         if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
         if (expectMoney != null ? !expectMoney.equals(that.expectMoney) : that.expectMoney != null) return false;
         if (money != null ? !money.equals(that.money) : that.money != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
         return true;
     }
@@ -152,7 +141,7 @@ public class IncomeBusinessEntity {
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (expectMoney != null ? expectMoney.hashCode() : 0);
         result = 31 * result + (money != null ? money.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+
         return result;
     }
 }

@@ -7,7 +7,7 @@
     </view>
 
     <editor>
-        <subscribe id="payment" name="交款信息" page="/subscribe/editor/chargeInfo.xhtml" class="cc.coopersoft.house.repair.controller.PaymentBusinessController">
+        <subscribe id="payment" name="交款信息" page="/subscribe/editor/chargeInfo.xhtml" class="cc.coopersoft.house.repair.services.PaymentInfoService">
             <!-- params -->
         </subscribe>
     </editor>

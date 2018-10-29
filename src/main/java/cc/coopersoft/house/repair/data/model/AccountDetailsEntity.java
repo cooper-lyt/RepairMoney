@@ -10,6 +10,13 @@ import java.util.Date;
 @Table(name = "ACCOUNT_DETAILS")
 public class AccountDetailsEntity implements java.io.Serializable{
 
+    public enum Status{
+        RUNNING, // 具体情况参见BusinessStatus
+        REG, //已生效
+        USEING, //正在使用此业务做其它业务
+        CANCEL, // 此业务已经不在生效了
+        DELETED // 此业务逻辑上相当于不存在了
+    }
 
     private String order;
     private AccountOperationDirection direction;
@@ -17,9 +24,11 @@ public class AccountDetailsEntity implements java.io.Serializable{
     private BigDecimal money;
     private BigDecimal balance;
     private String description;
+    private Status status;
 
     private HouseAccountEntity houseAccount;
     private BusinessEntity businessEntity;
+    private HouseEntity house;
 
     public AccountDetailsEntity() {
     }
@@ -78,8 +87,7 @@ public class AccountDetailsEntity implements java.io.Serializable{
 
 
     @Basic
-    @Column(name = "BALANCE", nullable = false)
-    @NotNull
+    @Column(name = "BALANCE")
     public BigDecimal getBalance() {
         return balance;
     }
@@ -99,6 +107,16 @@ public class AccountDetailsEntity implements java.io.Serializable{
         this.description = description;
     }
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS", nullable = false,length = 8)
+    @NotNull
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY,cascade =  {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH},optional = false)
     @JoinColumn(name = "ACCOUNT_NUMBER", nullable = false)
@@ -120,6 +138,16 @@ public class AccountDetailsEntity implements java.io.Serializable{
 
     public void setBusinessEntity(BusinessEntity businessEntity) {
         this.businessEntity = businessEntity;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH}, optional = false)
+    @JoinColumn(name = "HOUSE",nullable = false)
+    public HouseEntity getHouse() {
+        return house;
+    }
+
+    public void setHouse(HouseEntity house) {
+        this.house = house;
     }
 
     @Override

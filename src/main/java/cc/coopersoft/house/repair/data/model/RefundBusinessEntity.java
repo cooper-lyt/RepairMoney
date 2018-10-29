@@ -15,7 +15,6 @@ public class RefundBusinessEntity {
     private String reason;
     private String type;
     private String memo;
-    private String status;
     private Integer version;
     private Timestamp refundTime;
     private String bankOperOrder;
@@ -80,15 +79,6 @@ public class RefundBusinessEntity {
         this.memo = memo;
     }
 
-    @Basic
-    @Column(name = "STATUS")
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     @Basic
     @Column(name = "VERSION")
@@ -133,7 +123,6 @@ public class RefundBusinessEntity {
         if (reason != null ? !reason.equals(that.reason) : that.reason != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (memo != null ? !memo.equals(that.memo) : that.memo != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
         if (refundTime != null ? !refundTime.equals(that.refundTime) : that.refundTime != null) return false;
         if (bankOperOrder != null ? !bankOperOrder.equals(that.bankOperOrder) : that.bankOperOrder != null)
@@ -150,7 +139,6 @@ public class RefundBusinessEntity {
         result = 31 * result + (reason != null ? reason.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (memo != null ? memo.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (refundTime != null ? refundTime.hashCode() : 0);
         result = 31 * result + (bankOperOrder != null ? bankOperOrder.hashCode() : 0);

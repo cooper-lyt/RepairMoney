@@ -183,7 +183,7 @@ public class HouseAccountEntity {
         Collections.sort(result, new Comparator<AccountDetailsEntity>() {
             @Override
             public int compare(AccountDetailsEntity o1, AccountDetailsEntity o2) {
-                return o1.getOperationTime().compareTo(o2.getOperationTime());
+                return o2.getOperationTime().compareTo(o1.getOperationTime());
             }
         });
         return result;

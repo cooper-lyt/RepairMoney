@@ -46,7 +46,7 @@ public class PaymentDeleteService implements TaskActionComponent {
             }
             if (deleteHouse){
                 for(PaymentBusinessEntity pbe: payment.getPaymentBusinesses()){
-                    houseRepository.remove(pbe.getHouse());
+                    //houseRepository.remove(pbe.getHouse());
                 }
             }
 

@@ -20,7 +20,6 @@ public class UseBusinessEntity {
     private BigDecimal checkMoney;
     private BigDecimal superviseMoney;
     private boolean urgent;
-    private String status;
     private Integer version;
     private String splitType;
 
@@ -155,20 +154,6 @@ public class UseBusinessEntity {
     }
 
 
-
-
-
-
-    @Basic
-    @Column(name = "STATUS")
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     @Basic
     @Column(name = "VERSION")
     public Integer getVersion() {
@@ -211,7 +196,6 @@ public class UseBusinessEntity {
         if (checkMoney != null ? !checkMoney.equals(that.checkMoney) : that.checkMoney != null) return false;
         if (superviseMoney != null ? !superviseMoney.equals(that.superviseMoney) : that.superviseMoney != null)
             return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
         if (splitType != null ? !splitType.equals(that.splitType) : that.splitType != null) return false;
 
@@ -232,8 +216,6 @@ public class UseBusinessEntity {
         result = 31 * result + (payMoney != null ? payMoney.hashCode() : 0);
         result = 31 * result + (checkMoney != null ? checkMoney.hashCode() : 0);
         result = 31 * result + (superviseMoney != null ? superviseMoney.hashCode() : 0);
-
-        result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (splitType != null ? splitType.hashCode() : 0);
         return result;

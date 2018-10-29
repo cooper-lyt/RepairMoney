@@ -68,7 +68,7 @@
 
     <c:forEach items="#{paymentBusinessController.paymentBusiness.paymentBusinessList}" var="_pay">
         <ui:include src="/frame/house.xhtml">
-            <ui:param name="_house" value="#{_pay.house}"/>
+            <ui:param name="_house" value="#{_pay.accountDetails.house}"/>
         </ui:include>
         <b:row styleClass="details-info">
             <b:column span="3">

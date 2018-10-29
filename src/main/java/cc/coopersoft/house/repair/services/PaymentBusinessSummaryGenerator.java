@@ -8,10 +8,7 @@ import cc.coopersoft.framework.services.TaskActionComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.framework.tools.EnumHelper;
-import cc.coopersoft.house.repair.data.model.BusinessEntity;
-import cc.coopersoft.house.repair.data.model.OwnerPersonEntity;
-import cc.coopersoft.house.repair.data.model.PaymentBusinessEntity;
-import cc.coopersoft.house.repair.data.model.PaymentEntity;
+import cc.coopersoft.house.repair.data.model.*;
 
 import javax.inject.Inject;
 import java.text.DecimalFormat;
@@ -53,19 +50,20 @@ public class PaymentBusinessSummaryGenerator implements TaskActionComponent {
             summary = "多户合并交款！";
         }
         for(PaymentBusinessEntity p : payment.getPaymentBusinesses()){
-            searchKey += " " + p.getHouse().getMapNumber() + "-" + p.getHouse().getBlockNumber() + "-" + p.getHouse().getBuildNumber() + "-" + p.getHouse().getHouseOrder();
-            searchKey += " " + p.getHouse().getHouseAddress() + " " + p.getHouse().getHouseCode();
-            for(OwnerPersonEntity o : p.getHouse().getOwnerPersonList()){
+            HouseEntity house = p.getAccountDetails().getHouse();
+            searchKey += " " + house.getMapNumber() + "-" + house.getBlockNumber() + "-" + house.getBuildNumber() + "-" + house.getHouseOrder();
+            searchKey += " " + house.getHouseAddress() + " " + house.getHouseCode();
+            for(OwnerPersonEntity o : house.getOwnerPersonList()){
                 searchKey += " " + o.getName() + " " + o.getCredentialsNumber();
             }
             if (summary == null){
 
-                result.add(BusinessSummary.factorySummary("房屋编号",p.getHouse().getHouseCode(),4));
-                result.add(BusinessSummary.factorySummary("测绘标识",p.getHouse().getMapNumber() + "图" + p.getHouse().getBlockNumber() + "丘" + p.getHouse().getBuildNumber() + "幢" + p.getHouse().getHouseOrder() + "房",5));
-                result.add(BusinessSummary.factorySummary("建筑面积",areaFormat.format(p.getHouse().getHouseArea()),3));
-                result.add(BusinessSummary.factorySummary("房屋座落",p.getHouse().getHouseAddress(),12));
+                result.add(BusinessSummary.factorySummary("房屋编号",house.getHouseCode(),4));
+                result.add(BusinessSummary.factorySummary("测绘标识",house.getMapNumber() + "图" + house.getBlockNumber() + "丘" + house.getBuildNumber() + "幢" + house.getHouseOrder() + "房",5));
+                result.add(BusinessSummary.factorySummary("建筑面积",areaFormat.format(house.getHouseArea()),3));
+                result.add(BusinessSummary.factorySummary("房屋座落",house.getHouseAddress(),12));
                 String owner = "";
-                for(OwnerPersonEntity o : p.getHouse().getOwnerPersonList()){
+                for(OwnerPersonEntity o : house.getOwnerPersonList()){
                     if ("".equals(owner)){
                         owner += o.getName() + "[" + o.getCredentialsNumber() + "]";
                     }
@@ -76,7 +74,7 @@ public class PaymentBusinessSummaryGenerator implements TaskActionComponent {
                 result.add(BusinessSummary.factorySummary("实缴金额",currencyFormat.format(p.getMoney()),3));
             }else if(summary.length() < 400){
 
-                summary += p.getHouse().getHouseOrder() + "[" + p.getHouse().getOwnerPersonList().get(0).getName() + "]、";
+                summary += house.getHouseOrder() + "[" + house.getOwnerPersonList().get(0).getName() + "]、";
             }else{
                 summary += "等 ";
             }

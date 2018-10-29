@@ -7,6 +7,7 @@ import cc.coopersoft.framework.services.TaskActionComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.framework.tools.HttpJsonDataGet;
+import cc.coopersoft.framework.tools.UUIDGenerator;
 import cc.coopersoft.house.repair.data.model.*;
 import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
 import cc.coopersoft.house.repair.data.repository.PaymentNoticeRepository;
@@ -119,16 +120,26 @@ public class PaymentService implements TaskActionComponent,java.io.Serializable 
                     id = result.getId() + id;
                     PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
                             id,
-                            PaymentBusinessEntity.Status.PROCESS,
                             item.getMoney(),
                             item.getMustMoney(),
                             item.getCalcDetails(),
                             type,
-                            result.getPayment(),
-                            item.getHouse()
+                            result.getPayment()
                     );
                     item.getHouse().setDataTime(new Date());
                     result.getPayment().getPaymentBusinesses().add(paymentBusinessEntity);
+
+
+
+                    AccountDetailsEntity accountDetailsEntity =
+                            new AccountDetailsEntity(result,AccountOperationDirection.IN,UUIDGenerator.getUUID());
+                    accountDetailsEntity.setStatus(AccountDetailsEntity.Status.RUNNING);
+                    accountDetailsEntity.setHouse(item.getHouse());
+                    accountDetailsEntity.setMoney(item.getMoney());
+
+
+                    paymentBusinessEntity.setAccountDetails(accountDetailsEntity);
+
                 }
 
 

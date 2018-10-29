@@ -12,13 +12,14 @@ public interface BusinessInstance {
         ,OUT_SIDE //外部建立
     }
 
-    //仅对应工作流状态， 其它状态见各业务的状态
+
     public enum BusinessStatus{
         RUNNING  //运行中
         ,ABORT   //中止
         ,SUSPEND  //挂起
         ,COMPLETE //完成
         ,DELETED //撤回
+        ,CANCEL //注销
     }
 
 

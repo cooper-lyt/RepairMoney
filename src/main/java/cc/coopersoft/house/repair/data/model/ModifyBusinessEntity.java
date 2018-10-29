@@ -10,7 +10,6 @@ public class ModifyBusinessEntity {
     //private String oldHouse;
     //private String newHouse;
     private String type;
-    private String status;
     private Integer version;
     private String reason;
     private String memo;
@@ -37,15 +36,6 @@ public class ModifyBusinessEntity {
         this.type = type;
     }
 
-    @Basic
-    @Column(name = "STATUS")
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     @Basic
     @Column(name = "VERSION")
@@ -106,7 +96,6 @@ public class ModifyBusinessEntity {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
         if (reason != null ? !reason.equals(that.reason) : that.reason != null) return false;
         if (memo != null ? !memo.equals(that.memo) : that.memo != null) return false;
@@ -120,7 +109,6 @@ public class ModifyBusinessEntity {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (reason != null ? reason.hashCode() : 0);
         result = 31 * result + (memo != null ? memo.hashCode() : 0);
