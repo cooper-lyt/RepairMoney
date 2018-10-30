@@ -5,6 +5,7 @@ import cc.coopersoft.framework.controller.BusinessOperationController;
 import cc.coopersoft.framework.services.BusinessOperationService;
 import cc.coopersoft.framework.tools.HttpJsonDataGet;
 import cc.coopersoft.house.repair.Messages;
+import cc.coopersoft.house.repair.data.model.BusinessEntity;
 import cc.coopersoft.house.repair.data.model.PaymentNoticeEntity;
 import cc.coopersoft.house.repair.pages.Collect;
 import cc.coopersoft.house.repair.services.PaymentService;
@@ -36,7 +37,6 @@ public class PaymentBusinessCreate implements java.io.Serializable {
     private FacesContext facesContext;
 
     @Inject
-    @SubscribeComponent
     private PaymentService paymentService;
 
     @Inject
@@ -94,10 +94,13 @@ public class PaymentBusinessCreate implements java.io.Serializable {
 
 
     public Class<? extends ViewConfig> paymentByNotice(){
-        paymentService.createBusinessByNotice(paymentNotice);
-        businessOperationService.createInstance(
+        if (paymentService.isCharge(paymentNotice)){
+            messages.addError().paymentNoticeIsUsing();
+            return null;
+        }
+        paymentService.createBusinessByNotice((BusinessEntity) businessOperationService.createInstance(
                 facesContext.getExternalContext().getRequestParameterMap().get(BusinessOperationController.BUSINESS_DEFINE_ID_PARAM_NAME),
-                BusinessOperationService.CREATE_TASK_NAME);
+                BusinessOperationService.CREATE_TASK_NAME),paymentNotice);
         return businessOperationController.taskBegin();
     }
 

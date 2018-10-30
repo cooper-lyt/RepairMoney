@@ -3,6 +3,7 @@ package cc.coopersoft.house.repair.services;
 import cc.coopersoft.framework.SubscribeComponent;
 import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.services.TaskActionComponent;
+import cc.coopersoft.framework.services.TaskValidComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.house.repair.data.model.BusinessEntity;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SubscribeComponent
-public class OutsideBusinessHoldService implements TaskActionComponent<BusinessEntity> {
+public class OutsideBusinessHoldService implements TaskValidComponent<BusinessEntity> {
 
 
     @Override
@@ -22,8 +23,4 @@ public class OutsideBusinessHoldService implements TaskActionComponent<BusinessE
         return result;
     }
 
-    @Override
-    public void doAction(BusinessEntity businessInstance) {
-        // do nothing
-    }
 }

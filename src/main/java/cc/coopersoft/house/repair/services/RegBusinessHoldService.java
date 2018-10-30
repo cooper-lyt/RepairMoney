@@ -2,8 +2,7 @@ package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.I18n;
 import cc.coopersoft.framework.SubscribeComponent;
-import cc.coopersoft.framework.data.BusinessInstance;
-import cc.coopersoft.framework.services.TaskActionComponent;
+import cc.coopersoft.framework.services.TaskValidComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.house.repair.data.model.BusinessEntity;
 
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SubscribeComponent
-public class RegBusinessHoldService implements TaskActionComponent<BusinessEntity> {
+public class RegBusinessHoldService implements TaskValidComponent<BusinessEntity> {
 
     @Inject
     private I18n i18n;
@@ -26,8 +25,4 @@ public class RegBusinessHoldService implements TaskActionComponent<BusinessEntit
         return result;
     }
 
-    @Override
-    public void doAction(BusinessEntity businessInstance) {
-        //do nothing
-    }
 }

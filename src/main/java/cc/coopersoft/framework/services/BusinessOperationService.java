@@ -6,21 +6,18 @@ import cc.coopersoft.framework.data.TaskAction;
 import cc.coopersoft.framework.data.TaskSubscribe;
 import cc.coopersoft.framework.data.TaskSubscribeGroup;
 import cc.coopersoft.framework.data.model.BusinessDefineEntity;
-import cc.coopersoft.framework.data.model.DeleteActionEntity;
 import cc.coopersoft.framework.data.model.SubscribeGroupEntity;
 import cc.coopersoft.framework.data.model.TaskActionEntity;
 import cc.coopersoft.framework.data.repository.BusinessDefineRepository;
 import cc.coopersoft.framework.tools.DataHelper;
+import javafx.concurrent.Task;
 import org.apache.deltaspike.jpa.api.transaction.Transactional;
 
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,30 +42,65 @@ public class BusinessOperationService implements java.io.Serializable {
 
         private List<ValidMessage> messages;
 
-        private boolean pass;
+        private ValidLevel validLevel;
 
-
-        public ValidResult(boolean pass) {
-            this.pass = pass;
+        public ValidResult(ValidLevel validLevel) {
+            this.validLevel = validLevel;
             messages = new ArrayList<>();
         }
 
-        public ValidResult(List<ValidMessage> messages, boolean pass) {
-            this.messages = messages;
-            this.pass = pass;
-        }
 
-        public List<ValidMessage> getMessages() {
-            return messages;
-        }
-
-        public boolean isPass() {
+        boolean putMessages(List<ValidMessage> messages){
+            boolean pass = true;
+            for (ValidMessage message: messages) {
+                if (ValidMessage.Level.SERVER.equals(message.getLevel())) {
+                    if (ValidLevel.STRICT.equals(validLevel)) {
+                        message.setLevel(ValidMessage.Level.OFF);
+                    } else {
+                        message.setLevel(ValidMessage.Level.WARN);
+                    }
+                }
+                pass = (message.getLevel().pri <= ValidMessage.Level.WARN.pri);
+                this.messages.add(message);
+            }
             return pass;
         }
 
-        public void setPass(boolean pass) {
-            this.pass = pass;
+        void putAll(ValidResult other){
+            messages.addAll(other.messages);
         }
+
+        ValidMessage.Level maxLevel(){
+            ValidMessage.Level result = null;
+            for(ValidMessage msg: messages){
+                if ((result == null) || (result.pri < msg.getLevel().pri)){
+                    result = msg.getLevel();
+                }
+            }
+            return result;
+        }
+
+        boolean canContinue(){
+            ValidMessage.Level level = maxLevel();
+            return (level == null) || !ValidMessage.Level.FAIL.equals(level);
+        }
+
+        //private boolean pass;
+
+        public Iterator<ValidMessage> getMessages(){
+            return messages.iterator();
+        }
+
+        public boolean isEmpty(){
+            return messages.isEmpty();
+        }
+
+        public boolean isPass() {
+            ValidMessage.Level level = maxLevel();
+            return (level == null) || level.pri <= ValidMessage.Level.WARN.pri;
+        }
+
+
     }
 
 
@@ -103,9 +135,7 @@ public class BusinessOperationService implements java.io.Serializable {
 
     private List<TaskSubscribeGroup> viewGroups;
 
-    private List<TaskAction> beforeActions;
 
-    private List<TaskAction> afterActions;
 
 
     public BusinessDefineEntity getBusinessDefine() {
@@ -175,7 +205,7 @@ public class BusinessOperationService implements java.io.Serializable {
         }
     }
 
-    public void createInstance(String defineId, String taskName){
+    public BusinessInstance createInstance(String defineId, String taskName){
         initDefine(defineId,taskName);
         if (businessInstance == null) {
             businessInstance = businessInstanceService.createNew();
@@ -186,6 +216,7 @@ public class BusinessOperationService implements java.io.Serializable {
             businessInstance.setDefineVersion(businessDefine.getDefineVersion());
             businessInstance.setStatus(BusinessInstance.BusinessStatus.RUNNING);
         }
+        return businessInstance;
     }
 
     private void initDefine(String defineId,String taskName){
@@ -207,8 +238,6 @@ public class BusinessOperationService implements java.io.Serializable {
         businessDefine = null;
         editorGroups = null;
         viewGroups = null;
-        beforeActions = null;
-        afterActions = null;
     }
 
     public void clearInstance(){
@@ -216,11 +245,23 @@ public class BusinessOperationService implements java.io.Serializable {
         businessInstance = null;
     }
 
+    private List<TaskAction> getActions(TaskActionEntity.Type type, TaskActionEntity.Position position){
+        List<TaskAction> result = new ArrayList<>();
+        for(TaskActionEntity taskActionEntity: businessDefine.getTaskActionList()){
+            if (type.equals(taskActionEntity.getType()) && position.equals(taskActionEntity.getPosition())){
+                if (TaskActionEntity.Type.ACTION.equals(type)){
+                    result.add(businessSubscribeConfigService.getAction(taskActionEntity.getRegName()));
+                }else if (TaskActionEntity.Type.VALID.equals(type)){
+                    result.add(businessSubscribeConfigService.getValid(taskActionEntity.getRegName()));
+                }
+            }
+        }
+        return result;
+    }
+
     private void loadSubscribe(){
         editorGroups = new ArrayList<>();
         viewGroups = new ArrayList<>();
-        beforeActions = new ArrayList<>();
-        afterActions = new ArrayList<>();
         for(SubscribeGroupEntity sge: businessDefine.getSubscribeGroupList()){
             if (sge.getTaskName().equals(taskName)) {
                 if (SubscribeGroupEntity.Type.EDITOR.equals(sge.getType())) {
@@ -230,17 +271,6 @@ public class BusinessOperationService implements java.io.Serializable {
                 }
             }
         }
-        for(TaskActionEntity tae: businessDefine.getTaskActionList()){
-            if (tae.getTaskName().equals(taskName)){
-                if (TaskActionEntity.Type.BEFORE.equals(tae.getType())){
-                    beforeActions.add(businessSubscribeConfigService.getAction(tae.getRegName()));
-                }else if (TaskActionEntity.Type.AFTER.equals(tae.getType())){
-                    afterActions.add(businessSubscribeConfigService.getAction(tae.getRegName()));
-                }
-            }
-
-        }
-
     }
 
     private Integer pageIndex;
@@ -262,7 +292,11 @@ public class BusinessOperationService implements java.io.Serializable {
     }
 
     public ValidResult taskBegin(){
-        return doActionComponent(beforeActions);
+        ValidResult result = doValidationsComponent(getActions(TaskActionEntity.Type.VALID,TaskActionEntity.Position.BEFORE));
+        if (result.isPass()){
+            result.putAll(doActionComponent(getActions(TaskActionEntity.Type.ACTION,TaskActionEntity.Position.BEFORE)));
+        }
+        return result;
     }
 
     @Transactional
@@ -276,7 +310,7 @@ public class BusinessOperationService implements java.io.Serializable {
             }
             return result;
         }else
-            return new ValidResult(true);
+            return factoryValidResult();
     }
 
     public void next(){
@@ -296,16 +330,6 @@ public class BusinessOperationService implements java.io.Serializable {
         loadPage();
     }
 
-    private ValidResult doDeleteActions(DeleteActionEntity.Type type){
-        List<TaskAction> actions = new ArrayList<>();
-        for (DeleteActionEntity actionEntity: businessDefine.getDeleteActionList()){
-            if (actionEntity.getType().equals(type)) {
-                actions.add(businessSubscribeConfigService.getAction(actionEntity.getRegName()));
-            }
-        }
-        return doActionComponent(actions);
-    }
-
     @Transactional
     public void continueBusiness(){
         //TODO workflow
@@ -323,60 +347,57 @@ public class BusinessOperationService implements java.io.Serializable {
     }
 
     @Transactional
-    public ValidResult terminateBusiness(){
-        ValidResult result = doDeleteActions(DeleteActionEntity.Type.ABORT);
+    public ValidResult abortBusiness(){
+        ValidResult result = doValidationsComponent(getActions(TaskActionEntity.Type.VALID,TaskActionEntity.Position.ABORT));
         if (result.isPass()){
-            //TODO workflow
-            businessInstance.setStatus(BusinessInstance.BusinessStatus.ABORT);
-            businessInstanceService.saveEntity(businessInstance);
+            result.putAll(doActionComponent(getActions(TaskActionEntity.Type.ACTION,TaskActionEntity.Position.ABORT)));
+            if (result.isPass()) {
+                //TODO workflow
+                businessInstance.setStatus(BusinessInstance.BusinessStatus.ABORT);
+                businessInstanceService.saveEntity(businessInstance);
+            }
         }
         return result;
     }
 
     @Transactional
     public ValidResult revokeBusiness(){
-        ValidResult result = doDeleteActions(DeleteActionEntity.Type.REVOKE);
+        ValidResult result = doValidationsComponent(getActions(TaskActionEntity.Type.VALID,TaskActionEntity.Position.REVOKE));
         if (result.isPass()){
-            businessInstance.setStatus(BusinessInstance.BusinessStatus.DELETED);
-            businessInstanceService.saveEntity(businessInstance);
+            result.putAll(doActionComponent(getActions(TaskActionEntity.Type.ACTION,TaskActionEntity.Position.REVOKE)));
+            if (result.isPass()) {
+                businessInstance.setStatus(BusinessInstance.BusinessStatus.DELETED);
+                businessInstanceService.saveEntity(businessInstance);
+            }
         }
         return result;
     }
 
     @Transactional
     public ValidResult deleteBusiness(){
-        ValidResult result = doDeleteActions(DeleteActionEntity.Type.DELETE);
+        ValidResult result = doValidationsComponent(getActions(TaskActionEntity.Type.VALID,TaskActionEntity.Position.DELETE));
         if (result.isPass()){
-            businessInstanceService.deleteEntity(businessInstance);
+            result.putAll(doActionComponent(getActions(TaskActionEntity.Type.ACTION,TaskActionEntity.Position.DELETE)));
+            if (result.isPass()) {
+                businessInstanceService.deleteEntity(businessInstance);
+            }
         }
         return result;
     }
 
     @Transactional
     public ValidResult taskComplete(){
-        for (TaskSubscribeGroup tsg: editorGroups){
-            for(TaskSubscribe ts: tsg.getSubscribes()){
-                logger.config("assertion editor subscribe: " + ts);
-                try {
-                    Iterator<TaskEditSubscribeComponent> it = getSubscribeComponents(ts.getClassName());
-                    while (it.hasNext()){
-                        if (!it.next().assertion(businessInstance)){
-                            throw new IllegalArgumentException("subscribe assertion fail:" + ts.toString());
-                        }
-                    }
-                } catch (ClassNotFoundException e) {
-                    logger.log(Level.WARNING,ts.toString() + "subscribe component: " + ts.getClassName() + " not found:",e);
-                }
-            }
-        }
-        ValidResult result = doActionComponent(afterActions);
+        ValidResult result = doValidationsComponent(getActions(TaskActionEntity.Type.VALID,TaskActionEntity.Position.AFTER));
         if (result.isPass()){
-            businessInstance.setDataTime(new Date());
-            if (DataHelper.empty(businessDefine.getWfName())){
-                businessInstance.setStatus(BusinessInstance.BusinessStatus.COMPLETE);
+            result.putAll(doActionComponent(getActions(TaskActionEntity.Type.ACTION,TaskActionEntity.Position.AFTER)));
+            if (result.isPass()) {
+                businessInstance.setDataTime(new Date());
+                if (DataHelper.empty(businessDefine.getWfName())) {
+                    businessInstance.setStatus(BusinessInstance.BusinessStatus.COMPLETE);
+                }
+                businessInstanceService.saveEntity(businessInstance);
+                persistentAllEditor();
             }
-            businessInstanceService.saveEntity(businessInstance);
-            persistentAllEditor();
         }
         return result;
     }
@@ -406,28 +427,8 @@ public class BusinessOperationService implements java.io.Serializable {
         return result;
     }
 
-    private ValidResult factoryValidResult(List<ValidMessage> messages){
-        ValidResult result = new ValidResult(true);
-        if ((messages == null) || messages.isEmpty()){
-            return result;
-        }
-        ValidLevel validLevel = systemParamService.getEnumParam(ValidLevel.class,VALID_LEVEL_PARAM_NAME);
-
-        for(ValidMessage message: messages){
-            if (ValidMessage.Level.SERVER.equals(message.getLevel())){
-                if (ValidLevel.STRICT.equals(validLevel)){
-                    message.setLevel(ValidMessage.Level.OFF);
-                }else{
-                    message.setLevel(ValidMessage.Level.WARN);
-                }
-            }
-            if (result.pass && ValidMessage.Level.OFF.equals(message.getLevel())){
-                result.setPass(false);
-            }
-            result.getMessages().add(message);
-        }
-        return result;
-
+    private ValidResult factoryValidResult(){
+        return new ValidResult(systemParamService.getEnumParam(ValidLevel.class,VALID_LEVEL_PARAM_NAME));
     }
 
     private void loadPage(){
@@ -472,35 +473,53 @@ public class BusinessOperationService implements java.io.Serializable {
         }
     }
 
+    private ValidResult doValidationsComponent(List<TaskAction> validations){
+        ValidResult result = factoryValidResult();
+        for(TaskAction ta: validations){
+            logger.config("valid for:" + ta);
+            if (!DataHelper.empty(ta.getClassName())) {
+                try {
+                    Iterator<TaskValidComponent> it = getTaskValidComponents(ta.getClassName());
+                    while (it.hasNext()) {
+                        logger.config("valid from component:" + ta.getClassName());
+                        result.putMessages(it.next().valid(businessInstance));
+                        if(!result.canContinue()){
+                            return result;
+                        }
+                    }
+                } catch (ClassNotFoundException e) {
+                    logger.log(Level.WARNING, ta.toString() + "valid subscribe component: " + ta.getClassName() + " not found:", e);
+                }
+            }
+        }
+        return result;
+    }
+
 
     private ValidResult doActionComponent(List<? extends TaskAction> actions){
 
-        List<ValidMessage> validMessages = new ArrayList<>();
-        List<TaskActionComponent> componentList = new ArrayList<>();
-        for(TaskAction ta: actions){
-            logger.config("vail action for:" + ta);
+        ValidResult result = factoryValidResult();
+        for(TaskAction ta: actions) {
+            logger.config("do action for:" + ta);
             if (!DataHelper.empty(ta.getClassName())) {
                 try {
                     Iterator<TaskActionComponent> it = getTaskActionComponents(ta.getClassName());
-                    while (it.hasNext()) {
-                        logger.config("vail action from component:" + ta.getClassName());
+                    while (it.hasNext()){
                         TaskActionComponent component = it.next();
-                        componentList.add(component);
-                        validMessages.addAll(component.valid(businessInstance));
+                        if (result.putMessages(component.valid(businessInstance))) {
+                            component.doAction(businessInstance);
+                        }
+                        if (!result.canContinue()) {
+                            return result;
+                        }
+
                     }
                 } catch (ClassNotFoundException e) {
                     logger.log(Level.WARNING, ta.toString() + "action subscribe component: " + ta.getClassName() + " not found:", e);
                 }
             }
         }
-        ValidResult result = factoryValidResult(validMessages);
-        logger.config("do Action vaild: " + result.isPass());
-        if (result.isPass()){
-            for(TaskActionComponent component: componentList){
-                logger.config("do action for:" + component.getClass().getName());
-                component.doAction(businessInstance);
-            }
-        }
+
         return result;
     }
 
@@ -516,6 +535,14 @@ public class BusinessOperationService implements java.io.Serializable {
     private Instance<TaskActionComponent> taskActionComponentInstance;
 
     private Iterator<TaskActionComponent> getTaskActionComponents(String className) throws ClassNotFoundException {
+        Class clazz = Class.forName(className);
+        return taskActionComponentInstance.select(clazz,new SubscribeComponentQualifier()).iterator();
+    }
+
+    @Inject @Any
+    private Instance<TaskValidComponent> taskValidComponentInstance;
+
+    private Iterator<TaskValidComponent> getTaskValidComponents(String className) throws ClassNotFoundException{
         Class clazz = Class.forName(className);
         return taskActionComponentInstance.select(clazz,new SubscribeComponentQualifier()).iterator();
     }

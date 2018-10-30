@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -114,8 +115,8 @@ public class BusinessOperationController  implements java.io.Serializable {
 
     @BusinessRunManagerRole
     public Class<? extends ViewConfig> terminateBusiness(){
-        BusinessOperationService.ValidResult result = businessOperationService.terminateBusiness();
-        sendMessage(result.getMessages());
+        BusinessOperationService.ValidResult result = businessOperationService.abortBusiness();
+        sendMessage(result);
         if (result.isPass()){
             return Business.BusinessView.class;
         }else{
@@ -126,7 +127,7 @@ public class BusinessOperationController  implements java.io.Serializable {
     @BusinessManagerRole
     public Class<? extends ViewConfig> revokeBusiness(){
         BusinessOperationService.ValidResult result = businessOperationService.revokeBusiness();
-        sendMessage(result.getMessages());
+        sendMessage(result);
         if (result.isPass()){
             return Business.BusinessView.class;
         }else{
@@ -138,7 +139,7 @@ public class BusinessOperationController  implements java.io.Serializable {
     @SystemManagerRole
     public Class<? extends ViewConfig> deleteBusiness(){
         BusinessOperationService.ValidResult result = businessOperationService.deleteBusiness();
-        sendMessage(result.getMessages());
+        sendMessage(result);
         if (result.isPass()){
             return Business.BusinessDeleted.class;
         }else{
@@ -163,8 +164,11 @@ public class BusinessOperationController  implements java.io.Serializable {
         return businessOperationService.isPersistent();
     }
 
-    private void sendMessage(List<ValidMessage> messages){
-        for(ValidMessage msg: messages){
+    private void sendMessage(BusinessOperationService.ValidResult validResult){
+        Iterator<ValidMessage> it = validResult.getMessages();
+        while (it.hasNext()){
+            ValidMessage msg = it.next();
+
             FacesMessage.Severity severity = null;
             switch (msg.getLevel()){
 
@@ -176,6 +180,7 @@ public class BusinessOperationController  implements java.io.Serializable {
                     severity = FacesMessage.SEVERITY_WARN;
                     break;
                 case OFF:
+                case FAIL:
                     severity = FacesMessage.SEVERITY_ERROR;
                     break;
             }
@@ -196,6 +201,7 @@ public class BusinessOperationController  implements java.io.Serializable {
             logger.config("add " + severity + " message:" + summary);
             facesContext.addMessage(null,new FacesMessage(severity,summary,detail));
         }
+
     }
 
     private Class<? extends ViewConfig> preparePage(){
@@ -225,7 +231,7 @@ public class BusinessOperationController  implements java.io.Serializable {
 
     public Class<? extends ViewConfig> taskBegin(){
         BusinessOperationService.ValidResult result = businessOperationService.taskBegin();
-        sendMessage(result.getMessages());
+        sendMessage(result);
         if (result.isPass()){
             beginConversation();
             if (businessOperationService.isHasEditor()){
@@ -240,7 +246,7 @@ public class BusinessOperationController  implements java.io.Serializable {
 
     public Class<? extends ViewConfig> taskComplete(){
         BusinessOperationService.ValidResult result = businessOperationService.taskComplete();
-        sendMessage(result.getMessages());
+        sendMessage(result);
         if (result.isPass()){
             endConversation();
             return Business.Completed.class;
@@ -272,7 +278,7 @@ public class BusinessOperationController  implements java.io.Serializable {
 
     public Class<? extends ViewConfig> next(){
         BusinessOperationService.ValidResult result = businessOperationService.savePage();
-        sendMessage(result.getMessages());
+        sendMessage(result);
         if (result.isPass()){
             if (businessOperationService.isHasNext()){
                 businessOperationService.next();
@@ -290,7 +296,7 @@ public class BusinessOperationController  implements java.io.Serializable {
 
     public Class<? extends ViewConfig> save(){
         BusinessOperationService.ValidResult result = businessOperationService.savePage();
-        sendMessage(result.getMessages());
+        sendMessage(result);
         if (result.isPass()){
             return Business.Editor.class;
         }else{

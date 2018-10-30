@@ -9,12 +9,23 @@ import javax.validation.constraints.Size;
 public class TaskActionEntity implements Comparable<TaskActionEntity>,java.io.Serializable{
 
     public enum Type{
-        BEFORE,AFTER
+        VALID,
+        ACTION
+    }
+
+    public enum Position{
+        BEFORE,
+        AFTER,
+        ABORT,
+        REVOKE,
+        DELETE
+
     }
     private long id;
     private String taskName;
     private Type type;
     private String regName;
+    private Position position;
     private int priority;
 
     private BusinessDefineEntity businessDefine;
@@ -52,6 +63,17 @@ public class TaskActionEntity implements Comparable<TaskActionEntity>,java.io.Se
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "POSITION", length = 8, nullable = false)
+    @NotNull
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     @Basic

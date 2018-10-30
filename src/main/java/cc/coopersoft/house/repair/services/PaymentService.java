@@ -1,10 +1,6 @@
 package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.I18n;
-import cc.coopersoft.framework.SubscribeComponent;
-import cc.coopersoft.framework.data.BusinessInstance;
-import cc.coopersoft.framework.services.TaskActionComponent;
-import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.framework.tools.HttpJsonDataGet;
 import cc.coopersoft.framework.tools.UUIDGenerator;
@@ -12,20 +8,10 @@ import cc.coopersoft.house.repair.data.model.*;
 import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
 import cc.coopersoft.house.repair.data.repository.PaymentNoticeRepository;
 
-import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-@ConversationScoped
-@SubscribeComponent
-public class PaymentService implements TaskActionComponent<BusinessEntity>,java.io.Serializable {
-
-    private enum CreateSource{
-        NOTICE
-    }
+public class PaymentService implements java.io.Serializable {
 
     @Inject
     private PaymentNoticeRepository paymentNoticeRepository;
@@ -35,9 +21,6 @@ public class PaymentService implements TaskActionComponent<BusinessEntity>,java.
 
     @Inject
     private RemoteDataService remoteDataService;
-
-    @Inject
-    private I18n i18n;
 
 
     public PaymentNoticeEntity getPaymentNotice(String noticeNumber) throws HttpJsonDataGet.ApiServerException {
@@ -58,89 +41,74 @@ public class PaymentService implements TaskActionComponent<BusinessEntity>,java.
         return false;
     }
 
-    public void createBusinessByNotice(PaymentNoticeEntity paymentNotice){
-        createSource = CreateSource.NOTICE;
-        this.paymentNotice = paymentNotice;
-    }
+    public void createBusinessByNotice(BusinessEntity business, PaymentNoticeEntity paymentNotice){
+        business.setPayment(new PaymentEntity(business));
+        business.getPayment().setPaymentNotice(paymentNotice);
+        business.getPayment().setMustMoney(paymentNotice.getMustMoney());
+        business.getPayment().setMoney(paymentNotice.getMoney());
 
-    private CreateSource createSource;
+        int itemCount = paymentNotice.getNoticeItems().size();
+        int i = 0;
+        for(PaymentNoticeItemEntity item: paymentNotice.getNoticeItems()){
+            if(DataHelper.empty(business.getPayment().getSectionCode())){
+                business.getPayment().setSectionCode(item.getHouse().getSectionCode());
+                business.getPayment().setSectionName(item.getHouse().getSectionName());
+            }
+            HouseAccountEntity houseAccountEntity = houseAccountRepository.findOptionalByHouseCode(item.getHouse().getHouseCode());
+            PaymentBusinessEntity.Type type = ((houseAccountEntity == null) || (HouseAccountEntity.Status.DESTROY.equals(houseAccountEntity.getStatus()))) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
+            String id = String.valueOf(i++);
+            while (id.length() < itemCount){
+                id = '0' + id;
+            }
+            id = business.getId() + id;
+            PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
+                    id,
+                    item.getMoney(),
+                    item.getMustMoney(),
+                    item.getCalcDetails(),
+                    type,
+                    business.getPayment()
+            );
+            item.getHouse().setDataTime(new Date());
+            business.getPayment().getPaymentBusinesses().add(paymentBusinessEntity);
 
-    private PaymentNoticeEntity paymentNotice;
-
-    @Override
-    public List<ValidMessage> valid(BusinessEntity businessInstance) {
-        if (createSource == null){
-            throw new IllegalArgumentException("createSource is null");
-        }
-        List<ValidMessage> result = new ArrayList<>();
-        switch (createSource){
-            case NOTICE:
-                if (paymentNotice == null){
-                    throw new IllegalArgumentException("payment Notice not found!");
-                }
-                if (isCharge(paymentNotice)){
-                    result.add(new ValidMessage(ValidMessage.Level.OFF,"payment_notice_is_using","payment_notice_is_using",paymentNotice.getId()));
-                }else {
-                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(i18n.getLocale());
-
-                    result.add(new ValidMessage(ValidMessage.Level.INFO, "payment_create_by_notice", "payment_create_by_notice",
-                            paymentNotice.getId(),currencyFormat.format(paymentNotice.getMustMoney()),currencyFormat.format(paymentNotice.getMoney())));
-                }
-
-                break;
-        }
-        return result;
-    }
-
-    @Override
-    public void doAction(BusinessEntity business) {
-
-
-        switch (createSource){
-
-            case NOTICE:
-                business.setPayment(new PaymentEntity(business));
-                business.getPayment().setPaymentNotice(paymentNotice);
-                business.getPayment().setMustMoney(paymentNotice.getMustMoney());
-                business.getPayment().setMoney(paymentNotice.getMoney());
-
-                int itemCount = paymentNotice.getNoticeItems().size();
-                int i = 0;
-                for(PaymentNoticeItemEntity item: paymentNotice.getNoticeItems()){
-                    if(DataHelper.empty(business.getPayment().getSectionCode())){
-                        business.getPayment().setSectionCode(item.getHouse().getSectionCode());
-                        business.getPayment().setSectionName(item.getHouse().getSectionName());
-                    }
-                    HouseAccountEntity houseAccountEntity = houseAccountRepository.findOptionalByHouseCode(item.getHouse().getHouseCode());
-                    PaymentBusinessEntity.Type type = ((houseAccountEntity == null) || (HouseAccountEntity.Status.DESTROY.equals(houseAccountEntity.getStatus()))) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
-                    String id = String.valueOf(i++);
-                    while (id.length() < itemCount){
-                        id = '0' + id;
-                    }
-                    id = business.getId() + id;
-                    PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
-                            id,
-                            item.getMoney(),
-                            item.getMustMoney(),
-                            item.getCalcDetails(),
-                            type,
-                            business.getPayment()
-                    );
-                    item.getHouse().setDataTime(new Date());
-                    business.getPayment().getPaymentBusinesses().add(paymentBusinessEntity);
-
-                    AccountDetailsEntity accountDetailsEntity =
-                            new AccountDetailsEntity(business,AccountOperationDirection.IN,UUIDGenerator.getUUID());
-                    accountDetailsEntity.setStatus(AccountDetailsEntity.Status.RUNNING);
-                    accountDetailsEntity.setHouse(item.getHouse());
-                    accountDetailsEntity.setMoney(item.getMoney());
-                    business.getAccountDetails().add(accountDetailsEntity);
-                    paymentBusinessEntity.setAccountDetails(accountDetailsEntity);
-
-                }
-
-
+            AccountDetailsEntity accountDetailsEntity =
+                    new AccountDetailsEntity(business,AccountOperationDirection.IN,UUIDGenerator.getUUID());
+            accountDetailsEntity.setStatus(AccountDetailsEntity.Status.RUNNING);
+            accountDetailsEntity.setHouse(item.getHouse());
+            accountDetailsEntity.setMoney(item.getMoney());
+            business.getAccountDetails().add(accountDetailsEntity);
+            paymentBusinessEntity.setAccountDetails(accountDetailsEntity);
 
         }
     }
+
+
+
+//    public List<ValidMessage> valid(BusinessEntity businessInstance) {
+//        if (createSource == null){
+//            throw new IllegalArgumentException("createSource is null");
+//        }
+//        List<ValidMessage> result = new ArrayList<>();
+//        switch (createSource){
+//            case NOTICE:
+//                if (paymentNotice == null){
+//                    throw new IllegalArgumentException("payment Notice not found!");
+//                }
+//                if (isCharge(paymentNotice)){
+//                    result.add(new ValidMessage(ValidMessage.Level.OFF,"payment_notice_is_using","payment_notice_is_using",paymentNotice.getId()));
+//                }else {
+//                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(i18n.getLocale());
+//
+//                    result.add(new ValidMessage(ValidMessage.Level.INFO, "payment_create_by_notice", "payment_create_by_notice",
+//                            paymentNotice.getId(),currencyFormat.format(paymentNotice.getMustMoney()),currencyFormat.format(paymentNotice.getMoney())));
+//                }
+//
+//                break;
+//        }
+//        return result;
+//    }
+//
+
+
 }

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @SubscribeComponent
-public class PaymentInfoService extends PaymentAccountValidService implements TaskEditSubscribeComponent<BusinessEntity> {
+public class PaymentInfoService implements TaskEditSubscribeComponent<BusinessEntity> {
 
 
 
@@ -21,13 +21,6 @@ public class PaymentInfoService extends PaymentAccountValidService implements Ta
         if (payment.getOperationDate() == null){
             payment.setOperationDate(new Date());
         }
-    }
-
-    @Override
-    public boolean assertion(BusinessEntity businessInstance) {
-        PaymentEntity payment = businessInstance.getPayment();
-        return  ((PaymentType.CASH.equals(payment.getPaymentType()) && (payment.getBankAccountDetails() == null)) ||
-                (PaymentType.BANK.equals(payment.getPaymentType()) && payment.getBankAccountDetails() != null));
     }
 
     @Override
@@ -49,9 +42,6 @@ public class PaymentInfoService extends PaymentAccountValidService implements Ta
         for(PaymentBusinessEntity pb: payment.getPaymentBusinesses()){
             houseCodes.add(pb.getAccountDetails().getHouse().getHouseCode());
         }
-
-
-        result.addAll(super.valid(businessInstance));
         return result;
     }
 
@@ -60,9 +50,12 @@ public class PaymentInfoService extends PaymentAccountValidService implements Ta
         PaymentEntity payment = businessInstance.getPayment();
         if (PaymentType.BANK.equals(payment.getPaymentType()) && !BusinessInstance.Source.OUT_SIDE.equals(businessInstance.getSource())){
             payment.getBankAccountDetails().setOperationTime(payment.getOperationDate());
+        }else {
+            businessInstance.setRegTime(payment.getOperationDate());
         }
         for(PaymentBusinessEntity paymentBusinessEntity: payment.getPaymentBusinesses()){
             paymentBusinessEntity.getAccountDetails().setOperationTime(payment.getOperationDate());
+
         }
     }
 }

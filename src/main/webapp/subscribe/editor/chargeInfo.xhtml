@@ -38,13 +38,13 @@
         <h:outputLabel for="payment_type_input" styleClass="control-label" value="交款方式"/>
         <div class="input-group">
             <span class="input-group-btn">
-                <h:selectOneMenu id="payment_type_input" value="#{paymentBusinessController.paymentType}"
+                <h:selectOneMenu id="payment_type_input" value="#{paymentBusinessController.paymentType}" readonly="#{paymentBusinessController.paymentBusiness.business.source eq 'OUT_SIDE'}"
                                  styleClass="input-group-first selectpicker select-menu-btn js-payment-type-input">
                     <f:selectItems var="_type" value="#{paymentTypes}" itemValue="#{_type}" itemLabel="#{enumHelper.getLabel(_type)}"/>
                 </h:selectOneMenu>
             </span>
 
-            <h:selectOneMenu value="#{paymentBusinessController.bank}"
+            <h:selectOneMenu value="#{paymentBusinessController.bank}" readonly="#{paymentBusinessController.paymentBusiness.business.source eq 'OUT_SIDE'}"
                              styleClass="selectpicker edit-select form-control js-payment-bank-input" pt:placeholder="交款银行">
                 <f:selectItem noSelectionOption="true" itemLabel="选择交款银行"/>
                 <f:selectItems var="_bank" value="#{bankAccounts}" itemValue="#{_bank.bankAccountId}" itemLabel="#{_bank.bankName}"/>
@@ -54,7 +54,9 @@
         </div>
     </div>
 
-    <b:dateTimePicker  required="true" format="YYYY-MM-DD" value="#{paymentBusinessController.paymentBusiness.operationDate}" label="交款日期" renderLabel="true">
+    <b:dateTimePicker readonly="#{paymentBusinessController.paymentBusiness.business.source eq 'OUT_SIDE'}"
+                      required="true" format="YYYY-MM-DD"
+                      value="#{paymentBusinessController.paymentBusiness.operationDate}" label="交款日期" renderLabel="true">
     </b:dateTimePicker>
     <b:message/>
 

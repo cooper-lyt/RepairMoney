@@ -25,7 +25,6 @@ public class BusinessDefineEntity implements java.io.Serializable{
 
     private Set<SubscribeGroupEntity> subscribeGroups = new HashSet<>(0);
     private Set<TaskActionEntity> taskActions = new HashSet<>(0);
-    private Set<DeleteActionEntity> deleteActions = new HashSet<>(0);
 
 
     @Id
@@ -174,22 +173,6 @@ public class BusinessDefineEntity implements java.io.Serializable{
     @Transient
     public List<TaskActionEntity> getTaskActionList(){
         List<TaskActionEntity> result = new ArrayList<>(getTaskActions());
-        Collections.sort(result);
-        return result;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "businessDefine", orphanRemoval = true)
-    public Set<DeleteActionEntity> getDeleteActions() {
-        return deleteActions;
-    }
-
-    public void setDeleteActions(Set<DeleteActionEntity> deleteActions) {
-        this.deleteActions = deleteActions;
-    }
-
-    @Transient
-    public List<DeleteActionEntity> getDeleteActionList(){
-        List<DeleteActionEntity> result = new ArrayList<>(getDeleteActions());
         Collections.sort(result);
         return result;
     }

@@ -47,12 +47,15 @@ public class BusinessSubscribeConfigService  implements java.io.Serializable{
 
     private Map<String,TaskAction> actions;
 
+    private Map<String,TaskAction> validations;
+
     @PostConstruct
     public void load(){
 
         editors = new HashMap<>();
         views = new HashMap<>();
         actions = new HashMap<>();
+        validations = new HashMap<>();
 
         Reflections reflections = new Reflections(new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage("cc.coopersoft")).addScanners(new ResourcesScanner()));
         Set<String> confings = reflections.getResources(Pattern.compile(".*\\.tasksubscribe\\.xml"));
@@ -110,13 +113,16 @@ public class BusinessSubscribeConfigService  implements java.io.Serializable{
                                     }
 
 
-                                }else if ("ACTION".equals(typeName)){
+                                }else if ("ACTION".equals(typeName) || "VALID".equals(typeName)){
                                     TaskAction subscribe = new TaskAction();
                                     subscribe.setId(regNode.getAttributes().getNamedItem("id").getNodeValue());
                                     subscribe.setName(regNode.getAttributes().getNamedItem("name").getNodeValue());
                                     subscribe.setClassName(regNode.getAttributes().getNamedItem("class").getNodeValue());
-
-                                    actions.put(subscribe.getId(), subscribe);
+                                    if ("ACTION".equals(typeName)) {
+                                        actions.put(subscribe.getId(), subscribe);
+                                    }else{
+                                        validations.put(subscribe.getId(), subscribe);
+                                    }
 
                                     logger.config("load action subscribe:" + subscribe);
                                 }
@@ -173,6 +179,8 @@ public class BusinessSubscribeConfigService  implements java.io.Serializable{
     public TaskAction getAction(String id){
         return actions.get(id);
     }
+
+    public TaskAction getValid(String id) {return validations.get(id);}
 
 
 }

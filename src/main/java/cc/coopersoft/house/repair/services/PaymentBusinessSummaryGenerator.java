@@ -30,6 +30,7 @@ public class PaymentBusinessSummaryGenerator implements TaskActionComponent<Busi
         return new ArrayList<>(0);
     }
 
+
     @Override
     public void doAction(BusinessEntity businessInstance) {
         List<BusinessSummary> result = new ArrayList<>();
