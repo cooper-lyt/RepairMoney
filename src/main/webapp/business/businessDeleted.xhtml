@@ -1,12 +1,67 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Title</title>
-</head>
-<body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html   lang="zh-cmn-Hans"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:b="http://bootsfaces.net/ui"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<f:view contentType="text/html" encoding="UTF-8">
+    <h:head>
 
-</body>
+
+
+        <title>#{messages.application_title}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+        <META HTTP-EQUIV="refresh" CONTENT="10;URL=#{request.contextPath}#{param.from}"/>
+
+
+        <link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
+
+        <h:outputScript library="omnifaces" name="fixviewstate.js" target="head" />
+        <h:outputStylesheet library="github" name="bootstrap.min.css"/>
+        <h:outputStylesheet library="github" name="bootstrap-theme.min.css"/>
+        <h:outputStylesheet library="github" name="theme.css" position="last"/>
+
+        <h:outputStylesheet library="fontawesome" name="all.min.css"/>
+        <h:outputStylesheet name="style.css" />
+
+
+    </h:head>
+
+    <h:body>
+        <b:row style="margin-top: 20px">
+        <b:column offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
+
+        <div class="dashboard-notice" >
+        <b:icon name="info-sign" size="2x" styleClass="brand-icon" style="color: #4183c4;"/>
+        <h2>业务已删除</h2>
+            <p>接下来你可以：</p>
+            <ul>
+                <li>
+                    <h:outputLink value="#{request.contextPath}/home.xhtml">
+                        返回首页
+                    </h:outputLink>
+                </li>
+                <li>
+                    <h:link value="查询业务" outcome="/business/businessSearch.xhtml"/>
+                </li>
+            </ul>
+
+
+        </div>
+
+        </b:column>
+        </b:row>
+
+    </h:body>
+
+
+</f:view>
+
 </html>

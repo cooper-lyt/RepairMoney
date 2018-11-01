@@ -1,22 +1,28 @@
 package cc.coopersoft.house.repair.data.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "PUT_ACCOUNT_BOOK", schema = "WXZJ", catalog = "")
 public class PutAccountBookEntity {
-    private String putId;
+
+    private long id;
     private String type;
     private boolean put;
+    private BusinessEntity business;
+    private PutAccountBusinessEntity putAccountBusiness;
 
     @Id
-    @Column(name = "PUT_ID")
-    public String getPutId() {
-        return putId;
+    @Column(name = "PUT_ID", nullable = false, unique = true)
+    @GeneratedValue
+    @NotNull
+    public long getId() {
+        return id;
     }
 
-    public void setPutId(String putId) {
-        this.putId = putId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Basic
@@ -40,6 +46,27 @@ public class PutAccountBookEntity {
         this.put = put;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "BUSINESS", nullable = false)
+    @NotNull
+    public BusinessEntity getBusiness() {
+        return business;
+    }
+
+    public void setBusiness(BusinessEntity business) {
+        this.business = business;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    public PutAccountBusinessEntity getPutAccountBusiness() {
+        return putAccountBusiness;
+    }
+
+    public void setPutAccountBusiness(PutAccountBusinessEntity putAccountBusiness) {
+        this.putAccountBusiness = putAccountBusiness;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,16 +75,15 @@ public class PutAccountBookEntity {
         PutAccountBookEntity that = (PutAccountBookEntity) o;
 
 
-        if (putId != null ? !putId.equals(that.putId) : that.putId != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (that.id != id) return false;
+
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = putId != null ? putId.hashCode() : 0;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
+        int result = Long.valueOf(id).hashCode();
 
         return result;
     }

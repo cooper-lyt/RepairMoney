@@ -139,7 +139,7 @@ public class AccountDetailsEntity implements java.io.Serializable{
         this.business = businessEntity;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH}, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "HOUSE",nullable = false)
     public HouseEntity getHouse() {
         return house;

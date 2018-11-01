@@ -9,11 +9,17 @@ import cc.coopersoft.house.repair.data.model.HouseAccountEntity;
 import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
 
 @SubscribeComponent
 public class HouseAccountDeleteService implements TaskActionComponent<BusinessEntity> {
+
+    @Inject
+    private Logger logger;
 
     @Inject
     private HouseAccountRepository houseAccountRepository;
@@ -24,13 +30,15 @@ public class HouseAccountDeleteService implements TaskActionComponent<BusinessEn
         String details = "";
         for (AccountDetailsEntity detailsEntity: businessInstance.getAccountDetails() ){
             HouseAccountEntity account = detailsEntity.getHouseAccount();
-            List<AccountDetailsEntity> allOperation = account.getValidDetailsList();
-            if (account != null && !allOperation.isEmpty()){
-                if (!allOperation.get(0).equals(detailsEntity)){
-                    if (!"".equals(details)){
-                        details += "、";
+            if (account != null) {
+                List<AccountDetailsEntity> allOperation = account.getValidDetailsList();
+                if (account != null && !allOperation.isEmpty()) {
+                    if (!allOperation.get(0).equals(detailsEntity)) {
+                        if (!"".equals(details)) {
+                            details += "、";
+                        }
+                        details += account.getHouseCode();
                     }
-                    details += account.getHouseCode() + "[" + account.getAccountNumber() + "]";
                 }
             }
 
@@ -47,18 +55,25 @@ public class HouseAccountDeleteService implements TaskActionComponent<BusinessEn
         for (AccountDetailsEntity detailsEntity: businessInstance.getAccountDetails() ) {
             HouseAccountEntity account = detailsEntity.getHouseAccount();
             if (account != null) {
-                account.getAccountDetails().remove(detailsEntity);
-                List<AccountDetailsEntity> allOperation = account.getValidDetailsList();
 
-
-                if (allOperation.isEmpty()){
-                    if (account.getAllDetailList().isEmpty()){
+                List<AccountDetailsEntity> validOperation = account.getValidDetailsList();
+                validOperation.removeAll(businessInstance.getAccountDetails());
+                if (validOperation.isEmpty()){
+                    List<AccountDetailsEntity> allOperation = account.getAllDetailList();
+                    allOperation.removeAll(businessInstance.getAccountDetails());
+                    if (allOperation.isEmpty()){
+                        //detailsEntity.setHouseAccount(null);
+                        for(AccountDetailsEntity ad:account.getAccountDetails()) {
+                            ad.setHouseAccount(null);
+                        }
                         houseAccountRepository.remove(account);
+                        logger.config("remove account: " + account);
                     }else{
+                        account.setBalance(BigDecimal.ZERO);
                         account.setStatus(HouseAccountEntity.Status.DESTROY);
                     }
                 }else{
-                    AccountDetailsEntity last = allOperation.get(0);
+                    AccountDetailsEntity last = validOperation.get(0);
                     account.setBalance(last.getBalance());
                     account.setHouse(last.getHouse());
                 }

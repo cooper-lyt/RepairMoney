@@ -50,7 +50,46 @@
         </div>
     </ui:define>
 
+    <b:modal id="revoke_confirm" title="撤回业务确认" size="modal-sm">
+        <p>确定要撤回 <strong>#{businessOperationController.businessInstance.defineName}</strong>  业务 : #{businessOperationController.businessInstance.id} </p>
+        <p class="text-danger">业务撤回后不可恢复！</p>
+        <f:facet name="footer">
+
+            <h:form >
+                <b:button value="取消" dismiss="modal" />
+                <b:commandButton immediate="true" action="#{businessOperationController.revokeBusiness}" look="danger" value="确认撤回">
+                    <f:param name="businessInstanceId" value="#{businessOperationController.businessInstance.id}"/>
+                </b:commandButton>
+            </h:form>
+        </f:facet>
+    </b:modal>
+
+    <b:modal id="delete_confirm" title="删除业务确认" size="modal-sm">
+        <p>确定要删除 <strong>#{businessOperationController.businessInstance.defineName}</strong>  业务 : #{businessOperationController.businessInstance.id} </p>
+        <p class="text-danger">业务删除后相关数据将全部丢失！</p>
+        <f:facet name="footer">
+
+            <h:form>
+                <b:button value="取消" dismiss="modal" />
+                <b:commandButton immediate="true" action="#{businessOperationController.deleteBusiness}" look="danger" value="确认删除">
+                    <f:param name="businessInstanceId" value="#{businessOperationController.businessInstance.id}"/>
+                    <f:param name="from" value="#{param.from}"/>
+                </b:commandButton>
+            </h:form>
+        </f:facet>
+    </b:modal>
+
+    <b:row>
+
+    <b:column span="12">
+        <b:messages globalOnly="true" showDetail="true" styleClass="top-messages"/>
+    </b:column>
+
+
     <c:if test="#{not empty businessOperationController.businessInstance}">
+
+        <b:column span="12">
+
         <o:form includeViewParams="true">
             <div class="dashboard-notice #{businessOperationController.businessInstance.source} #{businessOperationController.businessInstance.status} #{businessOperationController.businessInstance.reg ? 'reg' : ''}">
                 <div class="right">
@@ -72,7 +111,7 @@
 
                             <b:commandButton tooltip="中止" styleClass="btn-reversal"  iconAwesome="stop" look="danger"
                                              disabled="#{not (businessOperationController.businessInstance.status eq 'RUNNING')}"
-                                             action="#{businessOperationController.terminateBusiness}">
+                                             action="#{businessOperationController.abortBusiness}">
 
                             </b:commandButton>
 
@@ -100,18 +139,16 @@
 
 
                         </c:if>
-                        <b:commandButton tooltip="撤回业务" styleClass="btn-reversal" iconAwesome="trash" look="danger"
+                        <b:button tooltip="撤回业务" styleClass="btn-reversal" iconAwesome="trash" look="danger"
                                          rendered="#{facesContext.externalContext.isUserInRole('BusinessManager')}"
                                          disabled="#{(businessOperationController.businessInstance.status eq 'DELETED')}"
-                                         action="#{businessOperationController.revokeBusiness}">
+                                         pt:data-target="#revoke_confirm" pt:data-toggle="modal">
+                        </b:button>
 
-                        </b:commandButton>
-
-                        <b:commandButton tooltip="删除业务" styleClass="btn-reversal" iconAwesome="eraser" look="danger"
-                                         rendered="#{facesContext.externalContext.isUserInRole('SystemManager')}"
-                                         action="#{businessOperationController.deleteBusiness}">
-
-                        </b:commandButton>
+                        <b:button tooltip="删除业务" styleClass="btn-reversal" iconAwesome="eraser" look="danger"
+                                         pt:data-target="#delete_confirm" pt:data-toggle="modal"
+                                         rendered="#{facesContext.externalContext.isUserInRole('SystemManager')}">
+                        </b:button>
 
 
 
@@ -167,6 +204,9 @@
             </div>
         </o:form>
 
+        </b:column>
+
+        <b:column span="12">
 
         <c:forEach items="#{businessOperationController.viewDependencies}" var="_dependency">
             <ui:include src="#{_dependency}"/>
@@ -198,11 +238,12 @@
 
         </b:tabView>
 
+        </b:column>
 
     </c:if>
 
     <c:if test="#{empty businessOperationController.businessInstance}">
-
+        <b:column span="12">
         <div class="px-2">
             <div class="blankslate blankslate-large">
                 <svg height="32" class="octicon octicon-search blankslate-icon" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M15.7 13.3l-3.81-3.83A5.93 5.93 0 0 0 13 6c0-3.31-2.69-6-6-6S1 2.69 1 6s2.69 6 6 6c1.3 0 2.48-.41 3.47-1.11l3.83 3.81c.19.2.45.3.7.3.25 0 .52-.09.7-.3a.996.996 0 0 0 0-1.41v.01zM7 10.7c-2.59 0-4.7-2.11-4.7-4.7 0-2.59 2.11-4.7 4.7-4.7 2.59 0 4.7 2.11 4.7 4.7 0 2.59-2.11 4.7-4.7 4.7z"></path></svg>
@@ -215,9 +256,10 @@
 
 
         </div>
+        </b:column>
     </c:if>
 
 
-
+    </b:row>
 
 </ui:composition>

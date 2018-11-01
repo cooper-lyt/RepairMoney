@@ -14,6 +14,7 @@ public class PaymentNoticeItemEntity implements java.io.Serializable {
     private BigDecimal mustMoney;
     private BigDecimal money;
     private String description;
+    private String houseCode;
 
 
     private PaymentNoticeEntity paymentNotice;
@@ -69,9 +70,19 @@ public class PaymentNoticeItemEntity implements java.io.Serializable {
         this.description = description;
     }
 
-    @OneToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "HOUSE", nullable = false)
+    @Column(name = "HOUSE_CODE", length = 32, nullable = false)
+    @Size(max = 32)
     @NotNull
+    public String getHouseCode() {
+        return houseCode;
+    }
+
+    public void setHouseCode(String houseCode) {
+        this.houseCode = houseCode;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HOUSE")
     public HouseEntity getHouse() {
         return house;
     }

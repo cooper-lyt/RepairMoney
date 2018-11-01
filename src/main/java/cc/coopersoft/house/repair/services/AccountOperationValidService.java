@@ -9,6 +9,7 @@ import cc.coopersoft.house.repair.data.model.BusinessEntity;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SubscribeComponent
@@ -20,6 +21,10 @@ public class AccountOperationValidService implements TaskValidComponent<Business
     @Inject
     private I18n i18n;
 
+    protected Date getOperationTime(BusinessEntity businessInstance){
+        return businessInstance.getRegTime();
+    }
+
 
     @Override
     public List<ValidMessage> valid(BusinessEntity businessInstance) {
@@ -30,7 +35,7 @@ public class AccountOperationValidService implements TaskValidComponent<Business
         }
 
 
-        if (!houseAccountService.validTime(businessInstance.getRegTime(),houseCodes)){
+        if (!houseAccountService.validTime(getOperationTime(businessInstance),houseCodes)){
             List<ValidMessage> result = new ArrayList<>(1);
             result.add(new ValidMessage(ValidMessage.Level.OFF,"操作时间必须在所有房屋账户变动之后！","最后变动时间：" + i18n.datetimeDisplay(houseAccountService.lastChangeTime(houseCodes))));
             return result;

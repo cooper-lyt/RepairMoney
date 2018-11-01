@@ -18,15 +18,15 @@ public class BankAccountDetailsEntity implements java.io.Serializable{
     private String bankOperationOrder;
 
     private BankAccountEntity bankAccount;
-    private BusinessEntity businessEntity;
+    private BusinessEntity business;
 
     public BankAccountDetailsEntity() {
     }
 
-    public BankAccountDetailsEntity(BusinessEntity businessEntity ,AccountOperationDirection direction, String bankOperationOrder) {
+    public BankAccountDetailsEntity(BusinessEntity business, AccountOperationDirection direction, String bankOperationOrder) {
         this.direction = direction;
         this.bankOperationOrder = bankOperationOrder;
-        this.businessEntity = businessEntity;
+        this.business = business;
     }
 
     @Id
@@ -98,12 +98,12 @@ public class BankAccountDetailsEntity implements java.io.Serializable{
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BUSINESS",nullable = false)
     @NotNull
-    public BusinessEntity getBusinessEntity() {
-        return businessEntity;
+    public BusinessEntity getBusiness() {
+        return business;
     }
 
-    public void setBusinessEntity(BusinessEntity businessEntity) {
-        this.businessEntity = businessEntity;
+    public void setBusiness(BusinessEntity businessEntity) {
+        this.business = businessEntity;
     }
 
     @Override

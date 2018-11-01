@@ -20,7 +20,7 @@ public class FixingPayEntity {
     private String description;
     private String memo;
     private Timestamp payTime;
-    private String putId;
+
 
     @Id
     @Column(name = "ID")
@@ -152,15 +152,7 @@ public class FixingPayEntity {
         this.payTime = payTime;
     }
 
-    @Basic
-    @Column(name = "PUT_ID")
-    public String getPutId() {
-        return putId;
-    }
 
-    public void setPutId(String putId) {
-        this.putId = putId;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -185,7 +177,7 @@ public class FixingPayEntity {
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (memo != null ? !memo.equals(that.memo) : that.memo != null) return false;
         if (payTime != null ? !payTime.equals(that.payTime) : that.payTime != null) return false;
-        if (putId != null ? !putId.equals(that.putId) : that.putId != null) return false;
+
 
         return true;
     }
@@ -205,7 +197,7 @@ public class FixingPayEntity {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (memo != null ? memo.hashCode() : 0);
         result = 31 * result + (payTime != null ? payTime.hashCode() : 0);
-        result = 31 * result + (putId != null ? putId.hashCode() : 0);
+
         return result;
     }
 }

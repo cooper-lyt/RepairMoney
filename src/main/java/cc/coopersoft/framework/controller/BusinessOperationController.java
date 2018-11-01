@@ -114,7 +114,8 @@ public class BusinessOperationController  implements java.io.Serializable {
     }
 
     @BusinessRunManagerRole
-    public Class<? extends ViewConfig> terminateBusiness(){
+    public Class<? extends ViewConfig> abortBusiness(){
+        viewBusiness();
         BusinessOperationService.ValidResult result = businessOperationService.abortBusiness();
         sendMessage(result);
         if (result.isPass()){
@@ -126,6 +127,8 @@ public class BusinessOperationController  implements java.io.Serializable {
 
     @BusinessManagerRole
     public Class<? extends ViewConfig> revokeBusiness(){
+        logger.config("begin revoke business:" + businessId);
+        viewBusiness();
         BusinessOperationService.ValidResult result = businessOperationService.revokeBusiness();
         sendMessage(result);
         if (result.isPass()){
@@ -138,6 +141,7 @@ public class BusinessOperationController  implements java.io.Serializable {
 
     @SystemManagerRole
     public Class<? extends ViewConfig> deleteBusiness(){
+        viewBusiness();
         BusinessOperationService.ValidResult result = businessOperationService.deleteBusiness();
         sendMessage(result);
         if (result.isPass()){

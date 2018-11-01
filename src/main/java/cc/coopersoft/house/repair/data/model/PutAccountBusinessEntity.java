@@ -1,23 +1,28 @@
 package cc.coopersoft.house.repair.data.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 @Table(name = "PUT_ACCOUNT_BUSINESS", schema = "WXZJ", catalog = "")
 public class PutAccountBusinessEntity {
-    private String id;
+    private long id;
     private String business;
-    private String putDate;
+    private Date putDate;
     private int cerNumber;
     private String cerWord;
 
+    private PutAccountBookEntity putAccountBook;
+
     @Id
-    @Column(name = "ID")
-    public String getId() {
+    @Column(name = "ID", nullable = false, unique = true)
+    @NotNull
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -33,11 +38,11 @@ public class PutAccountBusinessEntity {
 
     @Basic
     @Column(name = "PUT_DATE")
-    public String getPutDate() {
+    public Date getPutDate() {
         return putDate;
     }
 
-    public void setPutDate(String putDate) {
+    public void setPutDate(Date putDate) {
         this.putDate = putDate;
     }
 
@@ -61,6 +66,16 @@ public class PutAccountBusinessEntity {
         this.cerWord = cerWord;
     }
 
+    @OneToOne(fetch = FetchType.LAZY,optional = false,cascade ={CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
+    @PrimaryKeyJoinColumn
+    public PutAccountBookEntity getPutAccountBook() {
+        return putAccountBook;
+    }
+
+    public void setPutAccountBook(PutAccountBookEntity putAccountBookEntity) {
+        this.putAccountBook = putAccountBookEntity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,22 +83,17 @@ public class PutAccountBusinessEntity {
 
         PutAccountBusinessEntity that = (PutAccountBusinessEntity) o;
 
-        if (cerNumber != that.cerNumber) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (business != null ? !business.equals(that.business) : that.business != null) return false;
-        if (putDate != null ? !putDate.equals(that.putDate) : that.putDate != null) return false;
-        if (cerWord != null ? !cerWord.equals(that.cerWord) : that.cerWord != null) return false;
+
+        if (that.id != id) return false;
+
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (business != null ? business.hashCode() : 0);
-        result = 31 * result + (putDate != null ? putDate.hashCode() : 0);
-        result = 31 * result + cerNumber;
-        result = 31 * result + (cerWord != null ? cerWord.hashCode() : 0);
+        int result = Long.valueOf(id).hashCode();
+
         return result;
     }
 }

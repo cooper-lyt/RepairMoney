@@ -15,11 +15,22 @@
     <action>
         <subscribe id="payment.complete" name="完成交款业务" class="cc.coopersoft.house.repair.services.PaymentCompleteService"/>
         <subscribe id="payment.summary" name="交款业务摘要和查询生成" class="cc.coopersoft.house.repair.services.PaymentBusinessSummaryGenerator"/>
-        <subscribe id="payment.delete" name="删除缴费" class="cc.coopersoft.house.repair.services.PaymentDeleteService"/>
+
+        <subscribe id="account.details.revoke" name="撤回账户操作" class="cc.coopersoft.house.repair.services.AccountOperationRevokeService"/>
+        <subscribe id="account.delete" name="删除账户" class="cc.coopersoft.house.repair.services.HouseAccountDeleteService"/>
+        <subscribe id="paymentNotice.delete" name="删除缴费通知单" class="cc.coopersoft.house.repair.services.PaymentNoticeDeleteService"/>
+
     </action>
 
     <valid>
-        <subscribe id="account.lastOperationTime" name="验证账户操作时间" class="cc.coopersoft.house.repair.services.AccountOperationValidService"/>
+        <subscribe id="account.locked" name="禁止账户冻结" class="cc.coopersoft.house.repair.services.HouseAccountLockedHoldService"/>
+        <subscribe id="account.lastOperationTime" name="账户操作时间验证" class="cc.coopersoft.house.repair.services.AccountOperationValidService"/>
+
+        <subscribe id="business.lastAccountChange" name="业务必须为账户最后操作" class="cc.coopersoft.house.repair.services.OperationMustLastService"/>
+        <subscribe id="business.outside" name="禁止外部业务" class="cc.coopersoft.house.repair.services.OutsideBusinessHoldService"/>
+        <subscribe id="business.putAccount" name="禁止入账业务" class="cc.coopersoft.house.repair.services.PutAccountHoldService"/>
+        <subscribe id="business.reg" name="禁止生效业务" class="cc.coopersoft.house.repair.services.RegBusinessHoldService"/>
+
     </valid>
 
 </subscribes>

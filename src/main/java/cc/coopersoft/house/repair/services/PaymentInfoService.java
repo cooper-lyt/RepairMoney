@@ -6,12 +6,11 @@ import cc.coopersoft.framework.services.TaskEditSubscribeComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.house.repair.data.model.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @SubscribeComponent
-public class PaymentInfoService implements TaskEditSubscribeComponent<BusinessEntity> {
+public class PaymentInfoService extends AccountOperationValidService implements TaskEditSubscribeComponent<BusinessEntity> {
 
 
 
@@ -29,19 +28,21 @@ public class PaymentInfoService implements TaskEditSubscribeComponent<BusinessEn
     }
 
     @Override
+    protected Date getOperationTime(BusinessEntity businessInstance){
+        return businessInstance.getPayment().getOperationDate();
+    }
+
+    @Override
     public List<ValidMessage> valid(BusinessEntity businessInstance) {
         PaymentEntity payment = businessInstance.getPayment();
 
-        List<ValidMessage> result = new ArrayList<>();
+        List<ValidMessage> result = super.valid(businessInstance);
         if (PaymentType.BANK.equals(payment.getPaymentType()) &&
                 (payment.getBankAccountDetails() == null)){
 
             result.add(new ValidMessage(ValidMessage.Level.OFF,"请选择交款银行！","交款方式为转账时必须选择交款银行！"));
         }
-        List<String> houseCodes = new ArrayList<>();
-        for(PaymentBusinessEntity pb: payment.getPaymentBusinesses()){
-            houseCodes.add(pb.getAccountDetails().getHouse().getHouseCode());
-        }
+
         return result;
     }
 

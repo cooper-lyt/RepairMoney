@@ -52,16 +52,18 @@ public class BusinessOperationService implements java.io.Serializable {
 
         boolean putMessages(List<ValidMessage> messages){
             boolean pass = true;
-            for (ValidMessage message: messages) {
-                if (ValidMessage.Level.SERVER.equals(message.getLevel())) {
-                    if (ValidLevel.STRICT.equals(validLevel)) {
-                        message.setLevel(ValidMessage.Level.OFF);
-                    } else {
-                        message.setLevel(ValidMessage.Level.WARN);
+            if (messages != null){
+                for (ValidMessage message: messages) {
+                    if (ValidMessage.Level.SERVER.equals(message.getLevel())) {
+                        if (ValidLevel.STRICT.equals(validLevel)) {
+                            message.setLevel(ValidMessage.Level.OFF);
+                        } else {
+                            message.setLevel(ValidMessage.Level.WARN);
+                        }
                     }
+                    pass = (message.getLevel().pri <= ValidMessage.Level.WARN.pri);
+                    this.messages.add(message);
                 }
-                pass = (message.getLevel().pri <= ValidMessage.Level.WARN.pri);
-                this.messages.add(message);
             }
             return pass;
         }
@@ -367,6 +369,7 @@ public class BusinessOperationService implements java.io.Serializable {
             result.putAll(doActionComponent(getActions(TaskActionEntity.Type.ACTION,TaskActionEntity.Position.REVOKE)));
             if (result.isPass()) {
                 businessInstance.setStatus(BusinessInstance.BusinessStatus.DELETED);
+                businessInstance.setReg(false);
                 businessInstanceService.saveEntity(businessInstance);
             }
         }
