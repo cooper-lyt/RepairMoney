@@ -9,7 +9,7 @@ import org.apache.deltaspike.core.api.message.MessageTemplate;
 @MessageBundle
 public interface Messages {
 
-    @MessageTemplate("{payment_notice_not_fount}")
+    @MessageTemplate("{payment_notice_not_found}")
     String paymentNoticeNotFound(String noticeNumber);
 
     @MessageTemplate("{api_server_fail}")
@@ -17,4 +17,13 @@ public interface Messages {
 
     @MessageTemplate("{payment_notice_is_using}")
     String paymentNoticeIsUsing();
+
+    @MessageTemplate("{house_not_found}")
+    String houseNotFound(String code);
+
+    @MessageTemplate("{owner_business_not_found}")
+    String ownerBusinessNotFound(String businessId);
+
+    @MessageTemplate("{contract_not_found}")
+    String contractNotFound(String contractId);
 }

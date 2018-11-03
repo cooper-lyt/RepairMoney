@@ -8,4 +8,6 @@ public interface Collect extends ViewConfig {
 
 
     class Notice implements Collect {}
+
+    class House implements Collect {}
 }

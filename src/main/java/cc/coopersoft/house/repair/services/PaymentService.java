@@ -26,7 +26,7 @@ public class PaymentService implements java.io.Serializable {
     public PaymentNoticeEntity getPaymentNotice(String noticeNumber) throws HttpJsonDataGet.ApiServerException {
         PaymentNoticeEntity result = paymentNoticeRepository.findBy(noticeNumber.trim());
         if (result == null){
-            result = remoteDataService.getPaymentNotice(noticeNumber.trim());
+            result = remoteDataService.getPaymentNotice(noticeNumber);
 
         }
         return result;
@@ -39,6 +39,10 @@ public class PaymentService implements java.io.Serializable {
             }
         }
         return false;
+    }
+
+    public void createBusinessByHouse(BusinessEntity business, HouseEntity house){
+
     }
 
     public void createBusinessByNotice(BusinessEntity business, PaymentNoticeEntity paymentNotice){
