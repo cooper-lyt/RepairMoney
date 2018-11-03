@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -189,12 +190,16 @@ public class BusinessOperationController  implements java.io.Serializable {
                     break;
             }
 
-            String summary = bundle.getString(msg.getSummary());
-            if (DataHelper.empty(summary)){
+            String summary;
+            try {
+                summary = bundle.getString(msg.getSummary());
+            }catch (MissingResourceException e){
                 summary = msg.getSummary();
             }
-            String detail = bundle.getString(msg.getDetail());
-            if (DataHelper.empty(detail)){
+            String detail;
+            try {
+                detail=bundle.getString(msg.getDetail());
+            }catch (MissingResourceException e){
                 detail = msg.getDetail();
             }
             if (msg.getParams() != null){

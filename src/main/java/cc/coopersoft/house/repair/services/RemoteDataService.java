@@ -44,6 +44,11 @@ public class RemoteDataService implements java.io.Serializable{
 
         public void setHouse(HouseEntity house) {
             this.house = house;
+            if (house != null){
+                for(OwnerPersonEntity owner: house.getOwnerPersons()){
+                    owner.setHouse(house);
+                }
+            }
         }
 
         public boolean notFound(){

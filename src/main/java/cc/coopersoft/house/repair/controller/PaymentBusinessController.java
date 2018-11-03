@@ -9,10 +9,13 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
 
 @Named
 @RequestScoped
 public class PaymentBusinessController implements java.io.Serializable{
+
+    private List<PaymentBusinessEntity> paymentItems;
 
     @PostConstruct
     public void init(){
@@ -33,6 +36,13 @@ public class PaymentBusinessController implements java.io.Serializable{
         return ((BusinessEntity) businessOperationController.getBusinessInstance()).getPayment();
     }
 
+
+    public List<PaymentBusinessEntity> getPaymentItem() {
+        if (paymentItems == null){
+            paymentItems = getPaymentBusiness().getPaymentBusinessList();
+        }
+        return paymentItems;
+    }
 
     public BankAccountDetailsEntity getBankAccountDetails(){
         return getPaymentBusiness().getBankAccountDetails();

@@ -364,9 +364,9 @@ public class HouseEntity {
         this.saleMoney = saleMoney;
     }
 
-    @Basic
-    @Column(name = "DATA_TIME", nullable = false)
-    @NotNull
+    @Basic(optional = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "DATA_TIME", nullable = false , insertable = false, updatable = false)
     public Date getDataTime() {
         return dataTime;
     }

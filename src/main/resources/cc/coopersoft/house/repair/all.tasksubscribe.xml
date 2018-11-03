@@ -7,9 +7,10 @@
     </view>
 
     <editor>
-        <subscribe id="payment" name="交款信息" page="/subscribe/editor/chargeInfo.xhtml" class="cc.coopersoft.house.repair.services.PaymentInfoService">
+        <subscribe id="payment.info" name="交款信息" page="/subscribe/editor/chargeInfo.xhtml" class="cc.coopersoft.house.repair.services.PaymentInfoService">
             <!-- params -->
         </subscribe>
+        <subscribe id="payment.money" name="交款金额" page="/subscribe/editor/chargeMoney.xhtml" class="cc.coopersoft.house.repair.services.PaymentMoneyService"/>
     </editor>
 
     <action>
@@ -31,6 +32,7 @@
         <subscribe id="business.putAccount" name="禁止入账业务" class="cc.coopersoft.house.repair.services.PutAccountHoldService"/>
         <subscribe id="business.reg" name="禁止生效业务" class="cc.coopersoft.house.repair.services.RegBusinessHoldService"/>
 
+        <subscribe id="payment.noticeIsUse" name="禁止缴款通知单重复缴费" class="cc.coopersoft.house.repair.services.PaymentNoticeUseHoldService"/>
     </valid>
 
 </subscribes>

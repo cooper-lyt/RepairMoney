@@ -54,8 +54,8 @@
         </div>
     </div>
 
-    <b:dateTimePicker readonly="#{paymentBusinessController.paymentBusiness.business.source eq 'OUT_SIDE'}"
-                      required="true" format="YYYY-MM-DD"
+    <b:dateTimePicker readonly="#{paymentBusinessController.paymentBusiness.business.source eq 'OUT_SIDE'}" format="YYYY-MM-DD HH:mm:ss"
+                      required="true" showDate="true" showTime="true" useCurrent="true" allowInputToggle="true" iconPosition="left" sideBySide="true"
                       value="#{paymentBusinessController.paymentBusiness.operationDate}" label="交款日期" renderLabel="true">
     </b:dateTimePicker>
     <b:message/>

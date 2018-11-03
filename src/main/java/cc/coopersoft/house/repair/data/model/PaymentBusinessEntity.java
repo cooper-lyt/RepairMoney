@@ -30,7 +30,13 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     public PaymentBusinessEntity() {
     }
 
-    public PaymentBusinessEntity(String id,BigDecimal money, BigDecimal mustMoney, String calcDetails, Type type, PaymentEntity paymentEntity) {
+    public PaymentBusinessEntity(String id, Type type, PaymentEntity paymentEntity) {
+        this.id = id;
+        this.type = type;
+        this.paymentEntity = paymentEntity;
+    }
+
+    public PaymentBusinessEntity(String id, BigDecimal money, BigDecimal mustMoney, String calcDetails, Type type, PaymentEntity paymentEntity) {
         this.id = id;
         this.money = money;
         this.mustMoney = mustMoney;

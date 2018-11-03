@@ -25,6 +25,7 @@ public class PaymentService implements java.io.Serializable {
 
     public PaymentNoticeEntity getPaymentNotice(String noticeNumber) throws HttpJsonDataGet.ApiServerException {
         PaymentNoticeEntity result = paymentNoticeRepository.findBy(noticeNumber.trim());
+        //TODO if House is empty
         if (result == null){
             result = remoteDataService.getPaymentNotice(noticeNumber);
 
@@ -33,15 +34,29 @@ public class PaymentService implements java.io.Serializable {
     }
 
     public boolean isCharge(PaymentNoticeEntity paymentNotice){
-        for (PaymentEntity entity: paymentNotice.getPayments()){
-            if (!BusinessEntity.BusinessStatus.ABORT.equals(entity.getBusiness().getStatus())){
-                return true;
-            }
-        }
-        return false;
+        return paymentNoticeRepository.queryNoticeUseCount(paymentNotice.getId()) > 0;
     }
 
     public void createBusinessByHouse(BusinessEntity business, HouseEntity house){
+        PaymentEntity payment = new PaymentEntity(business);
+        business.setPayment(payment);
+        payment.setSectionName(house.getSectionName());
+        payment.setSectionCode(house.getSectionCode());
+        HouseAccountEntity houseAccountEntity = houseAccountRepository.findOptionalByHouseCode(house.getHouseCode());
+        PaymentBusinessEntity.Type type = ((houseAccountEntity == null) || (HouseAccountEntity.Status.DESTROY.equals(houseAccountEntity.getStatus()))) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
+        PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
+                business.getId(),
+                type,
+                business.getPayment()
+        );
+        payment.getPaymentBusinesses().add(paymentBusinessEntity);
+
+        AccountDetailsEntity accountDetailsEntity =
+                new AccountDetailsEntity(business,AccountOperationDirection.IN,UUIDGenerator.getUUID());
+        accountDetailsEntity.setStatus(AccountDetailsEntity.Status.RUNNING);
+        accountDetailsEntity.setHouse(house);
+        business.getAccountDetails().add(accountDetailsEntity);
+        paymentBusinessEntity.setAccountDetails(accountDetailsEntity);
 
     }
 
@@ -73,7 +88,6 @@ public class PaymentService implements java.io.Serializable {
                     type,
                     business.getPayment()
             );
-            item.getHouse().setDataTime(new Date());
             business.getPayment().getPaymentBusinesses().add(paymentBusinessEntity);
 
             AccountDetailsEntity accountDetailsEntity =

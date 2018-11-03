@@ -37,6 +37,37 @@
                 <b:message/>
             </o:form>
                 </b:column>
+
+                <b:column span="12">
+                    <hr/>
+                    <h:form>
+                        <b:inputText ng:autofocus="autofocus" value="#{paymentBusinessCreate.ownerBusinessNumber}"  autocomplete="off"
+                                     label="交易业务编号" placeholder="通过交易业务编号交款, 输入交易业务编号开始交款" renderLabel="true" required="true">
+                            <f:facet name="append">
+                                <b:commandButton look="primary" value="交款" icon="yen" action="#{paymentBusinessCreate.viewByOwnerBusiness}">
+                                    <f:param name="businessDefineId" value="BP"/>
+                                </b:commandButton>
+                            </f:facet>
+                        </b:inputText>
+                        <b:message/>
+                    </h:form>
+                </b:column>
+
+                <b:column span="12">
+                    <hr/>
+                    <h:form>
+                        <b:inputText ng:autofocus="autofocus" value="#{paymentBusinessCreate.contractNumber}"  autocomplete="off"
+                                     label="交易合同编号" placeholder="通过交易合同编号交款, 输入交易合同编号开始交款" renderLabel="true" required="true">
+                            <f:facet name="append">
+                                <b:commandButton look="primary" value="交款" icon="yen" action="#{paymentBusinessCreate.viewByContract}">
+                                    <f:param name="businessDefineId" value="BP"/>
+                                </b:commandButton>
+                            </f:facet>
+                        </b:inputText>
+                        <b:message/>
+                    </h:form>
+                </b:column>
+
                 <b:column span="12">
                     <hr/>
                     <h:form>
@@ -79,35 +110,7 @@
                 </b:column>
 
 
-                <b:column span="12">
-                    <hr/>
-                    <h:form>
-                        <b:inputText ng:autofocus="autofocus" value="#{paymentBusinessCreate.ownerBusinessNumber}"  autocomplete="off"
-                                     label="交易业务编号" placeholder="通过交易业务编号交款, 输入交易业务编号开始交款" renderLabel="true" required="true">
-                            <f:facet name="append">
-                                <b:commandButton look="primary" value="交款" icon="yen" action="#{paymentBusinessCreate.viewByOwnerBusiness}">
-                                    <f:param name="businessDefineId" value="BP"/>
-                                </b:commandButton>
-                            </f:facet>
-                        </b:inputText>
-                        <b:message/>
-                    </h:form>
-                </b:column>
 
-                <b:column span="12">
-                    <hr/>
-                    <h:form>
-                        <b:inputText ng:autofocus="autofocus" value="#{paymentBusinessCreate.contractNumber}"  autocomplete="off"
-                                     label="交易合同编号" placeholder="通过交易合同编号交款, 输入交易合同编号开始交款" renderLabel="true" required="true">
-                            <f:facet name="append">
-                                <b:commandButton look="primary" value="交款" icon="yen" action="#{paymentBusinessCreate.viewByContract}">
-                                    <f:param name="businessDefineId" value="BP"/>
-                                </b:commandButton>
-                            </f:facet>
-                        </b:inputText>
-                        <b:message/>
-                    </h:form>
-                </b:column>
 
 
             </b:row>
