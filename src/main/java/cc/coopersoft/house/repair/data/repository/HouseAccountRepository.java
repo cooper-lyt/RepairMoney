@@ -31,8 +31,8 @@ public abstract class HouseAccountRepository extends AbstractEntityRepository<Ho
         return ConditionQuery.instance(conditions,useTypes.isEmpty()?null:" h.useType in (:useTypes) ",fields);
     }
 
-    private <T> TypedQuery<T> setQueryParameter(ConditionQuery conditionQuery, TypedQuery<T> query,List<HouseEntity.UseType> useTypes){
-        TypedQuery<T> result = conditionQuery.setParamter(query);
+    private <T> TypedQuery<T> parameterization(ConditionQuery conditionQuery, TypedQuery<T> query, List<HouseEntity.UseType> useTypes){
+        TypedQuery<T> result = conditionQuery.parameterization(query);
         if (!useTypes.isEmpty()){
             result = result.setParameter("useTypes", useTypes);
         }
@@ -43,23 +43,23 @@ public abstract class HouseAccountRepository extends AbstractEntityRepository<Ho
     public List<HouseAccountEntity> queryByKey(List<ConditionAdapter> conditions, List<HouseEntity.UseType> useTypes, int offset, int count){
         ConditionQuery conditionQuery = buildConditionQuery(conditions,useTypes);
         TypedQuery<HouseAccountEntity> query = typedQuery("SELECT DISTINCT(a) FROM HouseAccountEntity a left join fetch a.house h left join h.ownerPersons o " +
-                conditionQuery.getWhere() + " order by h.dataTime desc , a.createTime desc, a.accountNumber").setMaxResults(count).setFirstResult(offset);
-        return setQueryParameter(conditionQuery,query,useTypes).getResultList();
+                conditionQuery.where() + " order by h.dataTime desc , a.createTime desc, a.accountNumber").setMaxResults(count).setFirstResult(offset);
+        return parameterization(conditionQuery,query,useTypes).getResultList();
     }
 
     public Long queryCountByKey(List<ConditionAdapter> conditions, List<HouseEntity.UseType> useTypes){
         ConditionQuery conditionQuery = buildConditionQuery(conditions,useTypes);
         TypedQuery<Long> query = entityManager().createQuery("SELECT COUNT(DISTINCT a.accountNumber) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o" +
-                conditionQuery.getWhere(), Long.class);
-        return setQueryParameter(conditionQuery,query,useTypes).getSingleResult();
+                conditionQuery.where(), Long.class);
+        return parameterization(conditionQuery,query,useTypes).getSingleResult();
     }
 
     public List<UseTypeCount> queryByKeyGroupUseType(List<ConditionAdapter> conditions, List<HouseEntity.UseType> useTypes){
         ConditionQuery conditionQuery = buildConditionQuery(conditions,useTypes);
         TypedQuery<UseTypeCount> query = entityManager().createQuery("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, DISTINCT(a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o" +
-                conditionQuery.getWhere() + " group by h.useType",UseTypeCount.class);
+                conditionQuery.where() + " group by h.useType",UseTypeCount.class);
 
-        return setQueryParameter(conditionQuery,query,useTypes).getResultList();
+        return parameterization(conditionQuery,query,useTypes).getResultList();
     }
 
 

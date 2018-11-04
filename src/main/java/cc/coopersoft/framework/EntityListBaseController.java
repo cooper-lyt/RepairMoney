@@ -4,7 +4,6 @@ import cc.coopersoft.framework.tools.DataHelper;
 import org.omnifaces.cdi.Param;
 
 import javax.inject.Inject;
-import java.util.List;
 
 
 public abstract class EntityListBaseController<E> {
@@ -16,13 +15,8 @@ public abstract class EntityListBaseController<E> {
     @Inject @Param(name = "condition")
     private String condition;
 
-    private PageResultData<E> result;
+    protected EntityDataPage<E> resultPage;
 
-    protected long resultCount;
-
-    protected void fillResult(List<E> resultData, int firstResult, long dataCount, int pageSize){
-        result = new PageResultData<>(resultData,firstResult,dataCount,pageSize);
-    }
 
     public Integer getOffset() {
         if (offset == null){
@@ -49,27 +43,21 @@ public abstract class EntityListBaseController<E> {
         this.condition = condition;
     }
 
-    public PageResultData<E> getResult() {
-        if (result == null){
+    public EntityDataPage<E> getResultPage() {
+        if (resultPage == null){
             fillResult();
         }
-        return result;
+        return resultPage;
     }
 
-    public long getResultCount() {
-        if (result == null){
-            fillResult();
-        }
-        return resultCount;
-    }
 
     public boolean isEmptyData(){
-        return getResultCount() == 0;
+        return getResultPage().getDataCount() == 0;
     }
 
     protected abstract void fillResult();
 
     protected void clearResult(){
-        result = null;
+        resultPage = null;
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by cooper on 7/24/16.
  */
-public class PageResultData<E> {
+public class EntityDataPage<E> {
 
     private static final int PAGE_MAX_COUNT = 15;
 
@@ -35,7 +35,7 @@ public class PageResultData<E> {
         }
     }
 
-    private List<E> resultData;
+    private List<E> dataList;
 
     private int page;
 
@@ -49,8 +49,8 @@ public class PageResultData<E> {
 
     private int pageSize;
 
-    public PageResultData(List<E> resultData, int firstResult, long dataCount,int pageSize) {
-        this.resultData = resultData;
+    public EntityDataPage(List<E> dataList, int firstResult, long dataCount, int pageSize) {
+        this.dataList = dataList;
         this.firstResult = firstResult;
         this.dataCount = dataCount;
         this.pageSize = pageSize;
@@ -86,8 +86,8 @@ public class PageResultData<E> {
         return firstResult - pageSize;
     }
 
-    public List<E> getResultData() {
-        return resultData;
+    public List<E> getDataList() {
+        return dataList;
     }
 
     public int getPage() {

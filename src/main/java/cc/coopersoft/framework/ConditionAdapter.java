@@ -2,6 +2,9 @@ package cc.coopersoft.framework;
 
 import cc.coopersoft.framework.tools.DataHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by cooper on 6/22/16.
  */
@@ -23,6 +26,18 @@ public class ConditionAdapter implements java.io.Serializable{
     public static ConditionAdapter instance(String condition){
         return new ConditionAdapter(condition);
     }
+
+    public static List<ConditionAdapter> instance(String condition, String regex){
+        if (DataHelper.empty(condition)){
+            return new ArrayList<>(0);
+        }
+        List<ConditionAdapter> result = new ArrayList<>();
+        for(String s: condition.split(regex)){
+            result.add(new ConditionAdapter(s));
+        }
+        return result;
+    }
+
 
     private String condition;
 

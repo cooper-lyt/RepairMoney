@@ -79,8 +79,8 @@ public class HouseAccountListController extends EntityListBaseController<HouseAc
 
     @Override
     protected void fillResult() {
-        resultCount = 0;
-        fillResult();
+
+
 
     }
 

@@ -1,7 +1,5 @@
 package cc.coopersoft.framework.controller;
 
-import cc.coopersoft.framework.PageResultData;
-import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.data.KeyAndCount;
 import cc.coopersoft.framework.data.model.BusinessDefineEntity;
 import cc.coopersoft.framework.services.BusinessDefineService;
@@ -18,15 +16,14 @@ import java.util.List;
 
 @Named
 @RequestScoped
-public class BusinessListController extends cc.coopersoft.framework.EntityListBaseController<BusinessInstance> {
+public class BusinessListController extends cc.coopersoft.framework.EntityListBaseController {
 
     private static final int PAGE_SIZE = 10;
 
     @Inject
-    private BusinessInstanceService<? extends BusinessInstance> businessInstanceService;
+    private BusinessInstanceService businessInstanceService;
 
-    @Inject
-    private BusinessDefineService businessDefineService;
+
 
     @Inject @Param(name = "categoryId")
     private String categoryId;
@@ -72,22 +69,8 @@ public class BusinessListController extends cc.coopersoft.framework.EntityListBa
 
     @Override
     protected void fillResult(){
-        resultCount = businessInstanceService.searchCount(getCondition(),getLimitDefineIds());
-
-        fillResult(new ArrayList<>(businessInstanceService.search(getCondition(),getLimitDefineIds(),getOffset(),PAGE_SIZE)),getOffset(),resultCount,PAGE_SIZE);
-
+        resultPage = businessInstanceService.search(getCondition(),getLimitDefineIds(),getOffset(),PAGE_SIZE);
         businessDefines = businessInstanceService.searchDefineCount(getCondition(),getLimitDefineIds());
-        for(KeyAndCount keyAndCount: businessDefines){
-            keyAndCount.setPri(9999);
-            for(BusinessDefineEntity e: businessDefineService.findAll()){
-                if(keyAndCount.getKey().equals(e.getId())) {
-                    keyAndCount.setName(e.getName());
-                    keyAndCount.setPri(e.getPriority());
-                    break;
-                }
-            }
-        }
-        Collections.sort(businessDefines);
     }
 
 }

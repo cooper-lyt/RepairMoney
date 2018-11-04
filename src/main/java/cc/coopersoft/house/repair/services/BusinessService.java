@@ -1,29 +1,35 @@
 package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.ConditionAdapter;
+import cc.coopersoft.framework.EntityDataPage;
 import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.data.BusinessOperationLog;
 import cc.coopersoft.framework.data.KeyAndCount;
+import cc.coopersoft.framework.data.model.BusinessDefineEntity;
+import cc.coopersoft.framework.services.BusinessDefineService;
 import cc.coopersoft.framework.services.BusinessInstanceService;
-import cc.coopersoft.framework.services.SimpleEntityService;
-import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.house.repair.data.model.BusinessEntity;
 import cc.coopersoft.house.repair.data.repository.BusinessRepository;
-import org.apache.deltaspike.data.api.EntityRepository;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class BusinessService extends SimpleEntityService<BusinessEntity,String> implements BusinessInstanceService<BusinessEntity> {
+public class BusinessService implements BusinessInstanceService {
 
 
     @Inject
     private BusinessRepository businessRepository;
 
+    @Inject
+    private MainBusinessService mainBusinessService;
+
+    @Inject
+    private BusinessDefineService businessDefineService;
 
     @Override
-    public void putOperationLog(BusinessEntity business, BusinessOperationLog log) {
+    public void putOperationLog(BusinessInstance business, BusinessOperationLog log) {
 
     }
 
@@ -33,48 +39,53 @@ public class BusinessService extends SimpleEntityService<BusinessEntity,String> 
     }
 
     @Override
+    public BusinessInstance getEntity(String id) {
+        return mainBusinessService.getEntity(id);
+    }
+
+    @Override
     public BusinessInstance saveEntity(BusinessInstance businessInstance) {
-        return saveEntity((BusinessEntity) businessInstance);
+        return mainBusinessService.saveEntity((BusinessEntity) businessInstance);
     }
 
     @Override
     public void deleteEntity(BusinessInstance businessInstance) {
-        deleteEntity((BusinessEntity)businessInstance);
+        mainBusinessService.deleteEntity((BusinessEntity) businessInstance);
     }
 
     @Override
-    public EntityRepository<BusinessEntity, String> getEntityRepository() {
-        return businessRepository;
+    public BusinessInstance createNew() {
+        return mainBusinessService.createNew();
     }
+
 
     @Override
-    public BusinessEntity createNew() {
-        return new BusinessEntity();
+    public EntityDataPage<BusinessInstance> search(String condition, List<String> defineIds, int offset, int count) {
+        return new EntityDataPage<>(
+                new ArrayList<>(businessRepository.queryByKey(ConditionAdapter.instance(condition," "),defineIds,offset,count)),
+                offset,
+                businessRepository.queryCountByKey(ConditionAdapter.instance(condition," "),defineIds)
+                ,count
+        );
     }
 
-    private List<ConditionAdapter> splitCondition(String condition){
-        if (DataHelper.empty(condition)){
-            return new ArrayList<>(0);
-        }
-        List<ConditionAdapter> result = new ArrayList<>();
-        for(String s: condition.split(" ")){
-            result.add(ConditionAdapter.instance(s));
-        }
-        return result;
-    }
 
-    @Override
-    public List<BusinessEntity> search(String condition, List<String> defineIds, int offset, int count) {
-        return businessRepository.queryByKey(splitCondition(condition),defineIds,offset,count);
-    }
-
-    @Override
-    public long searchCount(String condition, List<String> defineIds) {
-        return businessRepository.queryCountByKey(splitCondition(condition),defineIds);
-    }
 
     @Override
     public List<KeyAndCount> searchDefineCount(String condition, List<String> defineIds) {
-        return businessRepository.queryByKeyDefineGroup(splitCondition(condition),defineIds);
+        List<KeyAndCount> result = businessRepository.queryByKeyDefineGroup(ConditionAdapter.instance(condition," "),defineIds);
+
+        for(KeyAndCount keyAndCount: result){
+            keyAndCount.setPri(9999);
+            for(BusinessDefineEntity e: businessDefineService.findAll()){
+                if(keyAndCount.getKey().equals(e.getId())) {
+                    keyAndCount.setName(e.getName());
+                    keyAndCount.setPri(e.getPriority());
+                    break;
+                }
+            }
+        }
+        Collections.sort(result);
+        return result;
     }
 }

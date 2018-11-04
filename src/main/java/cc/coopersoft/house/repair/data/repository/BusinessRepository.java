@@ -23,8 +23,8 @@ public abstract class BusinessRepository extends AbstractEntityRepository<Busine
         return ConditionQuery.instance(conditions,defineIds.isEmpty() ? null : " b.defineId in (:defines) " ,conditionFields);
     }
 
-    private <T> TypedQuery<T> setQueryParameter(ConditionQuery conditionQuery, TypedQuery<T> query,List<String> defineIds){
-        TypedQuery<T> result = conditionQuery.setParamter(query);
+    private <T> TypedQuery<T> parameterization(ConditionQuery conditionQuery, TypedQuery<T> query, List<String> defineIds){
+        TypedQuery<T> result = conditionQuery.parameterization(query);
         if (!defineIds.isEmpty()){
             result = result.setParameter("defines", defineIds);
         }
@@ -34,21 +34,21 @@ public abstract class BusinessRepository extends AbstractEntityRepository<Busine
     public List<BusinessEntity> queryByKey(List<ConditionAdapter> conditions,List<String> defineIds,int offset, int count){
         ConditionQuery conditionQuery =  buildConditionQuery(conditions,defineIds);
         TypedQuery<BusinessEntity> query = typedQuery("SELECT b FROM BusinessEntity b left join fetch b.payment " +
-                conditionQuery.getWhere() + "order by b.regTime desc, b.dataTime desc").setFirstResult(offset).setMaxResults(count);
-        return setQueryParameter(conditionQuery,query,defineIds).getResultList();
+                conditionQuery.where() + "order by b.regTime desc, b.dataTime desc").setFirstResult(offset).setMaxResults(count);
+        return parameterization(conditionQuery,query,defineIds).getResultList();
     }
 
     public Long queryCountByKey(List<ConditionAdapter> conditions, List<String> defineIds){
         ConditionQuery conditionQuery =  buildConditionQuery(conditions,defineIds);
-        TypedQuery<Long> query = entityManager().createQuery("SELECT COUNT(b) FROM BusinessEntity b " + conditionQuery.getWhere(),Long.class);
-        return setQueryParameter(conditionQuery,query,defineIds).getSingleResult();
+        TypedQuery<Long> query = entityManager().createQuery("SELECT COUNT(b) FROM BusinessEntity b " + conditionQuery.where(),Long.class);
+        return parameterization(conditionQuery,query,defineIds).getSingleResult();
     }
 
     public List<KeyAndCount> queryByKeyDefineGroup(List<ConditionAdapter> conditions,List<String> defineIds){
         ConditionQuery conditionQuery =  buildConditionQuery(conditions,defineIds);
         TypedQuery<KeyAndCount> query = entityManager().createQuery(" SELECT new cc.coopersoft.framework.data.KeyAndCount(b.defineId,b.defineName,count(b)) FROM BusinessEntity b " +
-                conditionQuery.getWhere() + " group by b.defineId", KeyAndCount.class);
-        return setQueryParameter(conditionQuery,query,defineIds).getResultList();
+                conditionQuery.where() + " group by b.defineId", KeyAndCount.class);
+        return parameterization(conditionQuery,query,defineIds).getResultList();
     }
 
 }

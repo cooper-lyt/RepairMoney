@@ -85,12 +85,12 @@
             <c:if test="#{not businessListController.emptyData}">
                 <div class="d-flex flex-column flex-md-row flex-justify-between border-bottom pb-3 position-relative">
                     <h3>
-                        共查找到 #{businessListController.resultCount} 条符合条件的业务
+                        共查找到 #{businessListController.resultPage.dataCount} 条符合条件的业务
                     </h3>
                 </div>
 
                 <ul class="repo-list">
-                    <c:forEach items="#{businessListController.result.resultData}" var="_business">
+                    <c:forEach items="#{businessListController.resultPage.dataList}" var="_business">
                     <div class="repo-list-item d-flex flex-justify-start row">
                         <div class="col-12 col-md-12" >
                             <h3 class="mb-2">
@@ -131,7 +131,7 @@
 
 
                     <ui:include src="/frame/system/pageNav.xhtml">
-                        <ui:param name="pageResultData" value="#{businessListController.result}"/>
+                        <ui:param name="pageResultData" value="#{businessListController.resultPage}"/>
                     </ui:include>
 
 

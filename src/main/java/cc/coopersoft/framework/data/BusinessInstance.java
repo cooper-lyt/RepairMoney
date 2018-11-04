@@ -78,4 +78,5 @@ public interface BusinessInstance {
     String getSummary();
 
     void setSummary(String summary);
+
 }

@@ -117,7 +117,7 @@ public class BusinessOperationService implements java.io.Serializable {
     private BusinessSubscribeConfigService businessSubscribeConfigService;
 
     @Inject
-    private BusinessInstanceService<? extends BusinessInstance> businessInstanceService;
+    private BusinessInstanceService businessInstanceService;
 
     @Inject
     private NumberService numberService;

@@ -84,11 +84,11 @@ public class ConditionQuery {
         }
     }
 
-    public String getWhere() {
+    public String where() {
         return where;
     }
 
-    public <T> TypedQuery<T> setParamter(TypedQuery<T> query){
+    public <T> TypedQuery<T> parameterization(TypedQuery<T> query){
         if (parameter == null || parameter.isEmpty()){
             return query;
         }
