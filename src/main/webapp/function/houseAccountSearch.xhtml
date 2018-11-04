@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/functionBase.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <ui:param name="functionTitle" value="房屋账户查询"/>
+    <ui:define name="functionToolbar">
+        <div class="flex-table-item flex-table-item-primary">
+            <b:inputText autocomplete="false" placeholder="请输入关键字" value="#{businessListController.condition}"/>
+        </div>
+        <div class="flex-table-item">
+            <b:commandButton value="搜  索" action="/business/businessSearch?faces-redirect=true&amp;includeViewParams=true">
+                <f:param name="offset" value="0"/>
+                <f:param name="categoryId" value="#{null}"/>
+                <f:param name="defineId" value="#{null}"/>
+            </b:commandButton>
+        </div>
+    </ui:define>
+
+    <ui:define name="custom-header">
+        <f:metadata>
+            <o:viewParam name="offset" value="#{businessListController.offset}"/>
+            <o:viewParam name="condition" value="#{businessListController.condition}"/>
+            <o:viewParam name="categoryId" value="#{businessListController.categoryId}"/>
+            <o:viewParam name="defineId" value="#{businessListController.defineId}"/>
+        </f:metadata>
+    </ui:define>
+
+
+</ui:composition>

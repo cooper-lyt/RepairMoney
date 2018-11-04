@@ -7,6 +7,19 @@ import cc.coopersoft.framework.tools.DataHelper;
  */
 public class ConditionAdapter implements java.io.Serializable{
 
+    public enum MatchType{
+        FULL("="),
+        END_WITCH("like"),
+        START_WITCH("like"),
+        CONTAIN("like");
+
+        public String symbol;
+
+        MatchType(String symbol) {
+            this.symbol = symbol;
+        }
+    }
+
     public static ConditionAdapter instance(String condition){
         return new ConditionAdapter(condition);
     }
@@ -31,6 +44,22 @@ public class ConditionAdapter implements java.io.Serializable{
             contains = "%" + condition.trim() + "%";
             this.condition = condition.trim();
         }
+    }
+
+    public String getCondition(MatchType type){
+        switch (type){
+
+            case FULL:
+                return getCondition();
+            case END_WITCH:
+                return getEndWith();
+            case START_WITCH:
+                return getStartWith();
+            case CONTAIN:
+                return getContains();
+        }
+
+        return getCondition();
     }
 
     public String getCondition() {

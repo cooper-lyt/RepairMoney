@@ -70,7 +70,7 @@ public class BusinessService extends SimpleEntityService<BusinessEntity,String> 
 
     @Override
     public long searchCount(String condition, List<String> defineIds) {
-        return businessRepository.countByKey(splitCondition(condition),defineIds);
+        return businessRepository.queryCountByKey(splitCondition(condition),defineIds);
     }
 
     @Override

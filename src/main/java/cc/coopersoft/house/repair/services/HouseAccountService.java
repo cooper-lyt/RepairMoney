@@ -30,9 +30,9 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
     }
 
     public boolean validTime(Date date, List<String> houseCodes){
-
         Date lastDate = lastChangeTime(houseCodes);
         return ((lastDate == null) || date.after(lastDate));
-
     }
+
+
 }

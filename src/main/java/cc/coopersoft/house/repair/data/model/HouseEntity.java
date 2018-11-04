@@ -26,7 +26,6 @@ public class HouseEntity {
         SELF_CREATE,
         GOV_GROUP_HOUSE,
         STORE_HOUSE;
-
     }
 
     public enum UseType {
