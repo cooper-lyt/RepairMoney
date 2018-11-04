@@ -1,6 +1,5 @@
 package cc.coopersoft.house.repair.services;
 
-import cc.coopersoft.framework.I18n;
 import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.framework.tools.HttpJsonDataGet;
 import cc.coopersoft.framework.tools.UUIDGenerator;
@@ -9,7 +8,6 @@ import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
 import cc.coopersoft.house.repair.data.repository.PaymentNoticeRepository;
 
 import javax.inject.Inject;
-import java.util.Date;
 
 public class PaymentService implements java.io.Serializable {
 
@@ -57,7 +55,6 @@ public class PaymentService implements java.io.Serializable {
         accountDetailsEntity.setHouse(house);
         business.getAccountDetails().add(accountDetailsEntity);
         paymentBusinessEntity.setAccountDetails(accountDetailsEntity);
-
     }
 
     public void createBusinessByNotice(BusinessEntity business, PaymentNoticeEntity paymentNotice){
