@@ -176,10 +176,10 @@
                 <h2><strong>#{businessOperationController.businessInstance.defineName}</strong>
 
                     #{businessOperationController.businessInstance.id}
-                    <b:label style="font-size: 60%;" rendered="#{not businessOperationController.businessInstance.reg or not (businessOperationController.businessInstance.status eq 'COMPLETE')}" severity="#{(businessOperationController.businessInstance.status eq 'RUNNING') ? 'primary' : ((businessOperationController.businessInstance.status eq 'ABORT') ? 'danger' : ((businessOperationController.businessInstance.status eq 'SUSPEND') ? 'warning' : (businessOperationController.businessInstance.status eq 'COMPLETE') ? 'success' : 'default'))}"
+                    <b:label rendered="#{not businessOperationController.businessInstance.reg or not (businessOperationController.businessInstance.status eq 'COMPLETE')}" severity="#{(businessOperationController.businessInstance.status eq 'RUNNING') ? 'primary' : ((businessOperationController.businessInstance.status eq 'ABORT') ? 'danger' : ((businessOperationController.businessInstance.status eq 'SUSPEND') ? 'warning' : (businessOperationController.businessInstance.status eq 'COMPLETE') ? 'success' : 'default'))}"
                              text="#{enumHelper.getLabel(businessOperationController.businessInstance.status)}"/>
 
-                    <b:label style="font-size: 60%;" severity="success" text="生效" rendered="#{businessOperationController.businessInstance.reg}"/>
+                    <b:label severity="success" text="生效" rendered="#{businessOperationController.businessInstance.reg}"/>
                 </h2>
 
                 <p class="repo-list-description">

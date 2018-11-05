@@ -52,10 +52,8 @@
    </style>
 
     <b:row styleClass="context-condensed">
+        <c:if test="#{not businessListController.emptyData}">
         <b:column span="3" pt:role="complementary" hidden="sm">
-            <c:if test="#{not businessListController.emptyData}">
-
-
             <div class="border rounded-1 p-3 mb-3 d-none d-md-block">
                 <h2 class="d-inline-block f5 mb-2 mt-0">
                     业务种类
@@ -78,9 +76,9 @@
                     </c:forEach>
                 </ul>
             </div>
-            </c:if>
-        </b:column>
 
+        </b:column>
+        </c:if>
         <b:column span="#{businessListController.emptyData ? '12' : '9'}" pt:role="main">
             <c:if test="#{not businessListController.emptyData}">
                 <div class="d-flex flex-column flex-md-row flex-justify-between border-bottom pb-3 position-relative">

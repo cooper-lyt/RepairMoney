@@ -1,8 +1,7 @@
 package cc.coopersoft.framework.controller;
 
+import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.data.KeyAndCount;
-import cc.coopersoft.framework.data.model.BusinessDefineEntity;
-import cc.coopersoft.framework.services.BusinessDefineService;
 import cc.coopersoft.framework.services.BusinessInstanceService;
 import cc.coopersoft.framework.tools.DataHelper;
 import org.omnifaces.cdi.Param;
@@ -11,25 +10,33 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Named
 @RequestScoped
-public class BusinessListController extends cc.coopersoft.framework.EntityListBaseController {
+public class BusinessListController extends cc.coopersoft.framework.EntityListBaseController<BusinessInstance> {
 
     private static final int PAGE_SIZE = 10;
 
     @Inject
     private BusinessInstanceService businessInstanceService;
 
-
+    @Inject @Param(name = "condition")
+    private String condition;
 
     @Inject @Param(name = "categoryId")
     private String categoryId;
 
     @Inject @Param(name = "defineId")
     private String defineId;
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
 
     private List<KeyAndCount> businessDefines;
 
@@ -51,6 +58,9 @@ public class BusinessListController extends cc.coopersoft.framework.EntityListBa
 
     public List<KeyAndCount> getBusinessDefines() {
         //TODO count to many change to category
+        if (businessDefines == null){
+            fillResult();
+        }
         return businessDefines;
     }
 

@@ -2,7 +2,7 @@ package cc.coopersoft.house.repair.data;
 
 import cc.coopersoft.house.repair.data.model.HouseEntity;
 
-public class UseTypeCount implements java.io.Serializable{
+public class UseTypeCount implements Comparable<UseTypeCount>, java.io.Serializable {
 
     private HouseEntity.UseType useType;
 
@@ -19,5 +19,10 @@ public class UseTypeCount implements java.io.Serializable{
 
     public long getCount() {
         return count;
+    }
+
+    @Override
+    public int compareTo(UseTypeCount o) {
+        return useType.compareTo(o.useType);
     }
 }

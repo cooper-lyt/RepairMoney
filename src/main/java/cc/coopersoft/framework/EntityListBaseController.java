@@ -12,9 +12,6 @@ public abstract class EntityListBaseController<E> {
     @Param(name = "offset")
     private Integer offset;
 
-    @Inject @Param(name = "condition")
-    private String condition;
-
     protected EntityDataPage<E> resultPage;
 
 
@@ -32,16 +29,6 @@ public abstract class EntityListBaseController<E> {
         this.offset = offset;
     }
 
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String condition) {
-        if (DataHelper.isDirty(this.condition,condition)){
-            clearResult();
-        }
-        this.condition = condition;
-    }
 
     public EntityDataPage<E> getResultPage() {
         if (resultPage == null){

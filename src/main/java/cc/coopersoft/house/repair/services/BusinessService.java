@@ -61,10 +61,11 @@ public class BusinessService implements BusinessInstanceService {
 
     @Override
     public EntityDataPage<BusinessInstance> search(String condition, List<String> defineIds, int offset, int count) {
+        List<ConditionAdapter> conditions = ConditionAdapter.instance(condition," ");
         return new EntityDataPage<>(
-                new ArrayList<>(businessRepository.queryByKey(ConditionAdapter.instance(condition," "),defineIds,offset,count)),
+                new ArrayList<>(businessRepository.queryByKey(conditions,defineIds,offset,count)),
                 offset,
-                businessRepository.queryCountByKey(ConditionAdapter.instance(condition," "),defineIds)
+                businessRepository.queryCountByKey(conditions,defineIds)
                 ,count
         );
     }

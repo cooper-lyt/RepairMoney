@@ -10,29 +10,198 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
+    <ui:define name="custom-header">
+        <h:outputStylesheet library="bootstrap-select" name="css/bootstrap-select.min.css"/>
+        <h:outputStylesheet library="bootstrap-select" name="css/bootstrap-select-plug.css"/>
+        <f:metadata>
+            <o:viewParam name="offset" value="#{houseAccountListController.offset}"/>
+
+            <o:viewParam name="condition" value="#{houseSearchCondition.condition}"/>
+            <o:viewParam name="map" value="#{houseSearchCondition.mapNumber}"/>
+            <o:viewParam name="block" value="#{houseSearchCondition.blockNumber}"/>
+            <o:viewParam name="build" value="#{houseSearchCondition.buildNumber}"/>
+            <o:viewParam name="house" value="#{houseSearchCondition.houseOrder}"/>
+            <o:viewParam name="type" value="#{houseSearchCondition.type}"/>
+
+            <o:viewParam name="useType" value="#{houseAccountListController.useType}"/>
+        </f:metadata>
+    </ui:define>
 
     <ui:param name="functionTitle" value="房屋账户查询"/>
     <ui:define name="functionToolbar">
         <div class="flex-table-item flex-table-item-primary">
-            <b:inputText autocomplete="false" placeholder="请输入关键字" value="#{businessListController.condition}"/>
+        <ui:include src="/frame/houseSearchCondition.xhtml"/>
         </div>
+
         <div class="flex-table-item">
-            <b:commandButton value="搜  索" action="/business/businessSearch?faces-redirect=true&amp;includeViewParams=true">
+            <b:commandButton value="搜  索" action="/function/houseAccountSearch?faces-redirect=true&amp;includeViewParams=true">
                 <f:param name="offset" value="0"/>
-                <f:param name="categoryId" value="#{null}"/>
-                <f:param name="defineId" value="#{null}"/>
+                <f:param name="useType" value="#{null}"/>
             </b:commandButton>
         </div>
     </ui:define>
 
-    <ui:define name="custom-header">
-        <f:metadata>
-            <o:viewParam name="offset" value="#{businessListController.offset}"/>
-            <o:viewParam name="condition" value="#{businessListController.condition}"/>
-            <o:viewParam name="categoryId" value="#{businessListController.categoryId}"/>
-            <o:viewParam name="defineId" value="#{businessListController.defineId}"/>
-        </f:metadata>
-    </ui:define>
 
+    <b:row styleClass="context-condensed">
+        <c:if test="#{not houseAccountListController.emptyData}">
+        <b:column span="3" pt:role="complementary" hidden="sm">
+            <div class="border rounded-1 p-3 mb-3 d-none d-md-block">
+                <h2 class="d-inline-block f5 mb-2 mt-0">
+                    设计用途
+                </h2>
+
+                <ul class="filter-list small" data-pjax="">
+                    <c:forEach items="#{houseAccountListController.useTypeGroup}" var="_item">
+                        <li>
+                            <span class="bar" style="width: 23%;"></span>
+                            <b:link styleClass="filter-item #{(_item.useType eq houseAccountListController.useType) ? 'selected' : ''}"
+                                    value="#{enumHelper.getLabel(_item.useType)}"  outcome="/function/houseAccountSearch.xhtml" includeViewParams="true">
+                                <span class="count">#{_item.count}</span>
+                                <f:param name="useType" value="#{_item.useType}"/>
+                                <f:param name="offset" value="0"/>
+                            </b:link>
+                        </li>
+
+                    </c:forEach>
+                </ul>
+            </div>
+        </b:column>
+        </c:if>
+
+        <b:column span="#{houseAccountListController.emptyData ? '12' : '9'}" pt:role="main">
+            <c:if test="#{not houseAccountListController.emptyData}">
+                <div class="d-flex flex-column flex-md-row flex-justify-between border-bottom pb-3 position-relative">
+                    <h3>
+                        共查找到 #{houseAccountListController.resultPage.dataCount} 条符合条件的业务
+                    </h3>
+                </div>
+
+                <ul class="repo-list">
+                    <c:forEach items="#{houseAccountListController.resultPage.dataList}" var="_account">
+                        <div class="repo-list-item d-flex flex-justify-start row">
+                            <div class="col-12 col-md-12" >
+                                <h3 class="mb-2">
+                                    <h:link value="#{_account.house.houseAddress}/#{_account.houseCode}" includeViewParams="false" outcome="/function/houseAccountView.xhtml" >
+
+                                        <f:param name="accountId" value="#{_account.accountNumber}"/>
+                                        <f:param name="from" value="/function/houseAccountSearch.xhtml"/>
+
+                                    </h:link>
+                                    <b:label severity="#{(_account.status eq 'DESTROY') ? 'danger' : ((_account.status eq 'NORMAL') ? 'success' : 'warning')}"
+                                             text="#{enumHelper.getLabel(_account.status)}"/>
+
+                                </h3>
+
+                                <p class="col-12 col-md-12 d-inline-block p-fields pr-4 pl-0">
+                                    <span class="field">
+                                        <label>首缴应缴</label> <h:outputText value="#{_account.mustMoney}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
+                                    </span>
+                                    <span class="field">
+                                    <label>账户余额</label> <h:outputText value="#{_account.balance}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
+                                    </span>
+                                    <span class="field">
+                                    <label>冻结资金</label> <h:outputText styleClass="text-danger" value="#{_account.frozen}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
+                                    </span>
+                                </p>
+
+                                <p class="col-12 col-md-12 d-inline-block p-fields pr-4 pl-0">
+                                    <span class="field">
+                                    <label>测绘标识</label> #{_account.house.mapNumber}图#{_account.house.blockNumber}丘#{_account.house.buildNumber}幢#{_account.house.houseOrder}房
+                                    </span>
+                                    <c:if test="#{not empty _account.house.unitName}">
+                                        <span class="field">
+                                        <label>单元</label> #{_account.house.unitName}
+                                        </span>
+                                    </c:if>
+                                    <c:if test="#{not empty _account.house.floorName}">
+                                        <span class="field">
+                                        <label>所在层</label> #{_account.house.floorName}<c:if test="#{not empty _account.house.floorCount}">(#{_account.house.inFloor} / #{_account.house.floorCount}) </c:if>
+                                        </span>
+                                    </c:if>
+                                    <span class="field">
+                                    <label>建筑面积</label> <h:outputText value="#{_account.house.houseArea}" ><f:convertNumber pattern="#0.00"/> </h:outputText>
+                                    </span>
+                                    <c:if test="#{not empty _account.house.useArea}">
+                                        <span class="field">
+                                        <label>套内面积</label> <h:outputText value="#{_account.house.useArea}" ><f:convertNumber pattern="#0.00"/> </h:outputText>
+                                        </span>
+                                    </c:if>
+                                    <c:if test="#{not empty _account.house.commArea}">
+                                        <span class="field">
+                                        <label>公摊面积</label> <h:outputText value="#{_account.house.commArea}" ><f:convertNumber pattern="#0.00"/> </h:outputText>
+                                        </span>
+                                    </c:if>
+                                    <c:if test="#{not empty _account.house.structure}">
+                                        <span class="field">
+                                        <label>房屋结构</label> <h:outputText value="#{_account.house.structure}"/>
+                                        </span>
+                                    </c:if>
+                                    <span class="field">
+                                    <label>设计用途</label> #{enumHelper.getLabel(_account.house.useType)} - #{_account.house.designType}
+                                    </span>
+                                    <c:if test="#{not empty _account.house.buildType}">
+                                        <span class="field">
+                                        <label>楼幢类型</label> #{enumHelper.getLabel(_account.house.buildType)}
+                                        </span>
+                                    </c:if>
+                                    <c:if test="#{not empty _account.house.saleMoney}">
+                                        <span class="field">
+                                        <label>购房金额</label> <h:outputText value="#{_account.house.saleMoney}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
+                                        </span>
+                                    </c:if>
+                                </p>
+                                <c:forEach items="#{_account.house.ownerPersonList}" var="_owner">
+                                <p class="col-12 col-md-12 d-inline-block p-fields pr-4 pl-0">
+                                    <span class="field">
+                                    <label>业主姓名</label> #{_owner.name}
+                                    </span>
+                                    <span class="field">
+                                    <label>#{enumHelper.getLabel(_owner.credentialsType)}</label> #{_owner.credentialsNumber}
+                                    </span>
+                                    <span class="field">
+                                    <label>联系电话</label>#{_owner.tel}
+                                    </span>
+                                </p>
+                                </c:forEach>
+
+                                <p class="col-12 col-md-12 d-inline-block text-gray mb-2 pr-4 pl-0">
+                                    #{_account.memo}
+                                </p>
+
+
+                                <p class="col-12 col-md-12 f6 text-gray mb-0 mt-2 pl-0 pr-4">
+                                    开户时间:<h:outputText value="#{_account.createTime}"><f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/></h:outputText>
+                                    <c:if test="#{not (_account.status eq 'DESTROY')}">
+                                        积数日期:<h:outputText value="#{_account.productDate}"><f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDatePattern}"/></h:outputText>
+                                    </c:if>
+                                </p>
+                            </div>
+
+
+                        </div>
+                    </c:forEach>
+                </ul>
+                <ui:include src="/frame/system/pageNav.xhtml">
+                    <ui:param name="pageResultData" value="#{houseAccountListController.resultPage}"/>
+                </ui:include>
+            </c:if>
+            <c:if test="#{houseAccountListController.emptyData}">
+                <div class="px-2">
+                    <div class="blankslate">
+                        <svg height="32" class="octicon octicon-search blankslate-icon" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M15.7 13.3l-3.81-3.83A5.93 5.93 0 0 0 13 6c0-3.31-2.69-6-6-6S1 2.69 1 6s2.69 6 6 6c1.3 0 2.48-.41 3.47-1.11l3.83 3.81c.19.2.45.3.7.3.25 0 .52-.09.7-.3a.996.996 0 0 0 0-1.41v.01zM7 10.7c-2.59 0-4.7-2.11-4.7-4.7 0-2.59 2.11-4.7 4.7-4.7 2.59 0 4.7 2.11 4.7 4.7 0 2.59-2.11 4.7-4.7 4.7z"></path></svg>
+                        <h3>
+                            没有找到符合条件的房屋账户！请检查您的查询条件。
+                        </h3>
+                        你可以尝试 <h:link includeViewParams="false" >重置条件 </h:link>.
+                    </div>
+                </div>
+            </c:if>
+        </b:column>
+    </b:row>
+
+    <h:outputScript library="bootstrap-select" name="js/bootstrap-select.min.js"/>
+    <h:outputScript library="bootstrap-select" name="js/i18n/defaults-zh_CN.min.js"/>
+
+    <h:outputScript library="bsf" name="js/dropdown.js"/>
 
 </ui:composition>

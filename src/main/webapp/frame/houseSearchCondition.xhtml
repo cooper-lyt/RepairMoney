@@ -1,0 +1,68 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <style type="text/css">
+
+        .js-search-condition.MAP_ID .search-key-input{
+            display: none;
+        }
+
+        .js-search-condition .search-mbbh-input{
+            display: none;
+        }
+
+        .js-search-condition.MAP_ID .search-mbbh-input{
+            display:  table-cell;
+        }
+
+        .search-key-input{
+            border-top-right-radius: 3px !important;
+            border-bottom-right-radius: 3px !important;
+        }
+
+    </style>
+
+    <h:outputScript>
+
+        $(function () {
+            $('select.js-search-type').change(function () {
+
+                var css = 'js-search-condition ' + $('select.js-search-type').val();
+                $('.js-search-condition').removeAttr('class').attr('class', css );
+
+            });
+        });
+    </h:outputScript>
+    <div class="js-search-condition #{houseSearchCondition.type}">
+
+        <div class="input-group " style="width:100%">
+                <div class="input-group-btn">
+                    <h:selectOneMenu pt:data-width="100px" styleClass="js-search-type selectpicker form-control" value="#{houseSearchCondition.type}">
+                        <f:selectItems value="#{houseSearchCondition.allType}" var="_type" itemLabel="#{enumHelper.getLabel(_type)}" itemValue="#{_type}"/>
+                        <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="分类" />
+                    </h:selectOneMenu>
+                </div>
+            <h:inputText autocomplete="off" styleClass="form-control search-key-input" value="#{houseSearchCondition.condition}"/>
+            <h:inputText autocomplete="off" styleClass="form-control search-mbbh-input" value="#{houseSearchCondition.mapNumber}"/>
+            <h:outputText styleClass="input-group-addon search-mbbh-input" value="图"/>
+            <h:inputText autocomplete="off" styleClass="form-control search-mbbh-input" value="#{houseSearchCondition.blockNumber}"/>
+            <h:outputText styleClass="input-group-addon search-mbbh-input" value="丘"/>
+            <h:inputText autocomplete="off" styleClass="form-control search-mbbh-input" value="#{houseSearchCondition.buildNumber}"/>
+            <h:outputText styleClass="input-group-addon search-mbbh-input" value="幢"/>
+            <h:inputText autocomplete="off" styleClass="form-control search-mbbh-input" value="#{houseSearchCondition.houseOrder}"/>
+            <h:outputText styleClass="input-group-addon search-mbbh-input" value="房"/>
+        </div>
+
+
+    </div>
+
+
+</ui:composition>

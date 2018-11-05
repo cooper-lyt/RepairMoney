@@ -56,7 +56,7 @@ public abstract class HouseAccountRepository extends AbstractEntityRepository<Ho
 
     public List<UseTypeCount> queryByKeyGroupUseType(List<ConditionAdapter> conditions, List<HouseEntity.UseType> useTypes){
         ConditionQuery conditionQuery = buildConditionQuery(conditions,useTypes);
-        TypedQuery<UseTypeCount> query = entityManager().createQuery("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, DISTINCT(a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o" +
+        TypedQuery<UseTypeCount> query = entityManager().createQuery("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o" +
                 conditionQuery.where() + " group by h.useType",UseTypeCount.class);
 
         return parameterization(conditionQuery,query,useTypes).getResultList();
