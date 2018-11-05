@@ -1,5 +1,6 @@
 package cc.coopersoft.house.repair.controller;
 
+import cc.coopersoft.house.repair.services.HouseAccountService;
 import org.omnifaces.cdi.Param;
 
 import javax.enterprise.context.RequestScoped;
@@ -10,15 +11,6 @@ import javax.inject.Named;
 @RequestScoped
 public class HouseSearchCondition implements java.io.Serializable{
 
-
-    public enum Type{
-        IDENTITY,
-        PERSON_NAME,
-        MAP_ID,
-        HOUSE_CODE,
-        HOUSE_ADDRESS,
-        TEL
-    }
 
     @Inject @Param(name = "condition")
     private String condition;
@@ -36,10 +28,10 @@ public class HouseSearchCondition implements java.io.Serializable{
     private String houseOrder;
 
     @Inject @Param(name = "type")
-    private Type type;
+    private HouseAccountService.Type type;
 
-    public Type[] getAllType(){
-        return Type.values();
+    public HouseAccountService.Type[] getAllType(){
+        return HouseAccountService.Type.values();
     }
 
     public String getCondition() {
@@ -82,11 +74,11 @@ public class HouseSearchCondition implements java.io.Serializable{
         this.houseOrder = houseOrder;
     }
 
-    public Type getType() {
+    public HouseAccountService.Type getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(HouseAccountService.Type type) {
         this.type = type;
     }
 }

@@ -27,7 +27,6 @@ public class HouseAccountEntity {
     private Status status;
     private String memo;
     private Integer version;
-
     private BigDecimal mustMoney;
     private String houseCode;
 
