@@ -44,7 +44,7 @@
             <b:inputText autocomplete="false" placeholder="业务编号" value="#{businessOperationController.businessId}"/>
         </div>
         <div class="flex-table-item">
-            <b:commandButton value="搜  索" action="/business/businessView?faces-redirect=true&amp;includeViewParams=true">
+            <b:commandButton value="查  看" action="/business/businessView?faces-redirect=true&amp;includeViewParams=true">
                 <f:param name="from" value="#{param.from}"/>
             </b:commandButton>
         </div>
@@ -228,7 +228,7 @@
             </c:forEach>
 
             <b:tab title="业务操作日志">
-                <f:facet name="anchor"><b:iconAwesome name="business-time"/></f:facet>
+                <f:facet name="anchor"><b:iconAwesome name="history"/></f:facet>
 
             </b:tab>
 
