@@ -80,7 +80,7 @@ public class BusinessListController extends cc.coopersoft.framework.EntityListBa
     @Override
     protected void fillResult(){
         resultPage = businessInstanceService.search(getCondition(),getLimitDefineIds(),getOffset(),PAGE_SIZE);
-        businessDefines = businessInstanceService.searchDefineCount(getCondition(),getLimitDefineIds());
+        businessDefines = businessInstanceService.searchDefineCount(getCondition());
     }
 
 }

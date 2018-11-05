@@ -59,7 +59,7 @@ public class ConditionQuery {
             }
             if (notEmpty) {
                 if (!DataHelper.empty(other)){
-                    where = " AND ";
+                    where += " AND ";
                 }
                 parameter = new HashMap<>();
                 where += " ( ";

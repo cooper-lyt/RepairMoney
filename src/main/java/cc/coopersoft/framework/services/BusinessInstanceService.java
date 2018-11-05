@@ -15,6 +15,6 @@ public interface BusinessInstanceService extends EntityService<BusinessInstance,
 
     EntityDataPage<BusinessInstance> search(String condition, List<String> defineIds, int offset , int count);
 
-    List<KeyAndCount> searchDefineCount(String condition, List<String> defineIds);
+    List<KeyAndCount> searchDefineCount(String condition);
 
 }

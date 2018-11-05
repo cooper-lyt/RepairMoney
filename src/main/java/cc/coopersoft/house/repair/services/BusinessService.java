@@ -73,8 +73,8 @@ public class BusinessService implements BusinessInstanceService {
 
 
     @Override
-    public List<KeyAndCount> searchDefineCount(String condition, List<String> defineIds) {
-        List<KeyAndCount> result = businessRepository.queryByKeyDefineGroup(ConditionAdapter.instance(condition," "),defineIds);
+    public List<KeyAndCount> searchDefineCount(String condition) {
+        List<KeyAndCount> result = businessRepository.queryByKeyDefineGroup(ConditionAdapter.instance(condition," "));
 
         for(KeyAndCount keyAndCount: result){
             keyAndCount.setPri(9999);

@@ -22,8 +22,8 @@
             <o:viewParam name="build" value="#{houseSearchCondition.buildNumber}"/>
             <o:viewParam name="house" value="#{houseSearchCondition.houseOrder}"/>
             <o:viewParam name="type" value="#{houseSearchCondition.type}"/>
-
             <o:viewParam name="useType" value="#{houseAccountListController.useType}"/>
+
         </f:metadata>
     </ui:define>
 
@@ -36,7 +36,7 @@
         <div class="flex-table-item">
             <b:commandButton value="搜  索" action="/function/houseAccountSearch?faces-redirect=true&amp;includeViewParams=true">
                 <f:param name="offset" value="0"/>
-                <f:param name="useType" value="#{null}"/>
+
             </b:commandButton>
         </div>
     </ui:define>
@@ -56,8 +56,15 @@
                             <span class="bar" style="width: 23%;"></span>
                             <b:link styleClass="filter-item #{(_item.useType eq houseAccountListController.useType) ? 'selected' : ''}"
                                     value="#{enumHelper.getLabel(_item.useType)}"  outcome="/function/houseAccountSearch.xhtml" includeViewParams="true">
-                                <span class="count">#{_item.count}</span>
-                                <f:param name="useType" value="#{_item.useType}"/>
+                                <c:if test="#{not (_item.useType eq houseAccountListController.useType)}">
+                                    <span class="count">#{_item.count}</span>
+                                </c:if>
+                                <c:if test="#{_item.useType eq houseAccountListController.useType}">
+                                    <svg class="octicon octicon-x float-right" viewBox="0 0 12 16" version="1.1" width="12" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"></path></svg>
+                                </c:if>
+
+                                <f:param name="useType" value="#{_item.useType}" disable="#{_item.useType eq houseAccountListController.useType}"/>
+                                <f:param name="useType" value="#{null}" disable="#{not (_item.useType eq houseAccountListController.useType)}"/>
                                 <f:param name="offset" value="0"/>
                             </b:link>
                         </li>

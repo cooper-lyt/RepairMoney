@@ -48,6 +48,9 @@ public class HouseAccountListController extends EntityListBaseController<HouseAc
     @Override
     protected void fillResult() {
         List<HouseEntity.UseType> useTypes = new ArrayList<>();
+        if (useType != null){
+            useTypes.add(useType);
+        }
         //TODO useType
         HouseAccountService.SearchResult result = houseAccountService.search(houseSearchCondition.getType()
                     ,houseSearchCondition.getCondition()

@@ -52,7 +52,7 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                     houseAccountRepository.queryCountByKey(conditions,useTypes)
                     ,count
             );
-            result.useTypeCounts = houseAccountRepository.queryByKeyGroupUseType(ConditionAdapter.instance(condition," "),useTypes);
+            result.useTypeCounts = houseAccountRepository.queryByKeyGroupUseType(ConditionAdapter.instance(condition," "));
         }else{
             List<HouseEntity.UseType> useTypeList = useTypes;
             if (useTypeList == null || useTypeList.isEmpty()){
@@ -74,7 +74,7 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                             houseAccountRepository.queryCountByIdCard(number1,number2,useTypeList),
                             count
                     );
-                    result.useTypeCounts = houseAccountRepository.queryByIdCardGroupUseType(number1,number2,useTypeList);
+                    result.useTypeCounts = houseAccountRepository.queryByIdCardGroupUseType(number1,number2);
                     break;
                 case PERSON_NAME:
                     String personName = ConditionAdapter.instance(condition).getContains();
@@ -84,7 +84,7 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                             houseAccountRepository.queryCountByOwnerName(personName,useTypeList),
                             count
                     );
-                    result.useTypeCounts = houseAccountRepository.queryByOwnerNameGroupUseType(personName,useTypeList);
+                    result.useTypeCounts = houseAccountRepository.queryByOwnerNameGroupUseType(personName);
                     break;
                 case MAP_ID:
                     ConditionAdapter map = ConditionAdapter.instance(mapNumber);
@@ -97,7 +97,7 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                             houseAccountRepository.queryCountByMapId(map.getCondition(),!map.isEmpty(),block.getCondition(),!block.isEmpty(),build.getCondition(),!build.isEmpty(),house.getCondition(),!house.isEmpty(),useTypeList),
                             count
                     );
-                    result.useTypeCounts = houseAccountRepository.queryByMapIdGroupUseType(map.getCondition(),!map.isEmpty(),block.getCondition(),!block.isEmpty(),build.getCondition(),!build.isEmpty(),house.getCondition(),!house.isEmpty(),useTypeList);
+                    result.useTypeCounts = houseAccountRepository.queryByMapIdGroupUseType(map.getCondition(),!map.isEmpty(),block.getCondition(),!block.isEmpty(),build.getCondition(),!build.isEmpty(),house.getCondition(),!house.isEmpty());
                     break;
                 case HOUSE_CODE:
                     result.entityDataPage = new EntityDataPage<>(
@@ -106,7 +106,7 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                             houseAccountRepository.queryCountByHouseCode(condition.trim(),useTypeList),
                             count
                     );
-                    result.useTypeCounts = houseAccountRepository.queryByHouseCodeGroupUseType(condition.trim(),useTypeList);
+                    result.useTypeCounts = houseAccountRepository.queryByHouseCodeGroupUseType(condition.trim());
                     break;
                 case HOUSE_ADDRESS:
                     String address = ConditionAdapter.instance(condition).getContains();
@@ -116,7 +116,7 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                             houseAccountRepository.queryCountByAddress(address,useTypeList),
                             count
                     );
-                    result.useTypeCounts = houseAccountRepository.queryByAddressGroupUseType(address,useTypeList);
+                    result.useTypeCounts = houseAccountRepository.queryByAddressGroupUseType(address);
                     break;
                 case TEL:
                     String tel = ConditionAdapter.instance(condition).getEndWith();
@@ -126,7 +126,7 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                             houseAccountRepository.queryCountByTel(tel,useTypeList),
                             count
                     );
-                    result.useTypeCounts = houseAccountRepository.queryByTelGroupUseType(tel,useTypeList);
+                    result.useTypeCounts = houseAccountRepository.queryByTelGroupUseType(tel);
                     break;
             }
         }

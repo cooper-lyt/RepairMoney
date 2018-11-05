@@ -44,11 +44,11 @@ public abstract class BusinessRepository extends AbstractEntityRepository<Busine
         return parameterization(conditionQuery,query,defineIds).getSingleResult();
     }
 
-    public List<KeyAndCount> queryByKeyDefineGroup(List<ConditionAdapter> conditions,List<String> defineIds){
-        ConditionQuery conditionQuery =  buildConditionQuery(conditions,defineIds);
+    public List<KeyAndCount> queryByKeyDefineGroup(List<ConditionAdapter> conditions){
+        ConditionQuery conditionQuery =  ConditionQuery.instance(conditions,conditionFields);
         TypedQuery<KeyAndCount> query = entityManager().createQuery(" SELECT new cc.coopersoft.framework.data.KeyAndCount(b.defineId,b.defineName,count(b)) FROM BusinessEntity b " +
                 conditionQuery.where() + " group by b.defineId", KeyAndCount.class);
-        return parameterization(conditionQuery,query,defineIds).getResultList();
+        return conditionQuery.parameterization(query).getResultList();
     }
 
 }
