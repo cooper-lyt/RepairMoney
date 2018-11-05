@@ -65,7 +65,7 @@
                             <span class="bar" style="width: 23%;"></span>
                             <b:link styleClass="filter-item #{(_item.key eq businessListController.defineId) ? 'selected' : ''}"
                                     value="#{_item.name}"  outcome="/business/businessSearch.xhtml" includeViewParams="true">
-                                <span class="count">#{_item.count}</span>
+
                                 <c:if test="#{not (_item.key eq businessListController.defineId)}">
                                     <span class="count">#{_item.count}</span>
                                 </c:if>
