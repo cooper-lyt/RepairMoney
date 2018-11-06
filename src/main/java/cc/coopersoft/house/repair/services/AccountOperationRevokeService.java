@@ -1,6 +1,7 @@
 package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.SubscribeComponent;
+import cc.coopersoft.framework.services.SubscribeFailException;
 import cc.coopersoft.framework.services.TaskActionComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.house.repair.data.model.AccountDetailsEntity;
@@ -20,22 +21,22 @@ public class AccountOperationRevokeService implements TaskActionComponent<Busine
 
 
     @Override
-    public List<ValidMessage> valid(BusinessEntity businessInstance) {
-        return new ArrayList<>(0);
-    }
-
-
-    @Override
-    public void doAction(BusinessEntity businessInstance) {
-        for(AccountDetailsEntity details: businessInstance.getAccountDetails()){
+    public void doAction(BusinessEntity businessInstance, boolean persistent) {
+        for (AccountDetailsEntity details : businessInstance.getAccountDetails()) {
             details.setStatus(AccountDetailsEntity.Status.DELETED);
         }
-        for(BankAccountDetailsEntity details: businessInstance.getBankAccountDetails()) {
+        for (BankAccountDetailsEntity details : businessInstance.getBankAccountDetails()) {
             //TODO ADD any bank account business
-            if (businessInstance.getPayment() != null){
+            if (businessInstance.getPayment() != null) {
                 businessInstance.getPayment().setBankAccountDetails(null);
             }
             bankAccountDetailsRepository.remove(details);
         }
     }
+
+    @Override
+    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
+        return true;
+    }
 }
+

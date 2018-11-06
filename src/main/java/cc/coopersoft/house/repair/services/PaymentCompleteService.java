@@ -1,8 +1,8 @@
 package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.SubscribeComponent;
+import cc.coopersoft.framework.services.SubscribeFailException;
 import cc.coopersoft.framework.services.TaskActionComponent;
-import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.framework.tools.UUIDGenerator;
 import cc.coopersoft.house.repair.data.model.*;
 import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
@@ -10,8 +10,6 @@ import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @SubscribeComponent
 @RequestScoped
@@ -22,7 +20,12 @@ public class PaymentCompleteService  implements TaskActionComponent<BusinessEnti
 
 
     @Override
-    public void doAction(BusinessEntity businessInstance) {
+    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
+        return true;
+    }
+
+    @Override
+    public void doAction(BusinessEntity businessInstance,boolean persistent) {
        PaymentEntity paymentEntity =businessInstance.getPayment();
        for(PaymentBusinessEntity pb: paymentEntity.getPaymentBusinesses()){
            HouseAccountEntity account = houseAccountRepository.findOptionalByHouseCode(pb.getAccountDetails().getHouse().getHouseCode());
@@ -39,6 +42,9 @@ public class PaymentCompleteService  implements TaskActionComponent<BusinessEnti
            }
            if (PaymentBusinessEntity.Type.FIRST.equals(pb.getType())){
                account.setMustMoney(pb.getMustMoney());
+               if (HouseAccountEntity.Status.DESTROY.equals(account.getStatus())){
+                   account.setStatus(HouseAccountEntity.Status.NORMAL);
+               }
            }
            pb.getAccountDetails().setStatus(AccountDetailsEntity.Status.REG);
            pb.getAccountDetails().setBalance(account.getBalance().add(pb.getAccountDetails().getMoney()));
@@ -55,8 +61,4 @@ public class PaymentCompleteService  implements TaskActionComponent<BusinessEnti
 
     }
 
-    @Override
-    public List<ValidMessage> valid(BusinessEntity businessInstance) {
-        return new ArrayList<>(0);
-    }
 }

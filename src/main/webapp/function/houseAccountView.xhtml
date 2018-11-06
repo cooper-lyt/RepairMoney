@@ -1,12 +1,241 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Title</title>
-</head>
-<body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/pageTemplate.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
 
-</body>
-</html>
+    <ui:define name="custom-header">
+        <f:metadata>
+            <o:viewParam name="accountId" value="#{houseAccountController.id}"/>
+        </f:metadata>
+        <h:outputStylesheet name="style.css"/>
+
+        <style>
+
+            .dashboard-notice .brand-icon {
+                color: #31708f;
+            }
+
+            .dashboard-notice.DESTROY .brand-icon {
+                color: #777;
+            }
+
+            .dashboard-notice.NORMAL h2 {
+                color: #3c763d;
+            }
+
+            .dashboard-notice.DESTROY h2 {
+                color: #777;
+            }
+
+            .dashboard-notice.LOCKED h2 {
+                color: #a94442;
+            }
+
+            .bill-hide-destroy  .list-group-item.DELETED{
+                display: none;
+            }
+
+        </style>
+    </ui:define>
+
+    <b:row style="margin-top: 15px">
+
+        <b:column span="12">
+            <b:messages globalOnly="true" showDetail="true" styleClass="top-messages"/>
+        </b:column>
+
+        <b:column span="12">
+            <o:form includeViewParams="true">
+                <div class="dashboard-notice #{houseAccountController.instance.status}">
+                    <div class="right">
+                        <div class="btn-group" role="group" >
+                            <c:if test="#{facesContext.externalContext.isUserInRole('Collect')}">
+                                <b:commandButton styleClass="btn-reversal" iconAwesome="yen-sign" tooltip="缴费" look="success"
+                                                 action="#{businessOperationController.continueBusiness}">
+
+                                </b:commandButton>
+
+                                <b:commandButton styleClass="btn-reversal" iconAwesome="reply" tooltip="退款" look="danger"
+                                                 disabled="#{not (houseAccountController.instance.status eq 'NORMAL')}" >
+
+                                </b:commandButton>
+
+                                <b:commandButton styleClass="btn-reversal" iconAwesome="calculator" tooltip="计息" look="primary"
+                                                 disabled="#{houseAccountController.instance.status eq 'DESTROY'}">
+
+                                </b:commandButton>
+
+                                <b:commandButton styleClass="btn-reversal" iconAwesome="pen" tooltip="变更" look="primary"
+                                                 disabled="#{houseAccountController.instance.status eq 'DESTROY'}">
+
+                                </b:commandButton>
+
+
+
+                                <b:commandButton styleClass="btn-reversal" icon="bookmark" tooltip="备注" look="info">
+
+                                </b:commandButton>
+
+                            </c:if>
+
+
+                            <b:commandButton styleClass="btn-reversal" iconAwesome="ban" tooltip="冻结" look="danger">
+                            </b:commandButton>
+
+                            <b:commandButton styleClass="btn-reversal" iconAwesome="bell" tooltip="预警" look="warning">
+                            </b:commandButton>
+
+                            <div class="btn-group">
+                                <button type="button" disabled="disabled"
+                                        aria-label="打印"
+                                        class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+                                    <span class="btn-icon glyphicon glyphicon-print"></span>
+                                    <b class="caret"></b>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <b:iconAwesome size="2x" name="file-invoice-dollar" styleClass="brand-icon"/>
+                    <h2><strong>#{houseAccountController.instance.house.houseAddress}</strong>
+                        #{houseAccountController.instance.houseCode}
+                        <span class="label #{(houseAccountController.instance.status eq 'DESTROY') ? 'label-default' : ((houseAccountController.instance.status eq 'NORMAL') ? 'label-success' : 'label-danger')}">#{enumHelper.getLabel(houseAccountController.instance.status)}</span>
+                    </h2>
+
+                    <p class="repo-list-description ">
+                        首缴应缴
+                        <strong>
+                        <h:outputText value="#{houseAccountController.instance.mustMoney}">
+                            <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                        </h:outputText>
+                        </strong>
+                        现账户余额
+                        <strong>
+                            <h:outputText value="#{houseAccountController.instance.balance}">
+                                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                            </h:outputText>
+                        </strong>
+                        其中冻结金额
+                        <strong class="text-danger">
+                            <h:outputText value="#{houseAccountController.instance.frozen}">
+                                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                            </h:outputText>
+                        </strong>
+                    </p>
+
+                    <p class="repo-list-description">
+                        #{houseAccountController.instance.memo}
+                    </p>
+
+                    <p class="repo-list-meta">
+                        <h:outputText value="开户时间"/>
+                        <h:outputText value="#{houseAccountController.instance.createTime}">
+                            <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>
+                        </h:outputText>
+
+                        <h:outputText value="积数日期"
+                                      rendered="#{not (houseAccountController.instance.status eq 'DESTROY')}"/>
+                        <h:outputText value=" #{houseAccountController.instance.productDate}"
+                                      rendered="#{not (houseAccountController.instance.status eq 'DESTROY')}">
+                            <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDatePattern}"/>
+                        </h:outputText>
+                    </p>
+                </div>
+            </o:form>
+        </b:column>
+
+
+
+
+    </b:row>
+
+    <b:row>
+        <b:column span="12">
+            <ui:include src="/frame/account.xhtml">
+                <ui:param name="account" value="#{houseAccountController.instance}"/>
+            </ui:include>
+        </b:column>
+    </b:row>
+
+    <b:row style="margin-top:15px">
+        <b:column span="12">
+            <div class="boxed-group flush list-table ">
+                <div class="boxed-group-action">
+                    <button id="display-button" type="button" data-container="body" data-trigger="hover"  data-toggle="tooltip" data-placement="left" title="所有条目">
+                        <span id="bill_show_type_icon" class="far fa-eye-slash"></span>
+
+                    </button>
+                    <h:outputScript>
+                        $(function () {
+                            $('#display-button').tooltip({'delay':{show:0,hide:0}});
+                            $('#display-button').click(function () {
+
+                               if ($('.bill').hasClass('bill-hide-destroy')){
+                                   $('.bill').removeClass('bill-hide-destroy');
+                                    $('#bill_show_type_icon').removeAttr('class').attr('class', 'far fa-eye-slash' );
+                               }else{
+                                   $('.bill').addClass('bill-hide-destroy');
+                                   $('#bill_show_type_icon').removeAttr('class').attr('class', 'far fa-eye' );
+                               }
+                            });
+                        });
+                        $('.tooltip').tooltip('destroy');
+                    </h:outputScript>
+                </div>
+                <h3>账户账单</h3>
+                <ul class="boxed-group-inner list-group bill">
+                    <c:forEach items="#{houseAccountController.instance.allDetailList}" var="_details">
+                        <li class="list-group-item #{_details.status}">
+
+
+                                <span class="list-group-item-name css-truncate" style="max-width: 700px">
+                                    <span class="type-icon" style="width: 50px;">
+                                            <span class="label #{(_details.status eq 'RUNNING') ? 'label-primary' : ((_details.status eq 'REG') ? 'label-success' : ((_details.status eq 'USEING') ? 'label-info' : ((_details.status eq 'CANCEL') ? 'label-default' : 'label-warning')))}">#{enumHelper.getLabel(_details.status)}</span>
+                                    </span>
+
+                                    <span class="css-truncate-target list-item-title">
+                                        <h:outputText value="#{_details.money}" rendered="#{not (_details.direction eq 'ZERO')}">
+                                            <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                                        </h:outputText>
+                                    </span>
+
+                                    <h:link outcome="/business/businessView.xhtml"
+                                            styleClass="css-truncate-target list-item-description"
+                                            value="#{_details.business.defineName}#{_details.business.id}">
+                                        <f:param name="businessInstanceId" value="#{_details.business.id}"/>
+                                        <f:param name="from" value="#{param.from}"/>
+                                    </h:link>
+
+
+                                </span>
+                                <ul class="bill-last">
+
+                                    <li class="time">
+                                        <h:outputText value="#{_details.operationTime}">
+                                            <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>
+                                        </h:outputText>
+                                    </li>
+                                    <li class="balance">
+                                        <h:outputText value="#{_details.balance}" rendered="#{not (_details.direction eq 'ZERO')}">
+                                            <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                                        </h:outputText>
+                                    </li>
+                                </ul>
+
+                        </li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </b:column>
+    </b:row>
+
+</ui:composition>

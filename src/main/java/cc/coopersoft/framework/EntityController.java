@@ -191,7 +191,7 @@ public abstract class EntityController<E, PK extends Serializable> extends Mutab
 
 
     @Transactional
-    public E find()
+    protected E find()
     {
 
             E result = loadInstance();

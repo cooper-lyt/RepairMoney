@@ -61,7 +61,7 @@ public class BusinessService implements BusinessInstanceService {
 
     @Override
     public EntityDataPage<BusinessInstance> search(String condition, List<String> defineIds, int offset, int count) {
-        List<ConditionAdapter> conditions = ConditionAdapter.instance(condition," ");
+        List<ConditionAdapter> conditions = ConditionAdapter.instance(condition,"\\s+");
         return new EntityDataPage<>(
                 new ArrayList<>(businessRepository.queryByKey(conditions,defineIds,offset,count)),
                 offset,
@@ -74,7 +74,7 @@ public class BusinessService implements BusinessInstanceService {
 
     @Override
     public List<KeyAndCount> searchDefineCount(String condition) {
-        List<KeyAndCount> result = businessRepository.queryByKeyDefineGroup(ConditionAdapter.instance(condition," "));
+        List<KeyAndCount> result = businessRepository.queryByKeyDefineGroup(ConditionAdapter.instance(condition,"\\s+"));
 
         for(KeyAndCount keyAndCount: result){
             keyAndCount.setPri(9999);

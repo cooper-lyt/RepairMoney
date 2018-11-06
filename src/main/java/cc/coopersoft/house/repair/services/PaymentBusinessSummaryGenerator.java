@@ -4,6 +4,7 @@ import cc.coopersoft.framework.I18n;
 import cc.coopersoft.framework.SubscribeComponent;
 import cc.coopersoft.framework.data.BusinessInstance;
 import cc.coopersoft.framework.data.BusinessSummary;
+import cc.coopersoft.framework.services.SubscribeFailException;
 import cc.coopersoft.framework.services.TaskActionComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.framework.tools.DataHelper;
@@ -25,14 +26,14 @@ public class PaymentBusinessSummaryGenerator implements TaskActionComponent<Busi
     @Inject
     public I18n i18n;
 
+
     @Override
-    public List<ValidMessage> valid(BusinessEntity businessInstance) {
-        return new ArrayList<>(0);
+    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
+        return true;
     }
 
-
     @Override
-    public void doAction(BusinessEntity businessInstance) {
+    public void doAction(BusinessEntity businessInstance, boolean persistent) {
         List<BusinessSummary> result = new ArrayList<>();
 
         String searchKey = "";

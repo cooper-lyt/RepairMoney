@@ -1,6 +1,7 @@
 package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.SubscribeComponent;
+import cc.coopersoft.framework.services.SubscribeFailException;
 import cc.coopersoft.framework.services.TaskEditSubscribeComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.house.repair.data.model.BusinessEntity;
@@ -19,12 +20,12 @@ public class PaymentMoneyService implements TaskEditSubscribeComponent<BusinessE
     }
 
     @Override
-    public void persistent(BusinessEntity businessInstance) {
-
+    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
+        return true;
     }
 
     @Override
-    public void doAction(BusinessEntity businessInstance) {
+    public void doAction(BusinessEntity businessInstance, boolean persistent) {
         if (businessInstance.getPayment().getPaymentNotice() == null) {
             BigDecimal mustMoney = BigDecimal.ZERO;
             BigDecimal money = BigDecimal.ZERO;

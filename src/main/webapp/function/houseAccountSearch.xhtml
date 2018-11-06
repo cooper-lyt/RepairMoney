@@ -94,8 +94,7 @@
                                         <f:param name="from" value="/function/houseAccountSearch.xhtml"/>
 
                                     </h:link>
-                                    <b:label severity="#{(_account.status eq 'DESTROY') ? 'danger' : ((_account.status eq 'NORMAL') ? 'success' : 'warning')}"
-                                             text="#{enumHelper.getLabel(_account.status)}"/>
+                                    <span class="label #{(_account.status eq 'DESTROY') ? 'label-default' : ((_account.status eq 'NORMAL') ? 'label-success' : 'label-danger')}">#{enumHelper.getLabel(_account.status)}</span>
 
                                 </h3>
 

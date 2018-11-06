@@ -10,7 +10,9 @@ import cc.coopersoft.framework.data.model.BusinessDefineEntity;
 import cc.coopersoft.framework.pages.Business;
 
 import cc.coopersoft.framework.services.BusinessOperationService;
+import cc.coopersoft.framework.services.SubscribeFailException;
 import cc.coopersoft.framework.services.ValidMessage;
+import cc.coopersoft.framework.services.SubscribeValidResult;
 import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.framework.tools.DefaultMessageBundle;
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
@@ -117,11 +119,16 @@ public class BusinessOperationController  implements java.io.Serializable {
     @BusinessRunManagerRole
     public Class<? extends ViewConfig> abortBusiness(){
         viewBusiness();
-        BusinessOperationService.ValidResult result = businessOperationService.abortBusiness();
-        sendMessage(result);
-        if (result.isPass()){
-            return Business.BusinessView.class;
-        }else{
+        try {
+            SubscribeValidResult result = businessOperationService.abortBusiness();
+            sendMessage(result);
+            if (result.isPass()){
+                return Business.BusinessView.class;
+            }else{
+                return null;
+            }
+        } catch (SubscribeFailException e) {
+            sendMessage(e.getValidResult());
             return null;
         }
     }
@@ -130,11 +137,16 @@ public class BusinessOperationController  implements java.io.Serializable {
     public Class<? extends ViewConfig> revokeBusiness(){
         logger.config("begin revoke business:" + businessId);
         viewBusiness();
-        BusinessOperationService.ValidResult result = businessOperationService.revokeBusiness();
-        sendMessage(result);
-        if (result.isPass()){
-            return Business.BusinessView.class;
-        }else{
+        try {
+            SubscribeValidResult result = businessOperationService.revokeBusiness();
+            sendMessage(result);
+            if (result.isPass()){
+                return Business.BusinessView.class;
+            }else{
+                return null;
+            }
+        } catch (SubscribeFailException e) {
+            sendMessage(e.getValidResult());
             return null;
         }
     }
@@ -143,13 +155,19 @@ public class BusinessOperationController  implements java.io.Serializable {
     @SystemManagerRole
     public Class<? extends ViewConfig> deleteBusiness(){
         viewBusiness();
-        BusinessOperationService.ValidResult result = businessOperationService.deleteBusiness();
-        sendMessage(result);
-        if (result.isPass()){
-            return Business.BusinessDeleted.class;
-        }else{
+        try {
+            SubscribeValidResult result = businessOperationService.deleteBusiness();
+            sendMessage(result);
+            if (result.isPass()){
+                return Business.BusinessDeleted.class;
+            }else{
+                return null;
+            }
+        } catch (SubscribeFailException e) {
+            sendMessage(e.getValidResult());
             return null;
         }
+
     }
 
     public boolean isHasReport(){
@@ -169,7 +187,7 @@ public class BusinessOperationController  implements java.io.Serializable {
         return businessOperationService.isPersistent();
     }
 
-    private void sendMessage(BusinessOperationService.ValidResult validResult){
+    private void sendMessage(SubscribeValidResult validResult){
         Iterator<ValidMessage> it = validResult.getMessages();
         while (it.hasNext()){
             ValidMessage msg = it.next();
@@ -239,30 +257,39 @@ public class BusinessOperationController  implements java.io.Serializable {
     }
 
     public Class<? extends ViewConfig> taskBegin(){
-        BusinessOperationService.ValidResult result = businessOperationService.taskBegin();
-        sendMessage(result);
-        if (result.isPass()){
-            beginConversation();
-            if (businessOperationService.isHasEditor()){
-                return next();
+        try {
+            SubscribeValidResult result = businessOperationService.taskBegin();
+            sendMessage(result);
+            if (result.isPass()){
+                beginConversation();
+                if (businessOperationService.isHasEditor()){
+                    return next();
+                }else{
+                    return preparePage();
+                }
             }else{
-                return preparePage();
+                return null;
             }
-        }else{
+        } catch (SubscribeFailException e) {
+            sendMessage(e.getValidResult());
             return null;
         }
     }
 
     public Class<? extends ViewConfig> taskComplete(){
-        BusinessOperationService.ValidResult result = businessOperationService.taskComplete();
-        sendMessage(result);
-        if (result.isPass()){
-            endConversation();
-            return Business.Completed.class;
-        }else{
+        try {
+            SubscribeValidResult result = businessOperationService.taskComplete();
+            sendMessage(result);
+            if (result.isPass()){
+                endConversation();
+                return Business.Completed.class;
+            }else{
+                return null;
+            }
+        } catch (SubscribeFailException e) {
+            sendMessage(e.getValidResult());
             return null;
         }
-
     }
 
     //-- editor
@@ -286,31 +313,44 @@ public class BusinessOperationController  implements java.io.Serializable {
     }
 
     public Class<? extends ViewConfig> next(){
-        BusinessOperationService.ValidResult result = businessOperationService.savePage();
-        sendMessage(result);
-        if (result.isPass()){
-            if (businessOperationService.isHasNext()){
-                businessOperationService.next();
-                return Business.Editor.class;
+
+        try {
+            SubscribeValidResult result = businessOperationService.savePage();
+            sendMessage(result);
+            if (result.isPass()){
+                if (businessOperationService.isHasNext()){
+                    businessOperationService.next();
+                    return Business.Editor.class;
+                }else{
+                    logger.config("business memo is:" + getBusinessInstance().getMemo());
+                    return preparePage();
+                }
             }else{
-                logger.config("business memo is:" + getBusinessInstance().getMemo());
-                return preparePage();
+                return null;
             }
-        }else{
+        } catch (SubscribeFailException e) {
+            sendMessage(e.getValidResult());
             return null;
         }
+
     }
 
 
 
     public Class<? extends ViewConfig> save(){
-        BusinessOperationService.ValidResult result = businessOperationService.savePage();
-        sendMessage(result);
-        if (result.isPass()){
-            return Business.Editor.class;
-        }else{
+        try {
+            SubscribeValidResult result = businessOperationService.savePage();
+            sendMessage(result);
+            if (result.isPass()){
+                return Business.Editor.class;
+            }else{
+                return null;
+            }
+        } catch (SubscribeFailException e) {
+            sendMessage(e.getValidResult());
             return null;
         }
+
     }
 
     public String getTaskName(){

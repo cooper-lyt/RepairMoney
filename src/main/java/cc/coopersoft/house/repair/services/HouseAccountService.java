@@ -45,14 +45,14 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
         SearchResult result = new SearchResult();
 
         if (type == null || (!Type.MAP_ID.equals(type) && DataHelper.empty(condition))){
-            List<ConditionAdapter> conditions = ConditionAdapter.instance(condition," ");
+            List<ConditionAdapter> conditions = ConditionAdapter.instance(condition,"\\s+");
             result.entityDataPage =  new EntityDataPage<>(
                     houseAccountRepository.queryByKey(conditions,useTypes,offset,count),
                     offset,
                     houseAccountRepository.queryCountByKey(conditions,useTypes)
                     ,count
             );
-            result.useTypeCounts = houseAccountRepository.queryByKeyGroupUseType(ConditionAdapter.instance(condition," "));
+            result.useTypeCounts = houseAccountRepository.queryByKeyGroupUseType(ConditionAdapter.instance(condition,"\\s+"));
         }else{
             List<HouseEntity.UseType> useTypeList = useTypes;
             if (useTypeList == null || useTypeList.isEmpty()){

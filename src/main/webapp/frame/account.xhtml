@@ -1,0 +1,54 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <b:row styleClass="details-info">
+        <b:column span="9">
+            <h:outputLabel for="account_number" value="账号"/>
+            <h:outputText id="account_number" value="#{account.accountNumber}"/>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="create_time" value="开户时间"/>
+            <h:outputText id="create_time" value="#{account.createTime}">
+                <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>
+            </h:outputText>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="first_must_money" value="首缴应缴"/>
+            <h:outputText id="first_must_money" value="#{account.mustMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="balance" value="账户余额"/>
+            <h:outputText id="balance" value="#{account.balance}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+        <b:column span="3">
+            <h:outputLabel for="frozen" value="账户余额"/>
+            <h:outputText id="frozen" value="#{account.frozen}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+
+        <b:column span="3">
+            <h:outputLabel for="product_date" value="积数日期"/>
+            <h:outputText id="product_date" value="#{account.productDate}">
+                <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDatePattern}"/>
+            </h:outputText>
+        </b:column>
+    </b:row>
+
+    <ui:include src="house.xhtml">
+        <ui:param name="_house" value="#{account.house}"/>
+    </ui:include>
+
+</ui:composition>

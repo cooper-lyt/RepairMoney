@@ -2,7 +2,7 @@ package cc.coopersoft.framework.services;
 
 import cc.coopersoft.framework.data.BusinessInstance;
 
-public interface TaskEditSubscribeComponent<T extends BusinessInstance> extends TaskActionComponent<T>{
+public interface TaskEditSubscribeComponent<T extends BusinessInstance> extends TaskActionComponent<T>, TaskValidComponent<T>{
 
 
     /** 初始化
@@ -10,11 +10,5 @@ public interface TaskEditSubscribeComponent<T extends BusinessInstance> extends 
      */
     void init(T businessInstance);
 
-
-    /** 持久化
-     *  数据要保存到数据库中时调用
-     *  在此方法中持久化订阅都的数据
-     */
-    void persistent(T businessInstance);
 
 }

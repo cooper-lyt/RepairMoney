@@ -2,6 +2,7 @@ package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.SubscribeComponent;
 import cc.coopersoft.framework.data.BusinessInstance;
+import cc.coopersoft.framework.services.SubscribeFailException;
 import cc.coopersoft.framework.services.TaskEditSubscribeComponent;
 import cc.coopersoft.framework.services.ValidMessage;
 import cc.coopersoft.house.repair.data.model.*;
@@ -22,10 +23,6 @@ public class PaymentInfoService extends AccountOperationValidService implements 
         }
     }
 
-    @Override
-    public void persistent(BusinessEntity businessInstance) {
-        // do nothing
-    }
 
     @Override
     protected Date getOperationTime(BusinessEntity businessInstance){
@@ -47,7 +44,12 @@ public class PaymentInfoService extends AccountOperationValidService implements 
     }
 
     @Override
-    public void doAction(BusinessEntity businessInstance) {
+    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
+        return true;
+    }
+
+    @Override
+    public void doAction(BusinessEntity businessInstance,boolean persistent) {
         PaymentEntity payment = businessInstance.getPayment();
         if (PaymentType.BANK.equals(payment.getPaymentType()) && !BusinessInstance.Source.OUT_SIDE.equals(businessInstance.getSource())){
             payment.getBankAccountDetails().setOperationTime(payment.getOperationDate());
