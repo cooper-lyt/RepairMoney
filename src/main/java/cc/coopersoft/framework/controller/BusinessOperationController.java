@@ -129,6 +129,8 @@ public class BusinessOperationController  implements java.io.Serializable {
             }
         } catch (SubscribeFailException e) {
             sendMessage(e.getValidResult());
+            businessOperationService.clearInstance();
+            viewBusiness();
             return null;
         }
     }
@@ -147,7 +149,8 @@ public class BusinessOperationController  implements java.io.Serializable {
             }
         } catch (SubscribeFailException e) {
             sendMessage(e.getValidResult());
-            logger.config("revoke valid fail!");
+            businessOperationService.clearInstance();
+            viewBusiness();
             return null;
         }
     }
@@ -166,7 +169,6 @@ public class BusinessOperationController  implements java.io.Serializable {
             }
         } catch (SubscribeFailException e) {
             sendMessage(e.getValidResult());
-            logger.config("delete valid fail!");
             return null;
         }
 

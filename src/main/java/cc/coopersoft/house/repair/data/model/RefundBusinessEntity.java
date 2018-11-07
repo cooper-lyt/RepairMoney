@@ -3,21 +3,29 @@ package cc.coopersoft.house.repair.data.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "REFUND_BUSINESS", schema = "WXZJ")
 public class RefundBusinessEntity {
 
+    public enum Type{
+        PAYMENT_WRONG_FULL,
+        PAYMENT_WRONG_PART,
+        DESTROY,
+        OTHER
+    }
+
     private String id;
     //private String house;
-    private String operOrder;
+    private String operationOrder;
     private BigDecimal money;
     private String reason;
     private String type;
     private String memo;
     private Integer version;
-    private Timestamp refundTime;
-    private String bankOperOrder;
+    private Date refundTime;
+    private String bankOperationOrder;
 
     @Id
     @Column(name = "ID")
@@ -31,12 +39,12 @@ public class RefundBusinessEntity {
 
     @Basic
     @Column(name = "OPER_ORDER")
-    public String getOperOrder() {
-        return operOrder;
+    public String getOperationOrder() {
+        return operationOrder;
     }
 
-    public void setOperOrder(String operOrder) {
-        this.operOrder = operOrder;
+    public void setOperationOrder(String operOrder) {
+        this.operationOrder = operOrder;
     }
 
     @Basic
@@ -92,22 +100,22 @@ public class RefundBusinessEntity {
 
     @Basic
     @Column(name = "REFUND_TIME")
-    public Timestamp getRefundTime() {
+    public Date getRefundTime() {
         return refundTime;
     }
 
-    public void setRefundTime(Timestamp refundTime) {
+    public void setRefundTime(Date refundTime) {
         this.refundTime = refundTime;
     }
 
     @Basic
     @Column(name = "BANK_OPER_ORDER")
-    public String getBankOperOrder() {
-        return bankOperOrder;
+    public String getBankOperationOrder() {
+        return bankOperationOrder;
     }
 
-    public void setBankOperOrder(String bankOperOrder) {
-        this.bankOperOrder = bankOperOrder;
+    public void setBankOperationOrder(String bankOperOrder) {
+        this.bankOperationOrder = bankOperOrder;
     }
 
     @Override
@@ -118,15 +126,6 @@ public class RefundBusinessEntity {
         RefundBusinessEntity that = (RefundBusinessEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (operOrder != null ? !operOrder.equals(that.operOrder) : that.operOrder != null) return false;
-        if (money != null ? !money.equals(that.money) : that.money != null) return false;
-        if (reason != null ? !reason.equals(that.reason) : that.reason != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (memo != null ? !memo.equals(that.memo) : that.memo != null) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
-        if (refundTime != null ? !refundTime.equals(that.refundTime) : that.refundTime != null) return false;
-        if (bankOperOrder != null ? !bankOperOrder.equals(that.bankOperOrder) : that.bankOperOrder != null)
-            return false;
 
         return true;
     }
@@ -134,14 +133,6 @@ public class RefundBusinessEntity {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (operOrder != null ? operOrder.hashCode() : 0);
-        result = 31 * result + (money != null ? money.hashCode() : 0);
-        result = 31 * result + (reason != null ? reason.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (memo != null ? memo.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (refundTime != null ? refundTime.hashCode() : 0);
-        result = 31 * result + (bankOperOrder != null ? bankOperOrder.hashCode() : 0);
         return result;
     }
 }

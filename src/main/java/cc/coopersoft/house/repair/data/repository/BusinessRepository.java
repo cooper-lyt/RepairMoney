@@ -6,11 +6,12 @@ import cc.coopersoft.framework.data.KeyAndCount;
 import cc.coopersoft.house.repair.data.model.BusinessEntity;
 import org.apache.deltaspike.data.api.AbstractEntityRepository;
 import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.jpa.api.entitymanager.EntityManagerConfig;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Repository
+@Repository()
 public abstract class BusinessRepository extends AbstractEntityRepository<BusinessEntity,String> {
 
     private final static ConditionQuery.ConditionField[] conditionFields = {
