@@ -20,6 +20,10 @@ public class PaymentMoneyService implements TaskEditSubscribeComponent<BusinessE
     }
 
     @Override
+    public void doCreate(BusinessEntity business) {
+    }
+
+    @Override
     public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
         return true;
     }

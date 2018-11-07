@@ -23,6 +23,10 @@ public class PaymentInfoService extends AccountOperationValidService implements 
         }
     }
 
+    @Override
+    public void doCreate(BusinessEntity business) {
+    }
+
 
     @Override
     protected Date getOperationTime(BusinessEntity businessInstance){
