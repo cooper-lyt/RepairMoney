@@ -1,34 +1,42 @@
 package cc.coopersoft.house.repair.data.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "REFUND_BUSINESS", schema = "WXZJ")
-public class RefundBusinessEntity {
+@Table(name = "REFUND_BUSINESS")
+public class RefundBusinessEntity implements java.io.Serializable{
 
     public enum Type{
-        PAYMENT_WRONG_FULL,
-        PAYMENT_WRONG_PART,
+        WRONG_FULL,
+        WRONG_PART,
         DESTROY,
         OTHER
     }
 
     private String id;
     //private String house;
-    private String operationOrder;
     private BigDecimal money;
     private String reason;
-    private String type;
+    private Type type;
     private String memo;
     private Integer version;
     private Date refundTime;
-    private String bankOperationOrder;
+
+    private BusinessEntity business;
+    private AccountDetailsEntity accountDetails;
+    private BankAccountDetailsEntity bankAccountDetails;
+
+
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 32, nullable = false, unique = true)
+    @NotNull
+    @Size(max = 32)
     public String getId() {
         return id;
     }
@@ -38,17 +46,8 @@ public class RefundBusinessEntity {
     }
 
     @Basic
-    @Column(name = "OPER_ORDER")
-    public String getOperationOrder() {
-        return operationOrder;
-    }
-
-    public void setOperationOrder(String operOrder) {
-        this.operationOrder = operOrder;
-    }
-
-    @Basic
-    @Column(name = "MONEY")
+    @Column(name = "MONEY",nullable = false)
+    @NotNull
     public BigDecimal getMoney() {
         return money;
     }
@@ -58,7 +57,8 @@ public class RefundBusinessEntity {
     }
 
     @Basic
-    @Column(name = "REASON")
+    @Column(name = "REASON", length = 128)
+    @Size(max = 128)
     public String getReason() {
         return reason;
     }
@@ -67,18 +67,20 @@ public class RefundBusinessEntity {
         this.reason = reason;
     }
 
-    @Basic
-    @Column(name = "TYPE")
-    public String getType() {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TYPE", length = 16, nullable = false)
+    @NotNull
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
     @Basic
-    @Column(name = "MEMO")
+    @Column(name = "MEMO", length = 256)
+    @Size(max = 256)
     public String getMemo() {
         return memo;
     }
@@ -88,7 +90,7 @@ public class RefundBusinessEntity {
     }
 
 
-    @Basic
+    @Version
     @Column(name = "VERSION")
     public Integer getVersion() {
         return version;
@@ -98,8 +100,9 @@ public class RefundBusinessEntity {
         this.version = version;
     }
 
-    @Basic
-    @Column(name = "REFUND_TIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "REFUND_TIME",nullable = false)
+    @NotNull
     public Date getRefundTime() {
         return refundTime;
     }
@@ -108,14 +111,36 @@ public class RefundBusinessEntity {
         this.refundTime = refundTime;
     }
 
-    @Basic
-    @Column(name = "BANK_OPER_ORDER")
-    public String getBankOperationOrder() {
-        return bankOperationOrder;
+
+    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "ID")
+    @MapsId
+    public BusinessEntity getBusiness() {
+        return business;
     }
 
-    public void setBankOperationOrder(String bankOperOrder) {
-        this.bankOperationOrder = bankOperOrder;
+    public void setBusiness(BusinessEntity businessEntity) {
+        this.business = businessEntity;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "OPER_ORDER")
+    public AccountDetailsEntity getAccountDetails() {
+        return accountDetails;
+    }
+
+    public void setAccountDetails(AccountDetailsEntity accountDetails) {
+        this.accountDetails = accountDetails;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "BANK_OPER_ORDER")
+    public BankAccountDetailsEntity getBankAccountDetails() {
+        return bankAccountDetails;
+    }
+
+    public void setBankAccountDetails(BankAccountDetailsEntity bankAccountDetails) {
+        this.bankAccountDetails = bankAccountDetails;
     }
 
     @Override
