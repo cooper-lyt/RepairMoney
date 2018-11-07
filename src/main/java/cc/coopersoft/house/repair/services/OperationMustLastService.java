@@ -32,7 +32,7 @@ public class OperationMustLastService implements TaskValidComponent<BusinessEnti
         }
         if (!"".equals(msg)){
             List<ValidMessage> result = new ArrayList<>(1);
-            result.add(new ValidMessage(ValidMessage.Level.OFF,"账户在此业务之后又发生了变动！不能执行些操作。", "变动的账户：" + msg));
+            result.add(new ValidMessage(ValidMessage.Level.FAIL,"账户在此业务之后又发生了变动！不能执行些操作。", "变动的账户：" + msg));
             return result;
         }
         return new ArrayList<>(0);

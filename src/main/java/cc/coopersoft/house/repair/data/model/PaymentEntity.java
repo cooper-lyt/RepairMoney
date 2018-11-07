@@ -200,12 +200,7 @@ public class PaymentEntity implements java.io.Serializable{
     @Transient
     public List<PaymentBusinessEntity> getPaymentBusinessList(){
         List<PaymentBusinessEntity> result = new ArrayList<>(getPaymentBusinesses());
-        Collections.sort(result, new Comparator<PaymentBusinessEntity>() {
-            @Override
-            public int compare(PaymentBusinessEntity o1, PaymentBusinessEntity o2) {
-                return o1.getId().compareTo(o2.getId());
-            }
-        });
+        Collections.sort(result, Comparator.comparing(PaymentBusinessEntity::getId));
         return result;
     }
 

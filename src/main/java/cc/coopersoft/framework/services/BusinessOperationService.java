@@ -94,6 +94,8 @@ public class BusinessOperationService implements java.io.Serializable {
 
 
     public void initInstance(String instanceId,String taskName){
+
+
         if ((businessInstance != null) && DataHelper.isDirty(businessInstance.getId(),instanceId) ){
             clearInstance();
 
@@ -386,8 +388,11 @@ public class BusinessOperationService implements java.io.Serializable {
                     try {
                         Iterator<TaskEditSubscribeComponent> it = getSubscribeComponents(ts.getClassName());
                         while (it.hasNext()) {
-                            logger.config("call persistent from component:" + ts.getClassName());
-                            it.next().doCreate(businessInstance);
+                            TaskEditSubscribeComponent component = it.next();
+                            if (ts.getClassName().equals(component.getClass().getName())) {
+                                logger.config("call persistent from component:" + component.getClass().getName());
+                                component.doCreate(businessInstance);
+                            }
                         }
                     } catch (ClassNotFoundException e) {
                         logger.log(Level.WARNING, ts.toString() + "persistent subscribe component: " + ts.getClassName() + " not found:", e);
@@ -406,10 +411,14 @@ public class BusinessOperationService implements java.io.Serializable {
                 try {
                     Iterator<TaskValidComponent> it = getTaskValidComponents(ta.getClassName());
                     while (it.hasNext()) {
-                        logger.config("valid from component:" + ta.getClassName());
-                        result.putMessages(it.next().valid(businessInstance));
-                        if(!result.canContinue()){
-                            throw new SubscribeFailException(result);
+
+                        TaskValidComponent component = it.next();
+                        logger.config("valid from component:" + component.getClass().getName());
+                        if (ta.getClassName().equals(component.getClass().getName())) {
+                            result.putMessages(component.valid(businessInstance));
+                            if (!result.canContinue()) {
+                                throw new SubscribeFailException(result);
+                            }
                         }
                     }
                 } catch (ClassNotFoundException e) {
@@ -431,10 +440,11 @@ public class BusinessOperationService implements java.io.Serializable {
                     Iterator<TaskActionComponent> it = getTaskActionComponents(ta.getClassName());
                     while (it.hasNext()){
                         TaskActionComponent component = it.next();
-                        if (component.check(businessInstance,persistent)) {
-                            component.doAction(businessInstance, persistent);
+                        if (ta.getClassName().equals(component.getClass().getName())){
+                            if (component.check(businessInstance,persistent)) {
+                                component.doAction(businessInstance, persistent);
+                            }
                         }
-
                     }
                 } catch (ClassNotFoundException e) {
                     logger.log(Level.WARNING, ta.toString() + "action subscribe component: " + ta.getClassName() + " not found:", e);

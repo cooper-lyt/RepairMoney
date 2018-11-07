@@ -147,6 +147,7 @@ public class BusinessOperationController  implements java.io.Serializable {
             }
         } catch (SubscribeFailException e) {
             sendMessage(e.getValidResult());
+            logger.config("revoke valid fail!");
             return null;
         }
     }
@@ -165,6 +166,7 @@ public class BusinessOperationController  implements java.io.Serializable {
             }
         } catch (SubscribeFailException e) {
             sendMessage(e.getValidResult());
+            logger.config("delete valid fail!");
             return null;
         }
 
@@ -225,7 +227,7 @@ public class BusinessOperationController  implements java.io.Serializable {
                 detail = MessageFormat.format(detail,msg.getParams());
             }
 
-            logger.config("add " + severity + " message:" + summary);
+            logger.config("add " + msg.getLevel() + " message to:" + severity + summary);
             facesContext.addMessage(null,new FacesMessage(severity,summary,detail));
         }
 

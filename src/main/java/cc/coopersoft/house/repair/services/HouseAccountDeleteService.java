@@ -27,15 +27,6 @@ public class HouseAccountDeleteService extends OperationMustLastService implemen
 
 
     @Override
-    public List<ValidMessage> valid(BusinessEntity businessInstance) {
-        List<ValidMessage> result = super.valid(businessInstance);
-        for(ValidMessage message : result){
-            message.setLevel(ValidMessage.Level.FAIL);
-        }
-        return result;
-    }
-
-    @Override
     public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
         List<ValidMessage> result = super.valid(businessInstance);
         for (ValidMessage msg: result){
