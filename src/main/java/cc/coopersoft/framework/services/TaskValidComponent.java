@@ -9,5 +9,5 @@ public interface TaskValidComponent<T extends BusinessInstance> {
     /** 验证数据 添加消息
      *
      */
-    List<ValidMessage> valid(T businessInstance);
+    List<ValidMessage> valid(T business);
 }

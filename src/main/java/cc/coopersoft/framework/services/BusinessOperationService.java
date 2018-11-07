@@ -236,7 +236,6 @@ public class BusinessOperationService implements java.io.Serializable {
                 if (isPersistent()){
                     businessInstanceService.saveEntity(businessInstance);
                 }
-                doActionComponent(getEditor(),isPersistent());
             }
 
             return result;
@@ -324,9 +323,7 @@ public class BusinessOperationService implements java.io.Serializable {
             businessInstanceService.saveEntity(businessInstance);
 
             if (!isPersistent()) {
-                for(TaskSubscribeGroup group: editorGroups){
-                    doActionComponent(group.getSubscribes(),true);
-                }
+                persistentEditor();
             }
 
         }
@@ -376,6 +373,25 @@ public class BusinessOperationService implements java.io.Serializable {
                         logger.log(Level.WARNING,ts.toString() + "subscribe component: " + ts.getClassName() + " not found:",e);
                     }
 
+                }
+            }
+        }
+    }
+
+    private void persistentEditor(){
+        for(TaskSubscribeGroup group: editorGroups) {
+            for (TaskSubscribe ts : group.getSubscribes()) {
+                logger.config("call persistent for:" + ts);
+                if (!DataHelper.empty(ts.getClassName())) {
+                    try {
+                        Iterator<TaskEditSubscribeComponent> it = getSubscribeComponents(ts.getClassName());
+                        while (it.hasNext()) {
+                            logger.config("call persistent from component:" + ts.getClassName());
+                            it.next().doCreate(businessInstance);
+                        }
+                    } catch (ClassNotFoundException e) {
+                        logger.log(Level.WARNING, ts.toString() + "persistent subscribe component: " + ts.getClassName() + " not found:", e);
+                    }
                 }
             }
         }

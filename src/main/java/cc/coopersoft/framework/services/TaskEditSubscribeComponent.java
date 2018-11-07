@@ -8,7 +8,8 @@ public interface TaskEditSubscribeComponent<T extends BusinessInstance> extends 
     /** 初始化
      * 在开始加载所有订阅者页时执行，可能执行多次
      */
-    void init(T businessInstance);
+    void init(T business);
 
 
+    void doCreate(T business);
 }

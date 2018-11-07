@@ -39,7 +39,7 @@ public class HouseAccountDeleteService extends OperationMustLastService implemen
     public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
         List<ValidMessage> result = super.valid(businessInstance);
         for (ValidMessage msg: result){
-            if (ValidMessage.Level.FAIL.equals(msg.getLevel())){
+            if (ValidMessage.Level.FAIL.equals(msg.getLevel()) || ValidMessage.Level.OFF.equals(msg.getLevel())){
                 throw new SubscribeFailException(msg);
             }
         }
