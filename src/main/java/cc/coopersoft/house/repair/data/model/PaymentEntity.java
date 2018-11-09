@@ -1,5 +1,8 @@
 package cc.coopersoft.house.repair.data.model;
 
+import cc.coopersoft.house.repair.data.AccountMoneyOperation;
+import cc.coopersoft.house.repair.data.PaymentType;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -8,13 +11,13 @@ import java.util.*;
 
 @Entity
 @Table(name = "PAYMENT")
-public class PaymentEntity implements java.io.Serializable{
+public class PaymentEntity implements AccountMoneyOperation, java.io.Serializable{
 
     private String id;
     private String sectionCode;
     private String sectionName;
     private Integer version;
-    private Date operationDate;
+    private Date operationTime;
     private BigDecimal rulePrice;
     private String calcRule;
     private String payPerson;
@@ -82,15 +85,17 @@ public class PaymentEntity implements java.io.Serializable{
     }
 
 
-    @Basic
+    @Override
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "OPER_DATE",nullable = false)
     @NotNull
-    public Date getOperationDate() {
-        return operationDate;
+    public Date getOperationTime() {
+        return operationTime;
     }
 
-    public void setOperationDate(Date operDate) {
-        this.operationDate = operDate;
+    @Override
+    public void setOperationTime(Date operationDate) {
+        this.operationTime = operationDate;
     }
 
     @Basic
@@ -125,6 +130,7 @@ public class PaymentEntity implements java.io.Serializable{
         this.payPerson = payPerson;
     }
 
+    @Override
     @Enumerated(EnumType.STRING)
     @Column(name = "PAY_TYPE",length = 4 , nullable = false)
     @NotNull
@@ -132,17 +138,20 @@ public class PaymentEntity implements java.io.Serializable{
         return paymentType;
     }
 
+    @Override
     public void setPaymentType(PaymentType paymentType) {
         this.paymentType = paymentType;
     }
 
 
+    @Override
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "BANK_OPER_ORDER")
     public BankAccountDetailsEntity getBankAccountDetails() {
         return bankAccountDetails;
     }
 
+    @Override
     public void setBankAccountDetails(BankAccountDetailsEntity bankAccountDetails) {
         this.bankAccountDetails = bankAccountDetails;
     }

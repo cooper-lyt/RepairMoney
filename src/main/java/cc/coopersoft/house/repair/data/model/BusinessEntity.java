@@ -28,6 +28,9 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
     private String summary;
 
     private PaymentEntity payment;
+    private RefundBusinessEntity refund;
+
+
     private Set<AccountDetailsEntity> accountDetails = new HashSet<>(0);
     private Set<BankAccountDetailsEntity> bankAccountDetails = new HashSet<>(0);
     private Set<PutAccountBookEntity> putAccountBooks = new HashSet<>(0);
@@ -134,9 +137,8 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
     }
 
     @Override
-    @Basic
-    @Column(name = "REG_TIME",nullable = false)
-    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "REG_TIME")
     public Date getRegTime() {
         return regTime;
     }
@@ -241,7 +243,15 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
         this.payment = paymentEntity;
     }
 
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true,cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    public RefundBusinessEntity getRefund() {
+        return refund;
+    }
 
+    public void setRefund(RefundBusinessEntity refund) {
+        this.refund = refund;
+    }
 
     @Override
     public boolean equals(Object o) {

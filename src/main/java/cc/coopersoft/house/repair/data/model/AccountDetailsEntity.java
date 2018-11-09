@@ -1,5 +1,7 @@
 package cc.coopersoft.house.repair.data.model;
 
+import cc.coopersoft.house.repair.data.AccountOperationDirection;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -139,7 +141,7 @@ public class AccountDetailsEntity implements java.io.Serializable{
         this.business = businessEntity;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "HOUSE",nullable = false)
     public HouseEntity getHouse() {
         return house;

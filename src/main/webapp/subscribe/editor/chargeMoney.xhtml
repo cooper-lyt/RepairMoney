@@ -13,7 +13,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
-    <c:if test="#{empty paymentBusinessController.paymentBusiness.paymentNotice}">
+    <c:if test="#{empty paymentBusinessController.operation.paymentNotice}">
 
         
         <ui:repeat value="#{paymentBusinessController.paymentItem}" var="_payment">
@@ -44,15 +44,15 @@
 
     </c:if>
 
-    <c:if test="#{not empty paymentBusinessController.paymentBusiness.paymentNotice}">
+    <c:if test="#{not empty paymentBusinessController.operation.paymentNotice}">
 
         <div class="alert alert-info" role="alert">
             <strong>应缴</strong>
-            <h:outputText value="#{paymentBusinessController.paymentBusiness.mustMoney}">
+            <h:outputText value="#{paymentBusinessController.operation.mustMoney}">
                 <f:convertNumber type="currency" locale="#{i18n.locale}"/>
             </h:outputText>
             <strong>实缴</strong>
-            <h:outputText value="#{paymentBusinessController.paymentBusiness.money}">
+            <h:outputText value="#{paymentBusinessController.operation.money}">
                 <f:convertNumber type="currency" locale="#{i18n.locale}"/>
             </h:outputText>
         </div>

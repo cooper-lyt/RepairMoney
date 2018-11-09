@@ -1,5 +1,7 @@
 package cc.coopersoft.house.repair.data.model;
 
+import cc.coopersoft.house.repair.data.AccountOperationDirection;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

@@ -1,7 +1,7 @@
 package cc.coopersoft.house.repair.services;
 
 import cc.coopersoft.framework.services.SimpleEntityService;
-import cc.coopersoft.house.repair.data.model.AccountStatus;
+import cc.coopersoft.house.repair.data.AccountStatus;
 import cc.coopersoft.house.repair.data.model.BankAccountEntity;
 import cc.coopersoft.house.repair.data.repository.BankAccountRepository;
 import org.apache.deltaspike.data.api.EntityRepository;

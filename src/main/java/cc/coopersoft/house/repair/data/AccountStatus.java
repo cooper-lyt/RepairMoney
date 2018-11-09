@@ -1,4 +1,4 @@
-package cc.coopersoft.house.repair.data.model;
+package cc.coopersoft.house.repair.data;
 
 public enum AccountStatus {
 

@@ -22,19 +22,81 @@
             <b:messages globalOnly="true" styleClass="top-messages"/>
         </b:column>
 
-        <b:column offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
+        <b:column styleClass="js-type-radio" offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
 
+            <b:row>
+                <b:column span="12">
             <div class="form-checkbox">
-                <b:radiobutton ajax="true" update="valid_radio_panel" converter="validTypeConverter" value="#{houseValidInfo.validType}" process="@this" itemLabel="测绘标识" itemValue="MBBH_NUMBER" display="inline"/>
-                <b:iconAwesome name="map"/>
-                <span class="note">
-                        测绘部门为房屋编制的标识由图号、丘号、幢号、房号组成. 你可以在你的产权证中找到此标识.
-                </span>
+                <label>
+                    <input type="radio" name="type" value="WRONG_FULL" checked="checked"/>
+                    缴存错误
+                </label>
 
+                <b:iconAwesome name="exclamation-triangle"/>
+                <span class="note">
+                       因为缴存错误发生退款，生成红字冲账凭证！若交款业务下所有账户全部退款为全额冲账，若部分账户退款为差额冲账。
+                </span>
+            </div>
+            <div class="form-checkbox">
+                <label>
+                    <input disabled="disabled" type="radio" name="type" value="INCOME_FULL" />
+                    收益错误
+                </label>
+                <b:iconAwesome name="exclamation-circle"/>
+                <span class="note">
+                       因为收益分摊错误发生的退款，生成红字冲账凭证！若参加收益分摊业务的所有账户全部退款为全额冲账，若部分账户退款为差额冲账。
+                </span>
+            </div>
+            <div class="form-checkbox">
+                <label>
+                    <input type="radio" name="type" value="DESTROY" />
+                    销户退款
+                </label>
+                <b:iconAwesome name="minus-circle"/>
+                <span class="note">
+                       因房屋注销发生的销户退款，生成记账凭证。
+                </span>
             </div>
 
+            <div class="form-checkbox">
+                <label>
+                    <input type="radio" name="type" value="OTHER" />
+                    其它退款
+                </label>
+                <b:iconAwesome name="reply"/>
+                <span class="note">
+                       其它特殊原因发生的退款，生成记账凭证。
+                </span>
+            </div>
+                </b:column>
+                <b:column span="12">
+                    <hr/>
+                    <input id="begin_refund" class="btn btn-primary" type="button" value="开始退款"/>
+                </b:column>
+            </b:row>
         </b:column>
 
+
+
     </b:row>
+    
+    <h:outputScript>
+        $(function () {
+            $('#begin_refund').click(function () {
+                var type = $('input[name=type]:checked', '.js-type-radio').val();
+                var url = '#{request.contextPath}';
+                if (type == 'DESTROY' || type == 'OTHER') {
+                    url += '/function/houseAccountSearch.xhtml?';
+                }else if (type == 'WRONG_FULL'){
+                    url += '/business/businessSearch.xhtml?defineId=BP&amp;';
+                }else {
+                    alert('TODO: 此功能未完成');
+                }
+
+                location.href = url + 'refund=' + type;
+        });
+
+        });
+    </h:outputScript>
 
 </ui:composition>

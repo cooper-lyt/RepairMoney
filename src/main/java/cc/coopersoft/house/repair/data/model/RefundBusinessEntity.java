@@ -1,15 +1,17 @@
 package cc.coopersoft.house.repair.data.model;
 
+import cc.coopersoft.house.repair.data.AccountMoneyOperation;
+import cc.coopersoft.house.repair.data.PaymentType;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
 @Table(name = "REFUND_BUSINESS")
-public class RefundBusinessEntity implements java.io.Serializable{
+public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Serializable{
 
     public enum Type{
         WRONG_FULL, //冲账
@@ -25,12 +27,12 @@ public class RefundBusinessEntity implements java.io.Serializable{
     private BigDecimal money;
     private String reason;
     private Type type;
-    private String memo;
     private Integer version;
     private Date refundTime;
+    private PaymentType paymentType;
 
     private BusinessEntity business;
-    private AccountDetailsEntity accountDetails;
+
     private BankAccountDetailsEntity bankAccountDetails;
 
 
@@ -80,17 +82,6 @@ public class RefundBusinessEntity implements java.io.Serializable{
         this.type = type;
     }
 
-    @Basic
-    @Column(name = "MEMO", length = 256)
-    @Size(max = 256)
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
 
     @Version
     @Column(name = "VERSION")
@@ -102,15 +93,28 @@ public class RefundBusinessEntity implements java.io.Serializable{
         this.version = version;
     }
 
+    @Override
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "REFUND_TIME",nullable = false)
     @NotNull
-    public Date getRefundTime() {
+    public Date getOperationTime() {
         return refundTime;
     }
 
-    public void setRefundTime(Date refundTime) {
+    public void setOperationTime(Date refundTime) {
         this.refundTime = refundTime;
+    }
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "PAY_TYPE",length = 4 , nullable = false)
+    @NotNull
+    public PaymentType getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
     }
 
 
@@ -125,17 +129,9 @@ public class RefundBusinessEntity implements java.io.Serializable{
         this.business = businessEntity;
     }
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "OPER_ORDER")
-    public AccountDetailsEntity getAccountDetails() {
-        return accountDetails;
-    }
 
-    public void setAccountDetails(AccountDetailsEntity accountDetails) {
-        this.accountDetails = accountDetails;
-    }
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "BANK_OPER_ORDER")
     public BankAccountDetailsEntity getBankAccountDetails() {
         return bankAccountDetails;

@@ -102,7 +102,7 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     }
 
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "OPER_ORDER")
     public AccountDetailsEntity getAccountDetails() {
         return accountDetails;

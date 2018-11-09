@@ -1,7 +1,6 @@
 package cc.coopersoft.house.repair.controller;
 
 import cc.coopersoft.framework.controller.BusinessOperationController;
-import cc.coopersoft.framework.services.BusinessOperationService;
 import cc.coopersoft.framework.tools.HttpJsonDataGet;
 import cc.coopersoft.house.repair.Messages;
 import cc.coopersoft.house.repair.data.model.BusinessEntity;
@@ -16,7 +15,6 @@ import org.apache.deltaspike.jsf.api.message.JsfMessage;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.inject.Default;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.logging.Level;
@@ -34,16 +32,10 @@ public class PaymentBusinessCreate implements java.io.Serializable {
     private Logger logger;
 
     @Inject
-    private FacesContext facesContext;
-
-    @Inject
     private PaymentService paymentService;
 
     @Inject
     private JsfMessage<Messages> messages;
-
-    @Inject
-    private BusinessOperationService businessOperationService;
 
     @Inject
     private BusinessOperationController businessOperationController;
@@ -253,9 +245,7 @@ public class PaymentBusinessCreate implements java.io.Serializable {
 
 
     public Class<? extends ViewConfig> paymentByHouse(){
-        paymentService.createBusinessByHouse((BusinessEntity) businessOperationService.createInstance(
-                facesContext.getExternalContext().getRequestParameterMap().get(BusinessOperationController.BUSINESS_DEFINE_ID_PARAM_NAME),
-                BusinessOperationService.CREATE_TASK_NAME),house);
+        paymentService.createBusinessByHouse((BusinessEntity) businessOperationController.createInstance(),house);
         return businessOperationController.taskBegin();
     }
 
@@ -266,9 +256,7 @@ public class PaymentBusinessCreate implements java.io.Serializable {
             messages.addError().paymentNoticeIsUsing();
             return null;
         }
-        paymentService.createBusinessByNotice((BusinessEntity) businessOperationService.createInstance(
-                facesContext.getExternalContext().getRequestParameterMap().get(BusinessOperationController.BUSINESS_DEFINE_ID_PARAM_NAME),
-                BusinessOperationService.CREATE_TASK_NAME),paymentNotice);
+        paymentService.createBusinessByNotice((BusinessEntity) businessOperationController.createInstance(),paymentNotice);
         return businessOperationController.taskBegin();
     }
 

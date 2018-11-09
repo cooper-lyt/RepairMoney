@@ -34,7 +34,7 @@ public abstract class BusinessRepository extends AbstractEntityRepository<Busine
 
     public List<BusinessEntity> queryByKey(List<ConditionAdapter> conditions,List<String> defineIds,int offset, int count){
         ConditionQuery conditionQuery =  buildConditionQuery(conditions,defineIds);
-        TypedQuery<BusinessEntity> query = typedQuery("SELECT b FROM BusinessEntity b left join fetch b.payment " +
+        TypedQuery<BusinessEntity> query = typedQuery("SELECT b FROM BusinessEntity b left join fetch b.payment left join fetch b.refund " +
                 conditionQuery.where() + "order by b.regTime desc, b.dataTime desc").setFirstResult(offset).setMaxResults(count);
         return parameterization(conditionQuery,query,defineIds).getResultList();
     }

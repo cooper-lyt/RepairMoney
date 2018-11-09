@@ -88,9 +88,11 @@
                         <div class="repo-list-item d-flex flex-justify-start row">
                             <div class="col-12 col-md-12" >
                                 <h3 class="mb-2">
+
                                     <h:link value="#{_account.house.houseAddress}/#{_account.houseCode}" includeViewParams="false" outcome="/function/houseAccountView.xhtml" >
 
                                         <f:param name="accountId" value="#{_account.accountNumber}"/>
+                                        <f:param name="refund" value="#{param.refund}"/>
                                         <f:param name="from" value="/function/houseAccountSearch.xhtml"/>
 
                                     </h:link>

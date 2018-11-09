@@ -81,6 +81,13 @@ public class BusinessOperationController  implements java.io.Serializable {
         }
     }
 
+    public BusinessInstance createInstance(){
+        businessOperationService.clearInstance();
+        return businessOperationService.createInstance(
+                facesContext.getExternalContext().getRequestParameterMap().get(BUSINESS_DEFINE_ID_PARAM_NAME),
+                BusinessOperationService.CREATE_TASK_NAME);
+    }
+
     public String getBusinessId() {
         return businessId;
     }

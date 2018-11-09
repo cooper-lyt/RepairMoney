@@ -12,10 +12,10 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    
+
     <ui:include src="/frame/accountMoneyOperationEditor.xhtml">
         <ui:param name="controller" value="#{paymentBusinessController}"/>
-        <ui:param name="operationTimeLabel" value="交款日期"/>
+        <ui:param name="operationTimeLabel" value="退款日期"/>
         <ui:param name="readOnly" value="#{paymentBusinessController.operation.business.source eq 'OUT_SIDE'}"/>
     </ui:include>
 

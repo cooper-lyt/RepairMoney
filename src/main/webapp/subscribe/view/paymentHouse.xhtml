@@ -17,46 +17,46 @@
     <b:row styleClass="details-info">
         <b:column span="4">
             <h:outputLabel for="notice_number" value="通知单号"/>
-            <h:outputText id="notice_number" value="#{(empty paymentBusinessController.paymentBusiness.paymentNotice) ? '' : paymentBusinessController.paymentBusiness.paymentNotice.id}"/>
+            <h:outputText id="notice_number" value="#{(empty paymentBusinessController.operation.paymentNotice) ? '' : paymentBusinessController.operation.paymentNotice.id}"/>
         </b:column>
 
         <b:column span="4">
             <h:outputLabel for="notice_time" value="交款日期"/>
-            <h:outputText id="notice_time" value="#{paymentBusinessController.paymentBusiness.operationDate}">
+            <h:outputText id="notice_time" value="#{paymentBusinessController.operation.operationTime}">
                 <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>
             </h:outputText>
         </b:column>
 
         <b:column span="4">
             <h:outputLabel for="payment_bank" value="交款银行"/>
-            <h:outputText id="payment_bank" value="#{( empty paymentBusinessController.paymentBusiness.bankAccountDetails) ? '' : paymentBusinessController.paymentBusiness.bankAccountDetails.bankAccount.accountName}">
+            <h:outputText id="payment_bank" value="#{( empty paymentBusinessController.operation.bankAccountDetails) ? '' : paymentBusinessController.operation.bankAccountDetails.bankAccount.accountName}">
             </h:outputText>
         </b:column>
 
         <b:column span="3">
             <h:outputLabel for="payment_type" value="交款方式"/>
-            <h:outputText id="payment_type" value="#{enumHelper.getLabel(paymentBusinessController.paymentBusiness.paymentType)}">
+            <h:outputText id="payment_type" value="#{enumHelper.getLabel(paymentBusinessController.operation.paymentType)}">
             </h:outputText>
         </b:column>
 
 
         <b:column span="3">
             <h:outputLabel for="notice_must_money" value="应缴金额"/>
-            <h:outputText id="notice_must_money" value="#{paymentBusinessController.paymentBusiness.mustMoney}">
+            <h:outputText id="notice_must_money" value="#{paymentBusinessController.operation.mustMoney}">
                 <f:convertNumber type="currency" locale="#{i18n.locale}"/>
             </h:outputText>
         </b:column>
 
         <b:column span="3">
             <h:outputLabel for="notice_money" value="实缴金额"/>
-            <h:outputText id="notice_money" value="#{paymentBusinessController.paymentBusiness.money}">
+            <h:outputText id="notice_money" value="#{paymentBusinessController.operation.money}">
                 <f:convertNumber type="currency" locale="#{i18n.locale}"/>
             </h:outputText>
         </b:column>
 
         <b:column span="3">
             <h:outputLabel for="payment_person" value="交款人"/>
-            <h:outputText id="payment_person" value="#{paymentBusinessController.paymentBusiness.payPerson}">
+            <h:outputText id="payment_person" value="#{paymentBusinessController.operation.payPerson}">
                 <f:convertNumber type="currency" locale="#{i18n.locale}"/>
             </h:outputText>
         </b:column>
@@ -66,7 +66,7 @@
     </b:row>
 
 
-    <c:forEach items="#{paymentBusinessController.paymentBusiness.paymentBusinessList}" var="_pay">
+    <c:forEach items="#{paymentBusinessController.operation.paymentBusinessList}" var="_pay">
         <ui:include src="/frame/house.xhtml">
             <ui:param name="_house" value="#{_pay.accountDetails.house}"/>
         </ui:include>
