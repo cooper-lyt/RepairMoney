@@ -34,9 +34,5 @@ public class AccountOperationRevokeService implements TaskActionComponent<Busine
         }
     }
 
-    @Override
-    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
-        return true;
-    }
 }
 

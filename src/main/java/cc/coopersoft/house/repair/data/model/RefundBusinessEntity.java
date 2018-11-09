@@ -12,8 +12,10 @@ import java.util.Date;
 public class RefundBusinessEntity implements java.io.Serializable{
 
     public enum Type{
-        WRONG_FULL,
-        WRONG_PART,
+        WRONG_FULL, //冲账
+        WRONG_PART, //冲账
+        INCOME_PART, //冲账
+        INCOME_FULL, //冲账
         DESTROY,
         OTHER
     }

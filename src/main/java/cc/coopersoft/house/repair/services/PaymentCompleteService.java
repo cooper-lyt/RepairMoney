@@ -20,11 +20,6 @@ public class PaymentCompleteService  implements TaskActionComponent<BusinessEnti
 
 
     @Override
-    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
-        return true;
-    }
-
-    @Override
     public void doAction(BusinessEntity businessInstance,boolean persistent) {
        PaymentEntity paymentEntity =businessInstance.getPayment();
        for(PaymentBusinessEntity pb: paymentEntity.getPaymentBusinesses()){

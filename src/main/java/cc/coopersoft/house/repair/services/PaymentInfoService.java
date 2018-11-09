@@ -48,11 +48,6 @@ public class PaymentInfoService extends AccountOperationValidService implements 
     }
 
     @Override
-    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
-        return true;
-    }
-
-    @Override
     public void doAction(BusinessEntity businessInstance,boolean persistent) {
         PaymentEntity payment = businessInstance.getPayment();
         if (PaymentType.BANK.equals(payment.getPaymentType()) && !BusinessInstance.Source.OUT_SIDE.equals(businessInstance.getSource())){

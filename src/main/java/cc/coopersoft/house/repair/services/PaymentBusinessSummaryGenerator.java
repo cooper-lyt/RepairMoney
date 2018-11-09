@@ -28,11 +28,6 @@ public class PaymentBusinessSummaryGenerator implements TaskActionComponent<Busi
 
 
     @Override
-    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
-        return true;
-    }
-
-    @Override
     public void doAction(BusinessEntity businessInstance, boolean persistent) {
         List<BusinessSummary> result = new ArrayList<>();
 

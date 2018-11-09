@@ -441,9 +441,7 @@ public class BusinessOperationService implements java.io.Serializable {
                     while (it.hasNext()){
                         TaskActionComponent component = it.next();
                         if (ta.getClassName().equals(component.getClass().getName())){
-                            if (component.check(businessInstance,persistent)) {
-                                component.doAction(businessInstance, persistent);
-                            }
+                            component.doAction(businessInstance, persistent);
                         }
                     }
                 } catch (ClassNotFoundException e) {

@@ -19,10 +19,6 @@ public class PaymentNoticeDeleteService implements TaskActionComponent<BusinessE
     @Inject
     private PaymentNoticeRepository paymentNoticeRepository;
 
-    @Override
-    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
-        return true;
-    }
 
     @Override
     public void doAction(BusinessEntity businessInstance,boolean persistent) {

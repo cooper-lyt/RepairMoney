@@ -24,11 +24,6 @@ public class PaymentMoneyService implements TaskEditSubscribeComponent<BusinessE
     }
 
     @Override
-    public boolean check(BusinessEntity businessInstance, boolean persistent) throws SubscribeFailException {
-        return true;
-    }
-
-    @Override
     public void doAction(BusinessEntity businessInstance, boolean persistent) {
         if (businessInstance.getPayment().getPaymentNotice() == null) {
             BigDecimal mustMoney = BigDecimal.ZERO;
