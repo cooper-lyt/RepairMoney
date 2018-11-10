@@ -34,6 +34,7 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
     private BusinessEntity business;
 
     private BankAccountDetailsEntity bankAccountDetails;
+    private AccountDetailsEntity accountDetails;
 
 
 
@@ -129,7 +130,15 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
         this.business = businessEntity;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "OPER_ORDER", nullable = false)
+    public AccountDetailsEntity getAccountDetails() {
+        return accountDetails;
+    }
 
+    public void setAccountDetails(AccountDetailsEntity accountDetails) {
+        this.accountDetails = accountDetails;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "BANK_OPER_ORDER")

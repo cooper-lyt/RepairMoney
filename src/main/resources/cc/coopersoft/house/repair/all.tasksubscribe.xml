@@ -11,6 +11,8 @@
             <!-- params -->
         </subscribe>
         <subscribe id="payment.money" name="交款金额" page="/subscribe/editor/chargeMoney.xhtml" class="cc.coopersoft.house.repair.services.PaymentMoneyService"/>
+
+        <subscribe id="refund.info" name="退款信息" page="/subscribe/editor/refundInfo.xhtml" class="cc.coopersoft.house.repair.services.RefundInfoService"/>
     </editor>
 
     <action>
