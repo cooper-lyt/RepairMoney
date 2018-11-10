@@ -71,9 +71,6 @@
                             </ui:include>
                         </c:forEach>
 
-                        <c:if test="#{(not businessOperationController.persistent)  and (not businessOperationController.hasNext)}">
-                            <b:inputTextarea rows="4" value="#{businessOperationController.businessInstance.memo}" label="备注" renderLabel="true"/>
-                        </c:if>
 
                         <hr/>
                         <div class="action-panel">

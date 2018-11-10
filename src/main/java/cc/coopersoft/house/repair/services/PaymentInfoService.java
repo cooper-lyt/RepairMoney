@@ -16,7 +16,8 @@ public class PaymentInfoService extends AccountOperationInfoEditService<PaymentE
 
 
     @Override
-    public void init(BusinessEntity business) {
+    public boolean init(BusinessEntity business) {
+        return true;
     }
 
     @Override

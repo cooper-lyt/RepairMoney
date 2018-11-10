@@ -275,8 +275,8 @@ public class BusinessOperationController  implements java.io.Serializable {
             sendMessage(result);
             if (result.isPass()){
                 beginConversation();
-                if (businessOperationService.isHasEditor()){
-                    return next();
+                if (businessOperationService.next()){
+                    return Business.Editor.class;
                 }else{
                     return preparePage();
                 }
@@ -308,12 +308,11 @@ public class BusinessOperationController  implements java.io.Serializable {
     //-- editor
 
     public boolean isHasPrevious(){
-        return (businessOperationService.getPageIndex() != null) && (businessOperationService.getPageIndex() > 0);
+        return businessOperationService.isHasPrevious();
     }
 
     public Class<? extends ViewConfig> previous(){
-        if (isHasPrevious()){
-            toPage(businessOperationService.getPageIndex() - 1);
+        if (businessOperationService.previous()){
             return Business.Editor.class;
         }else{
             return null;
@@ -321,8 +320,11 @@ public class BusinessOperationController  implements java.io.Serializable {
     }
 
     public Class<? extends ViewConfig> toPage(int page){
-        businessOperationService.toPage(page);
-        return Business.Editor.class;
+        if (businessOperationService.toPage(page)){
+            return Business.Editor.class;
+        }else{
+            return preparePage();
+        }
     }
 
     public Class<? extends ViewConfig> next(){
@@ -331,8 +333,7 @@ public class BusinessOperationController  implements java.io.Serializable {
             SubscribeValidResult result = businessOperationService.savePage();
             sendMessage(result);
             if (result.isPass()){
-                if (businessOperationService.isHasNext()){
-                    businessOperationService.next();
+                if (businessOperationService.next()){
                     return Business.Editor.class;
                 }else{
                     logger.config("business memo is:" + getBusinessInstance().getMemo());
@@ -372,10 +373,6 @@ public class BusinessOperationController  implements java.io.Serializable {
 
     public List<TaskSubscribe> getEditor(){
         return businessOperationService.getEditor();
-    }
-
-    public boolean isHasNext(){
-        return businessOperationService.isHasNext();
     }
 
     public List<String> getEditorDependencies(){

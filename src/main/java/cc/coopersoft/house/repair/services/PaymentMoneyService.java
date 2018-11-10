@@ -15,8 +15,8 @@ import java.util.List;
 public class PaymentMoneyService implements TaskEditSubscribeComponent<BusinessEntity> {
 
     @Override
-    public void init(BusinessEntity businessInstance) {
-
+    public boolean init(BusinessEntity businessInstance) {
+        return true;
     }
 
     @Override

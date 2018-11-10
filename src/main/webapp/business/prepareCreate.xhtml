@@ -41,9 +41,6 @@
     <b:row>
 
         <b:column span="12">
-            <p>
-                #{businessOperationController.businessInstance.memo}
-            </p>
 
             <c:forEach items="#{businessOperationController.viewDependencies}" var="_dependency">
                 <ui:include src="#{_dependency}"/>
@@ -64,10 +61,10 @@
 
             </c:forEach>
 
-
             <hr/>
-            <h:form styleClass="action-panel" id="create_business_form">
 
+            <h:form styleClass="action-panel" id="create_business_form">
+                <b:inputTextarea rows="3" value="#{businessOperationController.businessInstance.memo}" placeholder="业务备注" label="备注" renderLabel="true"/>
 
                 <b:commandButton look="success" value="建立业务" ajax="false" styleClass="right" action="#{businessOperationController.taskComplete}">
                     <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />

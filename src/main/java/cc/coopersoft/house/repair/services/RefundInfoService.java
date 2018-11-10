@@ -19,7 +19,8 @@ public class RefundInfoService extends AccountOperationInfoEditService<RefundBus
     private RefundService refundService;
 
     @Override
-    public void init(BusinessEntity business) {
+    public boolean init(BusinessEntity business) {
+        return true;
     }
 
     @Override

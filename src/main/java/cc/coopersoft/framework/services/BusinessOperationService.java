@@ -209,17 +209,7 @@ public class BusinessOperationService implements java.io.Serializable {
         return editorGroups.get(pageIndex).getSubscribes();
     }
 
-    public boolean isHasNext(){
-        if (pageIndex == null) {
-            return isHasEditor();
-        }else{
-            return (pageIndex + 1) < editorGroups.size();
-        }
-    }
 
-    public boolean isHasEditor(){
-        return !editorGroups.isEmpty();
-    }
 
     public SubscribeValidResult taskBegin() throws SubscribeFailException {
         SubscribeValidResult result = doValidationsComponent(getActions(TaskActionEntity.Type.VALID,TaskActionEntity.Position.BEFORE));
@@ -245,29 +235,74 @@ public class BusinessOperationService implements java.io.Serializable {
             return factoryValidResult();
     }
 
-    public void next(){
-        if (pageIndex != null){
-            pageIndex++;
+    public boolean next(){
+        if (isHasNext()) {
+            if (pageIndex != null) {
+                pageIndex++;
+            } else {
+                pageIndex = 0;
+            }
+
+            if (loadPage()){
+                return true;
+            }else{
+                return next();
+            }
         }else{
-            pageIndex = 0;
+            return false;
         }
-        loadPage();
     }
 
-    public void toPage(int page){
-        if ((pageIndex == null) || page > pageIndex){
+    public boolean toPage(int page){
+        if ((pageIndex == null) || page > pageIndex || ((page + 1) >= editorGroups.size())){
             throw new IllegalArgumentException(" toPage cant to new Page");
         }
         pageIndex = page;
-        loadPage();
+        if (loadPage()){
+            return true;
+        }else{
+            return next();
+        }
+    }
+
+    public boolean isHasPrevious(){
+        return (pageIndex != null) && (pageIndex > 0);
+    }
+
+    public boolean previous(){
+        return previous(pageIndex);
+    }
+
+    private boolean isHasNext(){
+        if (pageIndex == null) {
+            return isHasEditor();
+        }else{
+            return (pageIndex + 1) < editorGroups.size();
+        }
+    }
+
+    private boolean isHasEditor(){
+        return !editorGroups.isEmpty();
+    }
+
+    private boolean previous(Integer currentPage){
+        if (isHasPrevious()){
+            pageIndex = pageIndex - 1;
+            if (loadPage()){
+                return true;
+            }else{
+                return previous(currentPage);
+            }
+        }else{
+            pageIndex = currentPage;
+            return false;
+        }
     }
 
     @Transactional
     public void continueBusiness(){
         //TODO workflow
     }
-
-
 
     @Transactional
     public void suspendBusiness(){
@@ -361,7 +396,8 @@ public class BusinessOperationService implements java.io.Serializable {
         return new SubscribeValidResult(systemParamService.getEnumParam(SubscribeValidResult.ValidLevel.class,VALID_LEVEL_PARAM_NAME));
     }
 
-    private void loadPage(){
+    private boolean loadPage(){
+        boolean result = false;
         if (pageIndex < editorGroups.size()){
             for (TaskSubscribe ts: getEditor()){
                 if (!DataHelper.empty(ts.getClassName())){
@@ -369,7 +405,9 @@ public class BusinessOperationService implements java.io.Serializable {
                         logger.config("init subscribe component for:" + ts);
                         Iterator<TaskEditSubscribeComponent> it = getSubscribeComponents(ts.getClassName());
                         while (it.hasNext()){
-                            it.next().init(businessInstance);
+                            if (it.next().init(businessInstance)){
+                                result = true;
+                            }
                         }
                     } catch (ClassNotFoundException e) {
                         logger.log(Level.WARNING,ts.toString() + "subscribe component: " + ts.getClassName() + " not found:",e);
@@ -378,6 +416,7 @@ public class BusinessOperationService implements java.io.Serializable {
                 }
             }
         }
+        return result;
     }
 
     private void persistentEditor(){
