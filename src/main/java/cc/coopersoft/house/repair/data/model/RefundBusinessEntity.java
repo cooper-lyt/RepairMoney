@@ -67,8 +67,8 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
     }
 
     @Basic
-    @Column(name = "REASON", length = 128)
-    @Size(max = 128)
+    @Column(name = "REASON", length = 16)
+    @Size(max = 16)
     public String getReason() {
         return reason;
     }

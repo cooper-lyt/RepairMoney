@@ -83,7 +83,7 @@
     <b:inputText value="#{refundBusinessController.operation.reason}"
                  rendered="#{(not refundBusinessController.incomeRefund and not refundBusinessController.paymentRefund)}"
                  disabled="#{refundBusinessController.operation.type eq 'DESTROY'}"
-                 maxlength="128" required="true" label="退款原因" renderLabel="true" placeholder="退款原因"/>
+                 maxlength="16" required="true" label="退款原因" renderLabel="true" placeholder="退款原因"/>
     <b:message/>
     </div>
 

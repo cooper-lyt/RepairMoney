@@ -24,11 +24,19 @@
                         <span class="input-group-addon">应缴</span>
                         <b:inputText label="应缴金额" placeholder="应缴金额"
                                      renderLabel="false" autocomplete="off" required="true" styleClass="form-control"
-                                     value="#{_payment.mustMoney}"/>
+                                     value="#{_payment.mustMoney}">
+                            <f:convertNumber type="currency" locale="#{i18n.locale}"
+                                             currencySymbol="" groupingUsed="false"/>
+                            <f:validateDoubleRange minimum="0.01"/>
+                        </b:inputText>
                         <span class="input-group-addon" >实缴</span>
                         <b:inputText label="实缴金额" placeholder="实缴金额"
                                      renderLabel="false" autocomplete="off"  required="true" styleClass="form-control"
-                                     value="#{_payment.money}"/>
+                                     value="#{_payment.money}">
+                            <f:convertNumber type="currency" locale="#{i18n.locale}"
+                                             currencySymbol="" groupingUsed="false"/>
+                            <f:validateDoubleRange minimum="0.01"/>
+                        </b:inputText>
 
                     </div>
                     <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true"/>
