@@ -102,8 +102,8 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     }
 
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "OPER_ORDER")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @JoinColumn(name = "OPER_ORDER",nullable = false)
     public AccountDetailsEntity getAccountDetails() {
         return accountDetails;
     }

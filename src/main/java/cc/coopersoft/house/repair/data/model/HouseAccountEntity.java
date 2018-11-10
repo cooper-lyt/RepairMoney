@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Entity
-@Table(name = "HOUSE_ACCOUNT", schema = "WXZJ")
+@Table(name = "HOUSE_ACCOUNT")
 public class HouseAccountEntity {
 
     public enum Status{
@@ -89,7 +89,7 @@ public class HouseAccountEntity {
         this.totalProduct = totalProduct;
     }
 
-    @Basic
+    @Temporal(TemporalType.DATE)
     @Column(name = "PRODUCT_DATE", nullable = false)
     @NotNull
     public Date getProductDate() {
@@ -167,7 +167,7 @@ public class HouseAccountEntity {
         this.houseCode = houseCode;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH} ,mappedBy = "houseAccount")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "houseAccount")
     public Set<AccountDetailsEntity> getAccountDetails() {
         return accountDetails;
     }
@@ -178,12 +178,7 @@ public class HouseAccountEntity {
 
     @Transient
     private List<AccountDetailsEntity> getAccountDetailList(List<AccountDetailsEntity> accountDetails){
-        Collections.sort(accountDetails, new Comparator<AccountDetailsEntity>() {
-            @Override
-            public int compare(AccountDetailsEntity o1, AccountDetailsEntity o2) {
-                return o2.getOperationTime().compareTo(o1.getOperationTime());
-            }
-        });
+        Collections.sort(accountDetails, (o1, o2) -> o2.getOperationTime().compareTo(o1.getOperationTime()));
         return accountDetails;
     }
 
@@ -204,7 +199,7 @@ public class HouseAccountEntity {
     }
 
 
-    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "HOUSE", nullable = false)
     public HouseEntity getHouse() {
         return house;

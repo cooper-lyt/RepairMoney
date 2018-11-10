@@ -176,6 +176,8 @@ public class BusinessOperationController  implements java.io.Serializable {
             }
         } catch (SubscribeFailException e) {
             sendMessage(e.getValidResult());
+            businessOperationService.clearInstance();
+            viewBusiness();
             return null;
         }
 

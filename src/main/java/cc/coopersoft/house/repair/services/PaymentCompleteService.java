@@ -7,13 +7,15 @@ import cc.coopersoft.house.repair.data.model.PaymentEntity;
 import cc.coopersoft.house.repair.data.model.*;
 import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.logging.Logger;
 
 @SubscribeComponent
-@RequestScoped
 public class PaymentCompleteService  implements TaskActionComponent<BusinessEntity> {
+
+    @Inject
+    private Logger logger;
 
     @Inject
     private HouseAccountRepository houseAccountRepository;
@@ -22,6 +24,7 @@ public class PaymentCompleteService  implements TaskActionComponent<BusinessEnti
     @Override
     public void doAction(BusinessEntity businessInstance,boolean persistent) {
         PaymentEntity paymentEntity =businessInstance.getPayment();
+        //logger.config("------------- complete action : " + paymentEntity.getPaymentBusinesses().size());
         for(PaymentBusinessEntity pb: paymentEntity.getPaymentBusinesses()){
             HouseAccountEntity account = houseAccountRepository.findOptionalByHouseCode(pb.getAccountDetails().getHouse().getHouseCode());
             if (account == null){
@@ -49,6 +52,7 @@ public class PaymentCompleteService  implements TaskActionComponent<BusinessEnti
             account.getAccountDetails().add(pb.getAccountDetails());
             pb.getAccountDetails().setHouseAccount(account);
 
+            //logger.config("------------- set houseAccount: " + account.getAccountNumber());
 
         }
 

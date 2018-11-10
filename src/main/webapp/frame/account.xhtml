@@ -9,11 +9,11 @@
                 xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <b:row styleClass="details-info">
-        <b:column span="9">
+        <b:column span="7">
             <h:outputLabel for="account_number" value="账号"/>
             <h:outputText id="account_number" value="#{account.accountNumber}"/>
         </b:column>
-        <b:column span="3">
+        <b:column span="5">
             <h:outputLabel for="create_time" value="开户时间"/>
             <h:outputText id="create_time" value="#{account.createTime}">
                 <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>

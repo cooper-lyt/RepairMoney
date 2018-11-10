@@ -8,9 +8,7 @@ import cc.coopersoft.house.repair.data.model.AccountDetailsEntity;
 import cc.coopersoft.house.repair.data.model.BusinessEntity;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @SubscribeComponent
 public class AccountOperationValidService implements TaskValidComponent<BusinessEntity> {
@@ -21,23 +19,31 @@ public class AccountOperationValidService implements TaskValidComponent<Business
     @Inject
     private I18n i18n;
 
-    protected Date getOperationTime(BusinessEntity businessInstance){
-        return businessInstance.getRegTime();
+    protected Date getOperationTime(AccountDetailsEntity details){
+        return details.getOperationTime();
     }
 
 
     @Override
     public List<ValidMessage> valid(BusinessEntity businessInstance) {
 
-        List<String> houseCodes = new ArrayList<>();
+        String detailsStr = "";
         for(AccountDetailsEntity details: businessInstance.getAccountDetails()){
-            houseCodes.add(details.getHouse().getHouseCode());
+            String houseCode = details.getHouse().getHouseCode();
+            Date last = houseAccountService.lastChangeTime(houseCode);
+
+            if ((last != null) && last.after(getOperationTime(details))){
+               if (!"".equals(detailsStr)){
+                   detailsStr += "、";
+               }
+               detailsStr += "房屋【" + houseCode + "】最后操作时间：" + i18n.datetimeDisplay(last);
+            }
+
         }
 
-
-        if (!houseAccountService.validTime(getOperationTime(businessInstance),houseCodes)){
+        if (!"".equals(detailsStr)){
             List<ValidMessage> result = new ArrayList<>(1);
-            result.add(new ValidMessage(ValidMessage.Level.OFF,"操作时间必须在所有房屋账户变动之后！","最后变动时间：" + i18n.datetimeDisplay(houseAccountService.lastChangeTime(houseCodes))));
+            result.add(new ValidMessage(ValidMessage.Level.OFF,"操作时间必须在所有房屋账户变动之后！",detailsStr));
             return result;
         }
 

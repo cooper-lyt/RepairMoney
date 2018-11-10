@@ -36,6 +36,10 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
         return houseAccountRepository.queryLastChangeDate(houseCodes);
     }
 
+    public Date lastChangeTime(String houseCode){
+        return houseAccountRepository.queryLastChangeDate(houseCode);
+    }
+
     public boolean validTime(Date date, List<String> houseCodes){
         Date lastDate = lastChangeTime(houseCodes);
         return ((lastDate == null) || date.after(lastDate));

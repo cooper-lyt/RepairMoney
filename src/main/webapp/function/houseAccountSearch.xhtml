@@ -92,7 +92,7 @@
                                     <h:link value="#{_account.house.houseAddress}/#{_account.houseCode}" includeViewParams="false" outcome="/function/houseAccountView.xhtml" >
 
                                         <f:param name="accountId" value="#{_account.accountNumber}"/>
-                                        <f:param name="refund" value="#{param.refund}"/>
+                                        <f:param name="refund" value="#{param.refund}" disable="#{empty param.refund}"/>
                                         <f:param name="from" value="/function/houseAccountSearch.xhtml"/>
 
                                     </h:link>

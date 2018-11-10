@@ -17,8 +17,8 @@ public abstract class AccountOperationInfoEditService<T extends AccountMoneyOper
     protected abstract T getOperationBusiness(BusinessEntity businessInstance);
 
     @Override
-    protected Date getOperationTime(BusinessEntity businessInstance){
-        return getOperationBusiness(businessInstance).getOperationTime();
+    protected Date getOperationTime(AccountDetailsEntity details){
+        return details.getBusiness().getPayment().getOperationTime();
     }
 
     @Override
@@ -41,6 +41,8 @@ public abstract class AccountOperationInfoEditService<T extends AccountMoneyOper
         if (PaymentType.BANK.equals(operation.getPaymentType()) && !BusinessInstance.Source.OUT_SIDE.equals(business.getSource())){
             operation.getBankAccountDetails().setOperationTime(operation.getOperationTime());
         }
+
+
         for(AccountDetailsEntity accountDetailsEntity: business.getAccountDetails()){
             accountDetailsEntity.setOperationTime(operation.getOperationTime());
         }

@@ -120,8 +120,8 @@ public class AccountDetailsEntity implements java.io.Serializable{
         this.status = status;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade =  {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
-    @JoinColumn(name = "ACCOUNT_NUMBER", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY,cascade =  {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "ACCOUNT_NUMBER")
     public HouseAccountEntity getHouseAccount() {
         return houseAccount;
     }
