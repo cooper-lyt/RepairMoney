@@ -37,6 +37,8 @@
         <class>cc.coopersoft.house.repair.data.model.OwnerPersonEntity</class>
         <class>cc.coopersoft.house.repair.data.model.PutAccountBookEntity</class>
         <class>cc.coopersoft.house.repair.data.model.PutAccountBusinessEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.IncomeRefundEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.PaymentRefundEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

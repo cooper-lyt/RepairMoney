@@ -30,7 +30,7 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
     private String reason;
     private Type type;
     private Integer version;
-    private Date refundTime;
+    private Date operationTime;
     private PaymentType paymentType;
 
     private BusinessEntity business;
@@ -38,10 +38,9 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
     private BankAccountDetailsEntity bankAccountDetails;
     private AccountDetailsEntity accountDetails;
 
-    private Set<PaymentBusinessEntity> paymentBusiness = new HashSet<>(0);
-    private Set<AccountIncomeEntity> accountIncomes = new HashSet<>(0);
 
-
+    private Set<IncomeRefundEntity> incomeRefunds = new HashSet<>(1);
+    private Set<PaymentRefundEntity> paymentRefunds = new HashSet<>(1);
 
     @Id
     @Column(name = "ID", length = 32, nullable = false, unique = true)
@@ -104,11 +103,11 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
     @Column(name = "REFUND_TIME",nullable = false)
     @NotNull
     public Date getOperationTime() {
-        return refundTime;
+        return operationTime;
     }
 
     public void setOperationTime(Date refundTime) {
-        this.refundTime = refundTime;
+        this.operationTime = refundTime;
     }
 
 
@@ -135,8 +134,8 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
         this.business = businessEntity;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "OPER_ORDER", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "OPER_ORDER")
     public AccountDetailsEntity getAccountDetails() {
         return accountDetails;
     }
@@ -155,24 +154,22 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
         this.bankAccountDetails = bankAccountDetails;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name = "PAYMENT_REFUND", joinColumns = @JoinColumn(name = "REFUND", nullable = false), inverseJoinColumns = @JoinColumn(name = "PAYMENT", nullable = false))
-    public Set<PaymentBusinessEntity> getPaymentBusiness() {
-        return paymentBusiness;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "refundBusiness", orphanRemoval = true)
+    public Set<IncomeRefundEntity> getIncomeRefunds() {
+        return incomeRefunds;
     }
 
-    public void setPaymentBusiness(Set<PaymentBusinessEntity> paymentBusiness) {
-        this.paymentBusiness = paymentBusiness;
+    public void setIncomeRefunds(Set<IncomeRefundEntity> incomeRefunds) {
+        this.incomeRefunds = incomeRefunds;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "INCOME_REFUND", joinColumns = @JoinColumn(name = "REFUND", nullable = false), inverseJoinColumns = @JoinColumn(name = "INCOME", nullable = false))
-    public Set<AccountIncomeEntity> getAccountIncomes() {
-        return accountIncomes;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "refundBusiness", orphanRemoval = true)
+    public Set<PaymentRefundEntity> getPaymentRefunds() {
+        return paymentRefunds;
     }
 
-    public void setAccountIncomes(Set<AccountIncomeEntity> accountIncomes) {
-        this.accountIncomes = accountIncomes;
+    public void setPaymentRefunds(Set<PaymentRefundEntity> paymentRefunds) {
+        this.paymentRefunds = paymentRefunds;
     }
 
     @Override

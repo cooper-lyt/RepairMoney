@@ -36,20 +36,20 @@ public class RefundService implements java.io.Serializable{
         refundBusiness.setPaymentType(systemParamService.getEnumParam(PaymentType.class,"business.preferredPaymentType"));
     }
 
-    public BigDecimal getRefundMoney(RefundBusinessEntity refundBusiness){
+    public BigDecimal getRefundFullMoney(RefundBusinessEntity refundBusiness){
         BigDecimal result = BigDecimal.ZERO;
         switch (refundBusiness.getType()){
 
             case WRONG_FULL:
             case WRONG_PART:
-                for(PaymentBusinessEntity payment: refundBusiness.getPaymentBusiness()){
-                    result = result.add(payment.getMoney());
+                for(PaymentRefundEntity payment: refundBusiness.getPaymentRefunds()){
+                    result = result.add(payment.getPaymentBusiness().getMoney());
                 }
                 break;
             case INCOME_PART:
             case INCOME_FULL:
-                for(AccountIncomeEntity income: refundBusiness.getAccountIncomes()){
-                    result = result.add(income.getMoney());
+                for(IncomeRefundEntity income: refundBusiness.getIncomeRefunds()){
+                    result = result.add(income.getAccountIncome().getMoney());
                 }
                 break;
             case DESTROY:

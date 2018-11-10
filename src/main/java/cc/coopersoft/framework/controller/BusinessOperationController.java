@@ -336,7 +336,6 @@ public class BusinessOperationController  implements java.io.Serializable {
                 if (businessOperationService.next()){
                     return Business.Editor.class;
                 }else{
-                    logger.config("business memo is:" + getBusinessInstance().getMemo());
                     return preparePage();
                 }
             }else{

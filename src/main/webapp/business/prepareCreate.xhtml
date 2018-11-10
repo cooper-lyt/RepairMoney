@@ -61,10 +61,9 @@
 
             </c:forEach>
 
-            <hr/>
 
             <h:form styleClass="action-panel" id="create_business_form">
-                <b:inputTextarea rows="3" value="#{businessOperationController.businessInstance.memo}" placeholder="业务备注" label="备注" renderLabel="true"/>
+                <b:inputTextarea rows="3" value="#{businessOperationController.businessInstance.memo}" placeholder="业务备注" label="备注" renderLabel="false"/>
 
                 <b:commandButton look="success" value="建立业务" ajax="false" styleClass="right" action="#{businessOperationController.taskComplete}">
                     <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />

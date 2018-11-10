@@ -44,15 +44,19 @@ public class RefundBusinessController extends AccountMoneyOperationController<Re
     }
 
     public boolean isIncomeRefund(){
-        return !getOperation().getAccountIncomes().isEmpty();
+        return !getOperation().getIncomeRefunds().isEmpty();
     }
 
     public boolean isPaymentRefund(){
-        return !getOperation().getPaymentBusiness().isEmpty();
+        return !getOperation().getPaymentRefunds().isEmpty();
     }
 
-    public BigDecimal getRefundMoney(){
-        return refundService.getRefundMoney(getOperation());
+    public boolean isAccountRefund() {
+        return getOperation().getAccountDetails() != null;
+    }
+
+    public BigDecimal getRefundFullMoney(){
+        return refundService.getRefundFullMoney(getOperation());
     }
 
 }
