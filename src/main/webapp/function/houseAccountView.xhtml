@@ -143,6 +143,12 @@
                                 <f:convertNumber type="currency" locale="#{i18n.locale}"/>
                             </h:outputText>
                         </strong>
+                        可用余额为
+                        <strong class="text-danger">
+                            <h:outputText value="#{houseAccountController.instance.validBalance}">
+                                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                            </h:outputText>
+                        </strong>
                     </p>
 
                     <p class="repo-list-description">

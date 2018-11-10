@@ -143,6 +143,11 @@ public class HouseAccountEntity {
         this.version = version;
     }
 
+    @Transient
+    public BigDecimal getValidBalance(){
+        return getBalance().subtract(getFrozen());
+    }
+
 
     @Basic
     @Column(name = "MUST_MONEY",nullable = false)

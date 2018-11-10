@@ -83,6 +83,7 @@ public abstract class EntityController<E, PK extends Serializable> extends Mutab
      * of the entity.
      */
     protected E createInstance(){
+        logger.config("create new Instance! id:" + getId());
         return getEntityService().createNew();
     }
 

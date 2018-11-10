@@ -18,7 +18,7 @@ public abstract class AccountOperationInfoEditService<T extends AccountMoneyOper
 
     @Override
     protected Date getOperationTime(AccountDetailsEntity details){
-        return details.getBusiness().getPayment().getOperationTime();
+        return getOperationBusiness(details.getBusiness()).getOperationTime();
     }
 
     @Override

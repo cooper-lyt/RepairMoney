@@ -17,7 +17,7 @@ public class AccountOperationValidService implements TaskValidComponent<Business
     private HouseAccountService houseAccountService;
 
     @Inject
-    private I18n i18n;
+    protected I18n i18n;
 
     protected Date getOperationTime(AccountDetailsEntity details){
         return details.getOperationTime();

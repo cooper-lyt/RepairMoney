@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "REFUND_BUSINESS")
@@ -35,6 +37,9 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
 
     private BankAccountDetailsEntity bankAccountDetails;
     private AccountDetailsEntity accountDetails;
+
+    private Set<PaymentBusinessEntity> paymentBusiness = new HashSet<>(0);
+    private Set<AccountIncomeEntity> accountIncomes = new HashSet<>(0);
 
 
 
@@ -148,6 +153,26 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
 
     public void setBankAccountDetails(BankAccountDetailsEntity bankAccountDetails) {
         this.bankAccountDetails = bankAccountDetails;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinTable(name = "PAYMENT_REFUND", joinColumns = @JoinColumn(name = "REFUND", nullable = false), inverseJoinColumns = @JoinColumn(name = "PAYMENT", nullable = false))
+    public Set<PaymentBusinessEntity> getPaymentBusiness() {
+        return paymentBusiness;
+    }
+
+    public void setPaymentBusiness(Set<PaymentBusinessEntity> paymentBusiness) {
+        this.paymentBusiness = paymentBusiness;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "INCOME_REFUND", joinColumns = @JoinColumn(name = "REFUND", nullable = false), inverseJoinColumns = @JoinColumn(name = "INCOME", nullable = false))
+    public Set<AccountIncomeEntity> getAccountIncomes() {
+        return accountIncomes;
+    }
+
+    public void setAccountIncomes(Set<AccountIncomeEntity> accountIncomes) {
+        this.accountIncomes = accountIncomes;
     }
 
     @Override

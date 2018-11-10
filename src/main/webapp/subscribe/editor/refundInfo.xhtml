@@ -12,11 +12,87 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
+    <style type="text/css">
+        .refund-reason-input{
+            display: none;
+        }
+        .refund-reason-input.OTHER{
+            display: block;
+        }
+    </style>
+
+    <h:outputScript>
+        $(function () {
+            $(function(){
+
+                $('select.js-refund-type-input').on('change', function () {
+                    $('.refund-reason-input').removeClass("OTHER");
+                    $('.refund-reason-input').removeClass("DESTROY");
+                    $('.refund-reason-input').addClass($(this).val());
+
+                    if ($(this).val() == 'DESTROY'){
+                        $('.js-refund-money-input').val(#{refundBusinessController.refundMoney})
+                        $('.js-refund-money-input').prop('readonly', true);
+                        $('.refund-reason-input input').prop('disabled',  true);
+                    }else{
+                        $('.js-refund-money-input').prop('readonly', false);
+                        $('.refund-reason-input input').prop('disabled',  false);
+
+                    }
+                });
+            });
+
+        });
+    </h:outputScript>
+
+    <div class="form-group">
+        <h:outputLabel for="refund_type_input" styleClass="control-label" value="退款类型"/>
+        <div class="input-group">
+
+            <span class=" #{(refundBusinessController.incomeRefund or refundBusinessController.paymentRefund) ? 'input-group-addon' : 'input-group-btn'}">
+                <h:selectOneMenu id="refund_type_input" value="#{refundBusinessController.operation.type}" rendered="#{(not refundBusinessController.incomeRefund and not refundBusinessController.paymentRefund)}"
+                                 styleClass="input-group-first selectpicker select-menu-btn js-refund-type-input">
+                    <f:selectItems var="_type" value="#{refundBusinessController.types}" itemValue="#{_type}" itemLabel="#{enumHelper.getLabel(_type)}"/>
+                </h:selectOneMenu>
+                <c:if test="#{refundBusinessController.paymentRefund}">
+                    缴费退款
+                </c:if>
+                 <c:if test="#{refundBusinessController.incomeRefund}">
+                    收益退款
+                </c:if>
+            </span>
+
+
+
+
+            <h:inputText id="refund_money_input" styleClass="form-control js-refund-money-input"
+                         value="#{refundBusinessController.operation.money}" required="true" label="退款金额"
+                         readonly="#{refundBusinessController.paymentRefund or refundBusinessController.incomeRefund or (refundBusinessController.operation.type eq 'DESTROY')}" pt:placeholder="退款金额">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"
+                                 currencySymbol="" groupingUsed="false"/>
+                <f:validateDoubleRange minimum="0.01" maximum="#{refundBusinessController.refundMoney}"/>
+            </h:inputText>
+
+
+        </div>
+        <b:message for="refund_money_input"/>
+
+    </div>
+
+    <div class="refund-reason-input #{refundBusinessController.operation.type}">
+    <b:inputText value="#{refundBusinessController.operation.reason}"
+                 rendered="#{(not refundBusinessController.incomeRefund and not refundBusinessController.paymentRefund)}"
+                 disabled="#{refundBusinessController.operation.type eq 'DESTROY'}"
+                 maxlength="128" required="true" label="退款原因" renderLabel="true" placeholder="退款原因"/>
+    <b:message/>
+    </div>
+
     <ui:include src="/frame/accountMoneyOperationEditor.xhtml">
         <ui:param name="controller" value="#{refundBusinessController}"/>
         <ui:param name="operationTimeLabel" value="退款日期"/>
         <ui:param name="readOnly" value="#{refundBusinessController.operation.business.source eq 'OUT_SIDE'}"/>
     </ui:include>
+
 
 
 </ui:composition>
