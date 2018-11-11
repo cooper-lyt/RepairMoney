@@ -1,39 +1,56 @@
 package cc.coopersoft.house.repair.data.model;
 
+import cc.coopersoft.house.repair.data.PaymentType;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "FIXING_PAY", schema = "WXZJ", catalog = "")
-public class FixingPayEntity {
-    private String id;
+@Table(name = "FIXING_PAY")
+public class FixingPayEntity implements java.io.Serializable{
+
+    public enum Type{
+        PAY, //支付
+        BACK //退回
+    }
+
+    private long id;
     private BigDecimal payMoney;
-    private String bankOperOrder;
-    private String project;
-    private String type;
-    private int round;
+
+    private Type type;
+    private PaymentType paymentType;
     private String receivePerson;
     private String receiveNumber;
     private String receiveName;
     private String receiveBank;
     private String description;
-    private String memo;
-    private Timestamp payTime;
+    private Date payTime;
 
+    private RepairBusinessEntity repairBusiness;
+    private BankAccountDetailsEntity bankAccountDetails;
+    private Set<AccountDetailsEntity> accountDetails = new HashSet<>(0);
 
     @Id
-    @Column(name = "ID")
-    public String getId() {
+    @Column(name = "ID", nullable = false, unique = true)
+    @GeneratedValue
+    @NotNull
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "PAY_MONEY")
+    @Column(name = "PAY_MONEY", nullable = false)
+    @NotNull
     public BigDecimal getPayMoney() {
         return payMoney;
     }
@@ -42,48 +59,33 @@ public class FixingPayEntity {
         this.payMoney = payMoney;
     }
 
-    @Basic
-    @Column(name = "BANK_OPER_ORDER")
-    public String getBankOperOrder() {
-        return bankOperOrder;
-    }
 
-    public void setBankOperOrder(String bankOperOrder) {
-        this.bankOperOrder = bankOperOrder;
-    }
-
-    @Basic
-    @Column(name = "PROJECT")
-    public String getProject() {
-        return project;
-    }
-
-    public void setProject(String project) {
-        this.project = project;
-    }
-
-    @Basic
-    @Column(name = "TYPE")
-    public String getType() {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TYPE", length = 6 , nullable = false)
+    @NotNull
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
-    @Basic
-    @Column(name = "ROUND")
-    public int getRound() {
-        return round;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "PAY_TYPE", nullable = false, length = 4)
+    @NotNull
+    public PaymentType getPaymentType() {
+        return paymentType;
     }
 
-    public void setRound(int round) {
-        this.round = round;
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
     }
 
     @Basic
-    @Column(name = "RECEIVE_PERSON")
+    @Column(name = "RECEIVE_PERSON",length = 64, nullable = false)
+    @NotNull
+    @Size(max = 64)
     public String getReceivePerson() {
         return receivePerson;
     }
@@ -93,7 +95,8 @@ public class FixingPayEntity {
     }
 
     @Basic
-    @Column(name = "RECEIVE_NUMBER")
+    @Column(name = "RECEIVE_NUMBER", length = 128)
+    @Size(max = 128)
     public String getReceiveNumber() {
         return receiveNumber;
     }
@@ -103,7 +106,8 @@ public class FixingPayEntity {
     }
 
     @Basic
-    @Column(name = "RECEIVE_NAME")
+    @Column(name = "RECEIVE_NAME", length = 64)
+    @Size(max = 64)
     public String getReceiveName() {
         return receiveName;
     }
@@ -113,7 +117,8 @@ public class FixingPayEntity {
     }
 
     @Basic
-    @Column(name = "RECEIVE_BANK")
+    @Column(name = "RECEIVE_BANK", length = 64)
+    @Size(max = 64)
     public String getReceiveBank() {
         return receiveBank;
     }
@@ -123,7 +128,8 @@ public class FixingPayEntity {
     }
 
     @Basic
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION", length = 128)
+    @Size(max = 128)
     public String getDescription() {
         return description;
     }
@@ -132,24 +138,48 @@ public class FixingPayEntity {
         this.description = description;
     }
 
-    @Basic
-    @Column(name = "MEMO")
-    public String getMemo() {
-        return memo;
-    }
 
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
-    @Basic
-    @Column(name = "PAY_TIME")
-    public Timestamp getPayTime() {
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "PAY_TIME", nullable = false)
+    @NotNull
+    public Date getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Timestamp payTime) {
+    public void setPayTime(Date payTime) {
         this.payTime = payTime;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "USE_AND_HOUSE",joinColumns = @JoinColumn(name = "PAY", nullable = false), inverseJoinColumns = @JoinColumn(name = "OPER_ORDER", nullable = false))
+    public Set<AccountDetailsEntity> getAccountDetails() {
+        return accountDetails;
+    }
+
+    public void setAccountDetails(Set<AccountDetailsEntity> accountDetails) {
+        this.accountDetails = accountDetails;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "BANK_OPER_ORDER", nullable = false)
+    @NotNull
+    public BankAccountDetailsEntity getBankAccountDetails() {
+        return bankAccountDetails;
+    }
+
+    public void setBankAccountDetails(BankAccountDetailsEntity bankAccountDetails) {
+        this.bankAccountDetails = bankAccountDetails;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "PROJECT", nullable = false)
+    @NotNull
+    public RepairBusinessEntity getRepairBusiness() {
+        return repairBusiness;
+    }
+
+    public void setRepairBusiness(RepairBusinessEntity repairBusiness) {
+        this.repairBusiness = repairBusiness;
     }
 
 
@@ -161,22 +191,8 @@ public class FixingPayEntity {
 
         FixingPayEntity that = (FixingPayEntity) o;
 
-        if (round != that.round) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (payMoney != null ? !payMoney.equals(that.payMoney) : that.payMoney != null) return false;
-        if (bankOperOrder != null ? !bankOperOrder.equals(that.bankOperOrder) : that.bankOperOrder != null)
-            return false;
-        if (project != null ? !project.equals(that.project) : that.project != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (receivePerson != null ? !receivePerson.equals(that.receivePerson) : that.receivePerson != null)
-            return false;
-        if (receiveNumber != null ? !receiveNumber.equals(that.receiveNumber) : that.receiveNumber != null)
-            return false;
-        if (receiveName != null ? !receiveName.equals(that.receiveName) : that.receiveName != null) return false;
-        if (receiveBank != null ? !receiveBank.equals(that.receiveBank) : that.receiveBank != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (memo != null ? !memo.equals(that.memo) : that.memo != null) return false;
-        if (payTime != null ? !payTime.equals(that.payTime) : that.payTime != null) return false;
+
+        if (that.id != id) return false;
 
 
         return true;
@@ -184,19 +200,7 @@ public class FixingPayEntity {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (payMoney != null ? payMoney.hashCode() : 0);
-        result = 31 * result + (bankOperOrder != null ? bankOperOrder.hashCode() : 0);
-        result = 31 * result + (project != null ? project.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + round;
-        result = 31 * result + (receivePerson != null ? receivePerson.hashCode() : 0);
-        result = 31 * result + (receiveNumber != null ? receiveNumber.hashCode() : 0);
-        result = 31 * result + (receiveName != null ? receiveName.hashCode() : 0);
-        result = 31 * result + (receiveBank != null ? receiveBank.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (memo != null ? memo.hashCode() : 0);
-        result = 31 * result + (payTime != null ? payTime.hashCode() : 0);
+        int result = Long.valueOf(id).hashCode();
 
         return result;
     }

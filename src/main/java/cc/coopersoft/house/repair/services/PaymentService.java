@@ -53,7 +53,6 @@ public class PaymentService implements java.io.Serializable {
         HouseAccountEntity houseAccountEntity = houseAccountRepository.findOptionalByHouseCode(house.getHouseCode());
         PaymentBusinessEntity.Type type = ((houseAccountEntity == null) || (HouseAccountEntity.Status.DESTROY.equals(houseAccountEntity.getStatus()))) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
         PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
-                business.getId(),
                 type,
                 business.getPayment()
         );
@@ -87,13 +86,7 @@ public class PaymentService implements java.io.Serializable {
             }
             HouseAccountEntity houseAccountEntity = houseAccountRepository.findOptionalByHouseCode(item.getHouse().getHouseCode());
             PaymentBusinessEntity.Type type = ((houseAccountEntity == null) || (HouseAccountEntity.Status.DESTROY.equals(houseAccountEntity.getStatus()))) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
-            String id = String.valueOf(i++);
-            while (id.length() < itemCount){
-                id = '0' + id;
-            }
-            id = business.getId() + id;
             PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
-                    id,
                     item.getMoney(),
                     item.getMustMoney(),
                     item.getCalcDetails(),

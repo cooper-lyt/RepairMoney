@@ -14,7 +14,7 @@ public class PaymentBusinessEntity implements java.io.Serializable{
         ,ADD  //续缴
     }
 
-    private String id;
+    private long id;
 
     private Integer version;
     private String memo;
@@ -30,14 +30,12 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     public PaymentBusinessEntity() {
     }
 
-    public PaymentBusinessEntity(String id, Type type, PaymentEntity paymentEntity) {
-        this.id = id;
+    public PaymentBusinessEntity( Type type, PaymentEntity paymentEntity) {
         this.type = type;
         this.paymentEntity = paymentEntity;
     }
 
-    public PaymentBusinessEntity(String id, BigDecimal money, BigDecimal mustMoney, String calcDetails, Type type, PaymentEntity paymentEntity) {
-        this.id = id;
+    public PaymentBusinessEntity(BigDecimal money, BigDecimal mustMoney, String calcDetails, Type type, PaymentEntity paymentEntity) {
         this.money = money;
         this.mustMoney = mustMoney;
         this.calcDetails = calcDetails;
@@ -46,14 +44,14 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     }
 
     @Id
-    @Column(name = "ID",nullable = false,length = 38,unique = true)
+    @Column(name = "ID", nullable = false, unique = true)
+    @GeneratedValue
     @NotNull
-    @Size(max = 38)
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -152,7 +150,7 @@ public class PaymentBusinessEntity implements java.io.Serializable{
 
         PaymentBusinessEntity that = (PaymentBusinessEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (that.id != id) return false;
 
 
         return true;
@@ -160,7 +158,7 @@ public class PaymentBusinessEntity implements java.io.Serializable{
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = Long.valueOf(id).hashCode();
 
         return result;
     }

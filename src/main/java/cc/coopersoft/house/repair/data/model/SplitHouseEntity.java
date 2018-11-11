@@ -1,41 +1,48 @@
 package cc.coopersoft.house.repair.data.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "SPLIT_HOUSE", schema = "WXZJ")
-public class SplitHouseEntity {
-    private String id;
-    private String project;
+@Table(name = "SPLIT_HOUSE")
+public class SplitHouseEntity implements java.io.Serializable{
+    private long id;
+
     //private String house;
     private BigDecimal mustMoney;
     private BigDecimal balance;
     private BigDecimal splitMoney;
     private BigDecimal saveMoney;
 
+    private RepairBusinessEntity repairBusiness;
+    private HouseEntity houseEntity;
+
+
+    public SplitHouseEntity() {
+    }
+
+    public SplitHouseEntity(RepairBusinessEntity repairBusiness) {
+        this.repairBusiness = repairBusiness;
+    }
+
     @Id
-    @Column(name = "ID")
-    public String getId() {
+    @Column(name = "ID", nullable = false, unique = true)
+    @GeneratedValue
+    @NotNull
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "PROJECT")
-    public String getProject() {
-        return project;
-    }
-
-    public void setProject(String project) {
-        this.project = project;
-    }
-
-    @Basic
-    @Column(name = "MUST_MONEY")
+    @Column(name = "MUST_MONEY", nullable = false)
+    @NotNull
     public BigDecimal getMustMoney() {
         return mustMoney;
     }
@@ -45,7 +52,8 @@ public class SplitHouseEntity {
     }
 
     @Basic
-    @Column(name = "BALANCE")
+    @Column(name = "BALANCE", nullable = false)
+    @NotNull
     public BigDecimal getBalance() {
         return balance;
     }
@@ -55,7 +63,8 @@ public class SplitHouseEntity {
     }
 
     @Basic
-    @Column(name = "SPLIT_MONEY")
+    @Column(name = "SPLIT_MONEY", nullable = false)
+    @NotNull
     public BigDecimal getSplitMoney() {
         return splitMoney;
     }
@@ -65,7 +74,8 @@ public class SplitHouseEntity {
     }
 
     @Basic
-    @Column(name = "SAVE_MONEY")
+    @Column(name = "SAVE_MONEY", nullable = false)
+    @NotNull
     public BigDecimal getSaveMoney() {
         return saveMoney;
     }
@@ -74,6 +84,30 @@ public class SplitHouseEntity {
         this.saveMoney = saveMoney;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "PROJECT", nullable = false)
+    @NotNull
+    public RepairBusinessEntity getRepairBusiness() {
+        return repairBusiness;
+    }
+
+    public void setRepairBusiness(RepairBusinessEntity repairBusiness) {
+        this.repairBusiness = repairBusiness;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "HOUSE" , nullable = false)
+    @NotNull
+    public HouseEntity getHouseEntity() {
+        return houseEntity;
+    }
+
+    public void setHouseEntity(HouseEntity houseEntity) {
+        this.houseEntity = houseEntity;
+    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,24 +115,15 @@ public class SplitHouseEntity {
 
         SplitHouseEntity that = (SplitHouseEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (project != null ? !project.equals(that.project) : that.project != null) return false;
-        if (mustMoney != null ? !mustMoney.equals(that.mustMoney) : that.mustMoney != null) return false;
-        if (balance != null ? !balance.equals(that.balance) : that.balance != null) return false;
-        if (splitMoney != null ? !splitMoney.equals(that.splitMoney) : that.splitMoney != null) return false;
-        if (saveMoney != null ? !saveMoney.equals(that.saveMoney) : that.saveMoney != null) return false;
+        if (that.id != id) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (project != null ? project.hashCode() : 0);
-        result = 31 * result + (mustMoney != null ? mustMoney.hashCode() : 0);
-        result = 31 * result + (balance != null ? balance.hashCode() : 0);
-        result = 31 * result + (splitMoney != null ? splitMoney.hashCode() : 0);
-        result = 31 * result + (saveMoney != null ? saveMoney.hashCode() : 0);
+        int result = Long.valueOf(id).hashCode();
+
         return result;
     }
 }

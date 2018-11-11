@@ -26,4 +26,10 @@ public interface Messages {
 
     @MessageTemplate("{contract_not_found}")
     String contractNotFound(String contractId);
+
+    @MessageTemplate("{account_join_to_repair}")
+    String accountJoin(int count);
+
+    @MessageTemplate("{account_not_found")
+    String accountNotFound();
 }

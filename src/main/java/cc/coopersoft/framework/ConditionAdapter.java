@@ -39,26 +39,15 @@ public class ConditionAdapter implements java.io.Serializable{
     }
 
 
-    private String condition;
+    private String condition = "";
 
-    private boolean empty;
-    private String endWith;
-    private String startWith;
-    private String contains;
+//    private boolean empty;
+//    private String endWith;
+//    private String startWith;
+//    private String contains;
 
     private ConditionAdapter(String condition) {
-        empty = condition == null || "".equals(condition.trim());
-        if (empty){
-            endWith = "%";
-            startWith = "%";
-            contains = "%";
-            this.condition = "";
-        }else{
-            endWith = "%" + condition.trim();
-            startWith = condition.trim() + "%";
-            contains = "%" + condition.trim() + "%";
-            this.condition = condition.trim();
-        }
+        setCondition(condition);
     }
 
     public String getCondition(MatchType type){
@@ -77,29 +66,37 @@ public class ConditionAdapter implements java.io.Serializable{
         return getCondition();
     }
 
+    public void setCondition(String condition) {
+        if (DataHelper.empty(condition)) {
+            this.condition = "";
+        }else{
+            this.condition = condition.trim();
+        }
+
+    }
+
     public String getCondition() {
         return condition;
     }
 
     public boolean isEmpty() {
-        return empty;
+        return "".equals(condition);
     }
 
     public String getEndWith() {
-        return endWith;
+        return "%"  + condition;
     }
 
     public String getStartWith() {
-        return startWith;
+        return condition + "%" ;
     }
 
     public String getContains() {
-        return contains;
-    }
-
-    public boolean isDirty(String other){
-        String otherValue = other == null ? "" : other.trim();
-        return DataHelper.isDirty(condition,otherValue);
+        if ("".equals(condition)){
+            return "%";
+        }else{
+            return "%" + condition + "%";
+        }
     }
 
     @Override

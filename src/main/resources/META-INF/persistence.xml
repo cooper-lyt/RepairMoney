@@ -27,12 +27,11 @@
         <class>cc.coopersoft.house.repair.data.model.FixingRepairEntity</class>
         <class>cc.coopersoft.house.repair.data.model.InterestRateEntity</class>
         <class>cc.coopersoft.house.repair.data.model.RefundBusinessEntity</class>
-        <class>cc.coopersoft.house.repair.data.model.UseBusinessEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.RepairBusinessEntity</class>
         <class>cc.coopersoft.house.repair.data.model.FixingEntity</class>
         <class>cc.coopersoft.house.repair.data.model.ModifyBusinessEntity</class>
         <class>cc.coopersoft.house.repair.data.model.RepairVoteEntity</class>
         <class>cc.coopersoft.house.repair.data.model.SplitHouseEntity</class>
-        <class>cc.coopersoft.house.repair.data.model.UseAndHouseEntity</class>
         <class>cc.coopersoft.house.repair.data.model.FixingTypeEntity</class>
         <class>cc.coopersoft.house.repair.data.model.OwnerPersonEntity</class>
         <class>cc.coopersoft.house.repair.data.model.PutAccountBookEntity</class>

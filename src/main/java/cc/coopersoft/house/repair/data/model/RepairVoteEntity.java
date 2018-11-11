@@ -1,12 +1,13 @@
 package cc.coopersoft.house.repair.data.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "REPAIR_VOTE", schema = "WXZJ", catalog = "")
 public class RepairVoteEntity {
-    private String id;
+    private long id;
     private String project;
     private BigDecimal area;
     private BigDecimal acceptArea;
@@ -16,12 +17,14 @@ public class RepairVoteEntity {
     private int round;
 
     @Id
-    @Column(name = "ID")
-    public String getId() {
+    @Column(name = "ID", nullable = false, unique = true)
+    @GeneratedValue
+    @NotNull
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -102,28 +105,15 @@ public class RepairVoteEntity {
 
         RepairVoteEntity that = (RepairVoteEntity) o;
 
-        if (ownerCount != that.ownerCount) return false;
-        if (acceptOwner != that.acceptOwner) return false;
-        if (round != that.round) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (project != null ? !project.equals(that.project) : that.project != null) return false;
-        if (area != null ? !area.equals(that.area) : that.area != null) return false;
-        if (acceptArea != null ? !acceptArea.equals(that.acceptArea) : that.acceptArea != null) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
+
+        if (that.id != id) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (project != null ? project.hashCode() : 0);
-        result = 31 * result + (area != null ? area.hashCode() : 0);
-        result = 31 * result + (acceptArea != null ? acceptArea.hashCode() : 0);
-        result = 31 * result + ownerCount;
-        result = 31 * result + acceptOwner;
-        result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + round;
+        int result = Long.valueOf(id).hashCode();
         return result;
     }
 }

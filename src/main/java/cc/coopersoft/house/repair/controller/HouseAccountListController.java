@@ -54,10 +54,7 @@ public class HouseAccountListController extends EntityListBaseController<HouseAc
         //TODO useType
         HouseAccountService.SearchResult result = houseAccountService.search(houseSearchCondition.getType()
                     ,houseSearchCondition.getCondition()
-                    ,houseSearchCondition.getMapNumber()
-                    ,houseSearchCondition.getBlockNumber()
-                    ,houseSearchCondition.getBuildNumber()
-                    ,houseSearchCondition.getHouseOrder()
+                    ,houseSearchCondition.getHouseMapId()
                     , useTypes, getOffset(), PAGE_SIZE);
         resultPage = result.getEntityDataPage();
         useTypeGroup = result.getUseTypeCounts();

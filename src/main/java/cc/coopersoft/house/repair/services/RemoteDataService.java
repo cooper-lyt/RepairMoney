@@ -56,7 +56,7 @@ public class RemoteDataService implements java.io.Serializable{
         }
     }
 
-    private static final String API_SERVER_ADDRESS_PARAM_KEY = "config.server.api";
+    public static final String API_SERVER_ADDRESS_PARAM_KEY = "config.server.api";
 
     private static final String PAYMENT_NOTICE_API_FUNCTION_ADDRESS = "/api/public/payment-notice";
 

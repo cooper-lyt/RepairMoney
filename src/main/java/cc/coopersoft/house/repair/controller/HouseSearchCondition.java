@@ -1,5 +1,6 @@
 package cc.coopersoft.house.repair.controller;
 
+import cc.coopersoft.house.repair.data.HouseMapId;
 import cc.coopersoft.house.repair.services.HouseAccountService;
 import org.omnifaces.cdi.Param;
 
@@ -80,5 +81,9 @@ public class HouseSearchCondition implements java.io.Serializable{
 
     public void setType(HouseAccountService.Type type) {
         this.type = type;
+    }
+
+    public HouseMapId getHouseMapId(){
+        return new HouseMapId(mapNumber,blockNumber,buildNumber,houseOrder);
     }
 }

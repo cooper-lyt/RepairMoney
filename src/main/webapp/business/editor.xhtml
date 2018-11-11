@@ -59,10 +59,10 @@
                     <b:messages globalOnly="true" styleClass="top-messages"/>
                 </b:column>
                 <b:column span="12">
+                    <c:forEach items="#{businessOperationController.editorDependencies}" var="_dependency">
+                        <ui:include src="#{_dependency}"/>
+                    </c:forEach>
                     <o:form acceptcharset="UTF-8" >
-                        <c:forEach items="#{businessOperationController.editorDependencies}" var="_dependency">
-                            <ui:include src="#{_dependency}"/>
-                        </c:forEach>
                         <c:forEach items="#{businessOperationController.editor}" var="_editor">
                             <ui:include src="#{_editor.page}">
                                 <c:forEach items="#{_editor.params.entrySet()}" var="_page_param">

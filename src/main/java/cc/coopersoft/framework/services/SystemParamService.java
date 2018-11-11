@@ -21,7 +21,7 @@ public class SystemParamService implements java.io.Serializable{
     private void initParams(){
         if (params == null) {
             List<SystemParamEntity> paramEntities = systemParamRepository.findAll();
-            params = new HashMap<String, String>(paramEntities.size());
+            params = new HashMap<>(paramEntities.size());
             for (SystemParamEntity entity : paramEntities) {
                 params.put(entity.getKey(), entity.getValue());
             }

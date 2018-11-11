@@ -1,12 +1,22 @@
 package cc.coopersoft.house.repair.data.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
-@Table(name = "USE_BUSINESS", schema = "WXZJ", catalog = "")
-public class UseBusinessEntity {
+@Table(name = "USE_BUSINESS")
+public class RepairBusinessEntity {
+
+    public enum SplitType{
+        AREA, // 按面积比例
+        MONEY //按首缴应缴金额
+        //TODO 手动分摊
+    }
+
+
     private String id;
     private String name;
     private String sectionCode;
@@ -19,12 +29,17 @@ public class UseBusinessEntity {
     private BigDecimal payMoney;
     private BigDecimal checkMoney;
     private BigDecimal superviseMoney;
+    private BigDecimal saveMoney;
     private boolean urgent;
     private Integer version;
-    private String splitType;
+    private SplitType splitType;
+
+    private BusinessEntity business;
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 32, nullable = false, unique = true)
+    @NotNull
+    @Size(max = 32)
     public String getId() {
         return id;
     }
@@ -34,7 +49,9 @@ public class UseBusinessEntity {
     }
 
     @Basic
-    @Column(name = "NAME")
+    @Column(name = "NAME", length = 128, nullable = false)
+    @Size(max = 128)
+    @NotNull
     public String getName() {
         return name;
     }
@@ -44,7 +61,9 @@ public class UseBusinessEntity {
     }
 
     @Basic
-    @Column(name = "SECTION_CODE")
+    @Column(name = "SECTION_CODE", length = 32, nullable = false)
+    @Size(max = 32)
+    @NotNull
     public String getSectionCode() {
         return sectionCode;
     }
@@ -54,7 +73,9 @@ public class UseBusinessEntity {
     }
 
     @Basic
-    @Column(name = "SECTION_NAME")
+    @Column(name = "SECTION_NAME", length = 64 , nullable = false)
+    @Size(max = 64)
+    @NotNull
     public String getSectionName() {
         return sectionName;
     }
@@ -64,7 +85,8 @@ public class UseBusinessEntity {
     }
 
     @Basic
-    @Column(name = "SECTION_ADDRESS")
+    @Column(name = "SECTION_ADDRESS", length = 256)
+    @Size(max = 256)
     public String getSectionAddress() {
         return sectionAddress;
     }
@@ -73,8 +95,9 @@ public class UseBusinessEntity {
         this.sectionAddress = sectionAddress;
     }
 
-    @Basic
-    @Column(name = "APPLY_DATE")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "APPLY_DATE", nullable = false)
+    @NotNull
     public Date getApplyDate() {
         return applyDate;
     }
@@ -84,7 +107,8 @@ public class UseBusinessEntity {
     }
 
     @Basic
-    @Column(name = "APPLY_TEL")
+    @Column(name = "APPLY_TEL", length = 16)
+    @Size(max = 16)
     public String getApplyTel() {
         return applyTel;
     }
@@ -94,7 +118,8 @@ public class UseBusinessEntity {
     }
 
     @Basic
-    @Column(name = "PLAN")
+    @Column(name = "PLAN", length = 512)
+    @Size(max = 512)
     public String getPlan() {
         return plan;
     }
@@ -104,7 +129,8 @@ public class UseBusinessEntity {
     }
 
     @Basic
-    @Column(name = "APPLY_MONEY")
+    @Column(name = "APPLY_MONEY", nullable = false)
+    @NotNull
     public BigDecimal getApplyMoney() {
         return applyMoney;
     }
@@ -143,8 +169,18 @@ public class UseBusinessEntity {
         this.superviseMoney = superviseMoney;
     }
 
+    @Column(name = "SAVE_MONEY", nullable = false)
+    @NotNull
+    public BigDecimal getSaveMoney() {
+        return saveMoney;
+    }
+
+    public void setSaveMoney(BigDecimal saveMoney) {
+        this.saveMoney = saveMoney;
+    }
+
     @Basic
-    @Column(name = "URGENT")
+    @Column(name = "URGENT", nullable = false)
     public boolean isUrgent() {
         return urgent;
     }
@@ -154,7 +190,7 @@ public class UseBusinessEntity {
     }
 
 
-    @Basic
+    @Version
     @Column(name = "VERSION")
     public Integer getVersion() {
         return version;
@@ -164,14 +200,27 @@ public class UseBusinessEntity {
         this.version = version;
     }
 
-    @Basic
-    @Column(name = "SPLIT_TYPE")
-    public String getSplitType() {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "SPLIT_TYPE", nullable = false, length = 6)
+    @NotNull
+    public SplitType getSplitType() {
         return splitType;
     }
 
-    public void setSplitType(String splitType) {
+    public void setSplitType(SplitType splitType) {
         this.splitType = splitType;
+    }
+
+
+    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "ID")
+    @MapsId
+    public BusinessEntity getBusiness() {
+        return business;
+    }
+
+    public void setBusiness(BusinessEntity businessEntity) {
+        this.business = businessEntity;
     }
 
     @Override
@@ -179,25 +228,11 @@ public class UseBusinessEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UseBusinessEntity that = (UseBusinessEntity) o;
+        RepairBusinessEntity that = (RepairBusinessEntity) o;
 
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (sectionCode != null ? !sectionCode.equals(that.sectionCode) : that.sectionCode != null) return false;
-        if (sectionName != null ? !sectionName.equals(that.sectionName) : that.sectionName != null) return false;
-        if (sectionAddress != null ? !sectionAddress.equals(that.sectionAddress) : that.sectionAddress != null)
-            return false;
-        if (applyDate != null ? !applyDate.equals(that.applyDate) : that.applyDate != null) return false;
-        if (applyTel != null ? !applyTel.equals(that.applyTel) : that.applyTel != null) return false;
-        if (plan != null ? !plan.equals(that.plan) : that.plan != null) return false;
-        if (applyMoney != null ? !applyMoney.equals(that.applyMoney) : that.applyMoney != null) return false;
-        if (payMoney != null ? !payMoney.equals(that.payMoney) : that.payMoney != null) return false;
-        if (checkMoney != null ? !checkMoney.equals(that.checkMoney) : that.checkMoney != null) return false;
-        if (superviseMoney != null ? !superviseMoney.equals(that.superviseMoney) : that.superviseMoney != null)
-            return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
-        if (splitType != null ? !splitType.equals(that.splitType) : that.splitType != null) return false;
+
 
         return true;
     }
@@ -205,19 +240,7 @@ public class UseBusinessEntity {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (sectionCode != null ? sectionCode.hashCode() : 0);
-        result = 31 * result + (sectionName != null ? sectionName.hashCode() : 0);
-        result = 31 * result + (sectionAddress != null ? sectionAddress.hashCode() : 0);
-        result = 31 * result + (applyDate != null ? applyDate.hashCode() : 0);
-        result = 31 * result + (applyTel != null ? applyTel.hashCode() : 0);
-        result = 31 * result + (plan != null ? plan.hashCode() : 0);
-        result = 31 * result + (applyMoney != null ? applyMoney.hashCode() : 0);
-        result = 31 * result + (payMoney != null ? payMoney.hashCode() : 0);
-        result = 31 * result + (checkMoney != null ? checkMoney.hashCode() : 0);
-        result = 31 * result + (superviseMoney != null ? superviseMoney.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (splitType != null ? splitType.hashCode() : 0);
+
         return result;
     }
 }

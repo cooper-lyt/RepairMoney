@@ -8,6 +8,7 @@ import cc.coopersoft.framework.tools.IdCardUtils;
 import cc.coopersoft.house.repair.data.UseTypeCount;
 import cc.coopersoft.house.repair.data.model.HouseAccountEntity;
 import cc.coopersoft.house.repair.data.model.HouseEntity;
+import cc.coopersoft.house.repair.data.HouseMapId;
 import cc.coopersoft.house.repair.data.repository.HouseAccountRepository;
 import org.apache.deltaspike.data.api.EntityRepository;
 
@@ -40,12 +41,21 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
         return houseAccountRepository.queryLastChangeDate(houseCode);
     }
 
+
+    public List<HouseAccountEntity> search(HouseMapId houseMapId){
+        return houseAccountRepository.queryByMapId(
+                houseMapId.getMap(),!houseMapId.isEmptyMap(),
+                houseMapId.getBlock(),!houseMapId.isEmptyBlock(),
+                houseMapId.getBuild(),!houseMapId.isEmptyBuild(),
+                houseMapId.getHouse(),!houseMapId.isEmptyHouse());
+    }
+
     public boolean validTime(Date date, List<String> houseCodes){
         Date lastDate = lastChangeTime(houseCodes);
         return ((lastDate == null) || date.after(lastDate));
     }
 
-    public SearchResult search(Type type, String condition ,String mapNumber, String blockNumber, String buildNumber, String houseOrder, List<HouseEntity.UseType> useTypes, int offset, int count){
+    public SearchResult search(Type type, String condition ,HouseMapId mapId, List<HouseEntity.UseType> useTypes, int offset, int count){
         SearchResult result = new SearchResult();
 
         if (type == null || (!Type.MAP_ID.equals(type) && DataHelper.empty(condition))){
@@ -91,17 +101,25 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                     result.useTypeCounts = houseAccountRepository.queryByOwnerNameGroupUseType(personName);
                     break;
                 case MAP_ID:
-                    ConditionAdapter map = ConditionAdapter.instance(mapNumber);
-                    ConditionAdapter block = ConditionAdapter.instance(blockNumber);
-                    ConditionAdapter build = ConditionAdapter.instance(buildNumber);
-                    ConditionAdapter house = ConditionAdapter.instance(houseOrder);
+
                     result.entityDataPage = new EntityDataPage<>(
-                            houseAccountRepository.queryByMapId(map.getCondition(),!map.isEmpty(),block.getCondition(),!block.isEmpty(),build.getCondition(),!build.isEmpty(),house.getCondition(),!house.isEmpty(),useTypeList,offset,count),
+                            houseAccountRepository.queryByMapId(
+                                    mapId.getMap(),!mapId.isEmptyMap(),
+                                    mapId.getBlock(),!mapId.isEmptyBlock(),
+                                    mapId.getBuild(),!mapId.isEmptyBuild(),
+                                    mapId.getHouse(),!mapId.isEmptyHouse()
+                                    ,useTypeList,offset,count),
                             offset,
-                            houseAccountRepository.queryCountByMapId(map.getCondition(),!map.isEmpty(),block.getCondition(),!block.isEmpty(),build.getCondition(),!build.isEmpty(),house.getCondition(),!house.isEmpty(),useTypeList),
+                            houseAccountRepository.queryCountByMapId(mapId.getMap(),!mapId.isEmptyMap(),
+                                    mapId.getBlock(),!mapId.isEmptyBlock(),
+                                    mapId.getBuild(),!mapId.isEmptyBuild(),
+                                    mapId.getHouse(),!mapId.isEmptyHouse(),useTypeList),
                             count
                     );
-                    result.useTypeCounts = houseAccountRepository.queryByMapIdGroupUseType(map.getCondition(),!map.isEmpty(),block.getCondition(),!block.isEmpty(),build.getCondition(),!build.isEmpty(),house.getCondition(),!house.isEmpty());
+                    result.useTypeCounts = houseAccountRepository.queryByMapIdGroupUseType(mapId.getMap(),!mapId.isEmptyMap(),
+                            mapId.getBlock(),!mapId.isEmptyBlock(),
+                            mapId.getBuild(),!mapId.isEmptyBuild(),
+                            mapId.getHouse(),!mapId.isEmptyHouse());
                     break;
                 case HOUSE_CODE:
                     result.entityDataPage = new EntityDataPage<>(

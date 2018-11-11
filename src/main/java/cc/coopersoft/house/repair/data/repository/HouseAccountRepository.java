@@ -89,6 +89,8 @@ public abstract class HouseAccountRepository extends AbstractEntityRepository<Ho
     @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o where o.name like ?1 group by h.useType")
     public abstract List<UseTypeCount> queryByOwnerNameGroupUseType(String name);
 
+    @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
+    public abstract List<HouseAccountEntity> queryByMapId(String mapNumber, boolean hasMapNumber, String blockNumber, boolean hasBlockNumber, String buildNumber, boolean hasBuildNumber, String houseOrder, boolean hasHouseOrder);
 
     @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) and h.useType in (?9) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
     public abstract List<HouseAccountEntity> queryByMapId(String mapNumber, boolean hasMapNumber, String blockNumber, boolean hasBlockNumber, String buildNumber, boolean hasBuildNumber, String houseOrder, boolean hasHouseOrder, List<HouseEntity.UseType> useTypes , @FirstResult int offset , @MaxResults int count);
