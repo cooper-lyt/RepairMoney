@@ -15,10 +15,11 @@
 
 
     <b:row styleClass="details-info">
-        <b:column span="8">
+        <b:column span="12">
             <h:outputLabel for="refund_type" value="退款原因"/>
             <h:outputText id="refund_type" value="#{enumHelper.getLabel(refundBusinessController.operation.type)}  #{(refundBusinessController.operation.type eq 'OTHER') ? refundBusinessController.operation.reason : ''}"/>
         </b:column>
+
         <b:column span="4">
             <h:outputLabel for="refund_money" value="退款金额"/>
             <h:outputText id="refund_money" value="#{refundBusinessController.operation.money}">
@@ -26,7 +27,27 @@
             </h:outputText>
         </b:column>
 
+        <b:column span="4">
+            <h:outputLabel for="refund_time" value="退款时间"/>
+            <h:outputText id="refund_time" value="#{refundBusinessController.operation.operationTime}">
+                <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDateTimePattern}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="4">
+            <h:outputLabel for="refund_pay_type" value="支付方式"/>
+            <h:outputText id="refund_pay_type" value="#{enumHelper.getLabel(refundBusinessController.operation.paymentType)}">
+            </h:outputText>
+        </b:column>
 
     </b:row>
 
+
+    <c:if test="#{refundBusinessController.accountRefund}">
+        <ui:include src="/frame/account.xhtml">
+            <ui:param name="account" value="#{refundBusinessController.operation.accountDetails.houseAccount}"/>
+        </ui:include>
+    </c:if>
+
+    <!-- TODO 多账户 -->
 </ui:composition>

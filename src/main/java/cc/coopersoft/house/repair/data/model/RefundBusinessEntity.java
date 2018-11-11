@@ -42,6 +42,13 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
     private Set<IncomeRefundEntity> incomeRefunds = new HashSet<>(1);
     private Set<PaymentRefundEntity> paymentRefunds = new HashSet<>(1);
 
+    public RefundBusinessEntity() {
+    }
+
+    public RefundBusinessEntity(BusinessEntity business) {
+        this.business = business;
+    }
+
     @Id
     @Column(name = "ID", length = 32, nullable = false, unique = true)
     @NotNull

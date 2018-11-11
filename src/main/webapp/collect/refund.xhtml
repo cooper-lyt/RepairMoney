@@ -28,7 +28,7 @@
                 <b:column span="12">
             <div class="form-checkbox">
                 <label>
-                    <input type="radio" name="type" value="WRONG_FULL" checked="checked"/>
+                    <input disabled="disabled" type="radio" name="type" value="WRONG_FULL" />
                     缴存错误
                 </label>
 
@@ -47,6 +47,7 @@
                        因为收益分摊错误发生的退款，生成红字冲账凭证！若参加收益分摊业务的所有账户全部退款为全额冲账，若部分账户退款为差额冲账。
                 </span>
             </div>
+
             <div class="form-checkbox">
                 <label>
                     <input type="radio" name="type" value="DESTROY" />
@@ -58,9 +59,9 @@
                 </span>
             </div>
 
-            <div class="form-checkbox">
+            <div class="form-checkbox" >
                 <label>
-                    <input type="radio" name="type" value="OTHER" />
+                    <input type="radio" name="type" value="OTHER" checked="checked" />
                     其它退款
                 </label>
                 <b:iconAwesome name="reply"/>

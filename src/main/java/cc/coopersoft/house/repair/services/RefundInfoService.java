@@ -40,11 +40,9 @@ public class RefundInfoService extends AccountOperationInfoEditService<RefundBus
         List<ValidMessage> result = super.valid(businessInstance);
         logger.config("q:" + businessInstance.getRefund().getMoney().doubleValue() + "a:" + businessInstance.getRefund().getAccountDetails().getHouseAccount().getValidBalance().doubleValue());
         if (businessInstance.getRefund().getAccountDetails() != null) {
-            logger.config("t:" + businessInstance.getRefund().getType());
             if (RefundBusinessEntity.Type.OTHER.equals(businessInstance.getRefund().getType()) &&
                     (businessInstance.getRefund().getMoney().compareTo(businessInstance.getRefund().getAccountDetails().getHouseAccount().getValidBalance()) > 0)) {
                 result.add(new ValidMessage(ValidMessage.Level.OFF, "退款金额必须小于账户可用余额!", "可用金额为：" + i18n.currencyDisplay(businessInstance.getRefund().getAccountDetails().getHouseAccount().getValidBalance())));
-                logger.config("message added");
             }
             if (RefundBusinessEntity.Type.DESTROY.equals(businessInstance.getRefund().getType()) &&
                     (BigDecimal.ZERO.compareTo(businessInstance.getRefund().getAccountDetails().getHouseAccount().getFrozen()) < 0)) {
@@ -59,6 +57,9 @@ public class RefundInfoService extends AccountOperationInfoEditService<RefundBus
         super.doAction(business,persistent);
         if (!RefundBusinessEntity.Type.OTHER.equals(business.getRefund().getType())){
             business.getRefund().setMoney(refundService.getRefundFullMoney(business.getRefund()));
+        }
+        if (business.getRefund().getAccountDetails() != null) {
+            business.getRefund().getAccountDetails().setMoney(business.getRefund().getMoney());
         }
     }
 

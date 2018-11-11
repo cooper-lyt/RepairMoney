@@ -15,8 +15,9 @@ public class RefundService implements java.io.Serializable{
     private SystemParamService systemParamService;
 
     public void createBusinessByAccount(BusinessEntity business, HouseAccountEntity account, RefundBusinessEntity.Type type){
-        RefundBusinessEntity refundBusiness = new RefundBusinessEntity();
+        RefundBusinessEntity refundBusiness = new RefundBusinessEntity(business);
         business.setRefund(refundBusiness);
+
 
         if (type == null){
             refundBusiness.setType(RefundBusinessEntity.Type.DESTROY);

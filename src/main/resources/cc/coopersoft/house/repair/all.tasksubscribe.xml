@@ -4,6 +4,8 @@
         <subscribe id="paymentItem" name="交款分户信息" page="/subscribe/view/paymentHouse.xhtml">
             <!-- params -->
         </subscribe>
+
+        <subscribe id="refundInfo" name="退款业务信息" page="/subscribe/view/refund.xhtml"/>
     </view>
 
     <editor>
@@ -23,6 +25,9 @@
         <subscribe id="account.delete" name="删除账户" class="cc.coopersoft.house.repair.services.HouseAccountDeleteService"/>
         <subscribe id="paymentNotice.delete" name="删除缴费通知单" class="cc.coopersoft.house.repair.services.PaymentNoticeDeleteService"/>
 
+        <subscribe id="refund.complete" name="完成退款业务" class="cc.coopersoft.house.repair.services.RefundCompleteService"/>
+        <subscribe id="refund.summary" name="退款业务摘要和查询生成" class="cc.coopersoft.house.repair.services.RefundSummaryGenerator"/>
+
     </action>
 
     <valid>
@@ -35,6 +40,8 @@
         <subscribe id="business.reg" name="禁止生效业务" class="cc.coopersoft.house.repair.services.RegBusinessHoldService"/>
 
         <subscribe id="payment.noticeIsUse" name="禁止缴款通知单重复缴费" class="cc.coopersoft.house.repair.services.PaymentNoticeUseHoldService"/>
+
+        <subscribe id="cantDoThis" name="禁止操作" class="cc.coopersoft.house.repair.services.CantDoOperation"/>
     </valid>
 
 </subscribes>
