@@ -4,7 +4,7 @@
         <IdentityURL>${idp.url::http://localhost:8080/idp/}</IdentityURL>
         <ServiceURL>${RepairMoney.url::http://localhost:8080/RepairMoney/}</ServiceURL>
         <Trust>
-            <Domains>localhost,jboss.com,jboss.org,amazonaws.com</Domains>
+            <Domains>192.168.248.248,localhost</Domains>
         </Trust>
     </PicketLinkSP>
     <Handlers xmlns="urn:picketlink:identity-federation:handler:config:2.1">
