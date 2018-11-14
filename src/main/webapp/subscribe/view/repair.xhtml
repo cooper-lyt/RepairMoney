@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <b:row styleClass="details-info">
+
+        <b:column span="12">
+            <h:outputLabel for="project_name" value="项目名称"/>
+            <h:outputText id="project_name" value="#{repairUseController.repairBusiness.name}"/>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="section_name" value="物业区域名称"/>
+            <h:outputText id="section_name" value="#{repairUseController.repairBusiness.sectionName}"/>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="apply_group" value="申报单位"/>
+            <h:outputText id="apply_group" value="#{repairUseController.repairBusiness.applyGroup} -  #{repairUseController.repairBusiness.applyTel}"/>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="apply_date" value="申报日期"/>
+            <h:outputText id="apply_date" value="#{repairUseController.repairBusiness.applyDate}">
+                <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}" pattern="#{messages.displayDatePattern}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="repair_plan" value="维修方案"/>
+            <h:outputText id="repair_plan" value="#{repairUseController.repairBusiness.plan}"/>
+        </b:column>
+
+
+        <b:column span="12">
+            <h:outputLabel for="apply_money" value="预算金额"/>
+            <h:outputText id="apply_money" value="#{repairUseController.repairBusiness.applyMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="budget_money" value="决算金额"/>
+            <h:outputText rendered="#{repairUseController.repairBusiness.budget}" id="budget_money" value="#{repairUseController.repairBusiness.budgetMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+            <h:outputText rendered="#{not repairUseController.repairBusiness.budget}"  value="未决算"/>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="pay_money" value="已拨金额"/>
+            <h:outputText id="pay_money" value="#{repairUseController.repairBusiness.paymentMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="debit_money" value="未拨金额"/>
+            <h:outputText id="debit_money" value="#{repairUseController.repairBusiness.allDebitMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+
+        <b:column span="12">
+            <h:outputLabel for="save_money" value="保证金"/>
+            <h:outputText id="save_money" value="#{repairUseController.repairBusiness.saveMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="check_money" value="审价费用"/>
+            <h:outputText id="check_money" value="#{repairUseController.repairBusiness.checkMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+        <b:column span="12">
+            <h:outputLabel for="supervise_money" value="监理费用"/>
+            <h:outputText id="supervise_money" value="#{repairUseController.repairBusiness.superviseMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+
+        <b:column span="12">
+            <h:outputLabel for="urgent" value="紧急维修"/>
+            <h:outputText id="urgent" value="#{repairUseController.repairBusiness.urgent ? '是' : '否'}"/>
+        </b:column>
+
+
+        <b:column span="12">
+            <h:outputLabel for="split_type" value="分摊计算方式"/>
+            <h:outputText id="split_type" value="#{enumHelper.getLabel(repairUseController.repairBusiness.splitType)} - #{enumHelper.getLabel(repairUseController.repairBusiness.calcType)}"/>
+        </b:column>
+
+    </b:row>
+
+
+
+
+
+
+</ui:composition>

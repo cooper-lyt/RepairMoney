@@ -13,14 +13,24 @@ import java.util.Set;
 
 @Entity
 @Table(name = "FIXING_PAY")
-public class FixingPayEntity implements java.io.Serializable{
+public class FixingPayEntity implements Comparable<FixingPayEntity>, java.io.Serializable{
+
 
     public enum Type{
         PAY, //支付
         BACK //退回
     }
 
-    private long id;
+    public enum Status{
+        CREATING, // 创建中
+        COMPLETE,
+
+        // 有银行接口使用以下状态
+        WAITING, // 等待支付
+        FAIL  //支付失败
+    }
+
+    private String id;
     private BigDecimal payMoney;
 
     private Type type;
@@ -31,20 +41,30 @@ public class FixingPayEntity implements java.io.Serializable{
     private String receiveBank;
     private String description;
     private Date payTime;
+    private Status status;
 
     private RepairBusinessEntity repairBusiness;
     private BankAccountDetailsEntity bankAccountDetails;
     private Set<AccountDetailsEntity> accountDetails = new HashSet<>(0);
 
+    public FixingPayEntity() {
+    }
+
+    public FixingPayEntity(String id, Status status, RepairBusinessEntity repairBusiness) {
+        this.id = id;
+        this.status = status;
+        this.repairBusiness = repairBusiness;
+    }
+
     @Id
-    @Column(name = "ID", nullable = false, unique = true)
-    @GeneratedValue
+    @Column(name = "ID", length = 32, nullable = false, unique = true)
     @NotNull
-    public long getId() {
+    @Size(max = 32)
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -80,6 +100,17 @@ public class FixingPayEntity implements java.io.Serializable{
 
     public void setPaymentType(PaymentType paymentType) {
         this.paymentType = paymentType;
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS", nullable = false, length = 8)
+    @NotNull
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Basic
@@ -160,9 +191,8 @@ public class FixingPayEntity implements java.io.Serializable{
         this.accountDetails = accountDetails;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "BANK_OPER_ORDER", nullable = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "BANK_OPER_ORDER")
     public BankAccountDetailsEntity getBankAccountDetails() {
         return bankAccountDetails;
     }
@@ -188,11 +218,10 @@ public class FixingPayEntity implements java.io.Serializable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         FixingPayEntity that = (FixingPayEntity) o;
 
 
-        if (that.id != id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
 
         return true;
@@ -200,8 +229,13 @@ public class FixingPayEntity implements java.io.Serializable{
 
     @Override
     public int hashCode() {
-        int result = Long.valueOf(id).hashCode();
+        int result = id != null ? id.hashCode() : 0;
 
         return result;
+    }
+
+    @Override
+    public int compareTo(FixingPayEntity o) {
+        return payTime.compareTo(o.payTime);
     }
 }

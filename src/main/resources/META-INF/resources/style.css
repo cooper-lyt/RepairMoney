@@ -42,3 +42,16 @@
 .bill-last .balance{
     font-weight: bold;
 }
+
+
+.repair-house-list.member-list .list-item{
+    border-bottom: 0;
+    border-top: 1px solid #eee;
+}
+
+.repair-house-list .member-content .note.row{
+    margin: 0;
+}
+
+
+

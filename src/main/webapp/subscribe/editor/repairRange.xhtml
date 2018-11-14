@@ -1,0 +1,118 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <b:row >
+        <h:form>
+        <b:column id="condition" span="12">
+            <div class="form-group">
+                <div class="input-group">
+
+                    <h:outputText styleClass="input-group-addon search-mbbh-input" value="图"/>
+                    <b:inputText label="图号" placeholder="图号" renderLabel="false"
+                                 required="true" autocomplete="off" styleClass="form-control search-mbbh-input" value="#{repairUseController.houseMapId.map}"/>
+                    <h:outputText styleClass="input-group-addon search-mbbh-input" value="丘"/>
+                    <b:inputText label="丘号" placeholder="丘号" renderLabel="false"
+                                 required="true" autocomplete="off" styleClass="form-control search-mbbh-input" value="#{repairUseController.houseMapId.block}"/>
+                    <h:outputText styleClass="input-group-addon search-mbbh-input" value="幢"/>
+                    <b:inputText label="幢号" placeholder="幢号" renderLabel="false"
+                            required="true" autocomplete="off" styleClass="form-control search-mbbh-input" value="#{repairUseController.houseMapId.build}"/>
+                    <h:outputText styleClass="input-group-addon search-mbbh-input" value="房"/>
+                    <b:inputText label="房号" placeholder="房号" renderLabel="false"
+                            autocomplete="off" styleClass="form-control search-mbbh-input" value="#{repairUseController.houseMapId.house}"/>
+                    <span class="input-group-btn">
+                        <b:commandButton look="info" process="@form" ajax="true" value="添加"
+                                         action="#{repairUseController.join}" update="join_list condition" >
+
+                        </b:commandButton>
+                    </span>
+                </div>
+            </div>
+            <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true" id="leftmessages"/>
+
+        </b:column>
+        </h:form>
+
+    </b:row>
+    <style type="text/css">
+
+    </style>
+
+    <h:form id="join_list">
+    <b:row style="margin-bottom: -20px">
+        <b:column span="12">
+        <ul class="repair-house-list member-list">
+            <c:forEach items="#{repairUseController.joinHouseAccount}" var="_item">
+                <li class="list-item">
+
+                    <b:commandButton look="link" action="#{repairUseController.remove}" ajax="true" process="@this" update="@form"
+                                     styleClass="float-right muted-link">
+                        <f:param name="selectHouseId" value="#{_item.id}"/>
+                        <svg class="octicon octicon-x" viewBox="0 0 12 16" version="1.1" width="12" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"></path></svg>
+                    </b:commandButton>
+                        <span class="member-list-avatar text-#{_item.status.style}">
+                            <b:iconAwesome name="home" size="2x"/>
+                        </span>
+                    <div class="member-content">
+                            <span class="member-name text-#{_item.status.style}">
+                                #{_item.houseEntity.houseAddress} / #{_item.houseEntity.houseCode}
+
+                                <span class="labels">
+                                    <span class="label label-#{_item.status.style}">#{enumHelper.getLabel(_item.status)}</span>
+                                </span>
+                            </span>
+
+                        <p class="row note description-note">
+                            <span class="col-md-4 col-lg-4 col-sm-4 d-inline-block">
+                                <label>首缴金额</label><h:outputText value="#{_item.mustMoney}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
+                            </span>
+                            <span class="col-md-4 col-lg-4 col-sm-4 d-inline-block">
+                                <label>可用余额</label><h:outputText value="#{_item.balance}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
+                            </span>
+                            <span class="col-md-4 col-lg-4 col-sm-4 d-inline-block">
+                                <label>分摊金额</label><h:outputText value="#{_item.applyMoney}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
+                            </span>
+
+                        </p>
+                    </div>
+                </li>
+            </c:forEach>
+        </ul>
+        </b:column>
+    </b:row>
+        <hr/>
+        <div class="input-block description-note" style="margin-top: -10px">
+
+        <span class="right field-block">
+            <label>分摊金额</label>
+            <h:outputText value="#{repairUseController.totalMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </span>
+            <span class="right">
+            <label>预算金额</label>
+            <h:outputText value="#{repairUseController.repairBusiness.applyMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </span>
+
+        </div>
+        <div style="clear:both;"/>
+
+    </h:form>
+
+
+
+
+</ui:composition>

@@ -1,18 +1,25 @@
 package cc.coopersoft.house.repair.data.model;
 
+import cc.coopersoft.framework.tools.SetLinkList;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "USE_BUSINESS")
 public class RepairBusinessEntity {
 
     public enum SplitType{
-        AREA, // 按面积比例
-        MONEY //按首缴应缴金额
+        MONEY, //按首缴应缴金额
+        AREA // 按面积比例
+
         //TODO 手动分摊
     }
 
@@ -24,17 +31,29 @@ public class RepairBusinessEntity {
     private String sectionAddress;
     private Date applyDate;
     private String applyTel;
+    private String applyGroup;
     private String plan;
     private BigDecimal applyMoney;
-    private BigDecimal payMoney;
+    private BigDecimal budgetMoney;
     private BigDecimal checkMoney;
     private BigDecimal superviseMoney;
     private BigDecimal saveMoney;
     private boolean urgent;
     private Integer version;
     private SplitType splitType;
+    private RoundingMode calcType;
+    private boolean budget;
 
     private BusinessEntity business;
+    private Set<RepairJoinHouseEntity> repairJoinHouses = new HashSet<>(0);
+    private Set<FixingPayEntity> fixingPays = new HashSet<>(0);
+
+    public RepairBusinessEntity() {
+    }
+
+    public RepairBusinessEntity(BusinessEntity business) {
+        this.business = business;
+    }
 
     @Id
     @Column(name = "ID", length = 32, nullable = false, unique = true)
@@ -117,6 +136,17 @@ public class RepairBusinessEntity {
         this.applyTel = applyTel;
     }
 
+    @Column(name = "APPLY_GROUP", length = 128, nullable = false)
+    @Size(max = 128)
+    @NotNull
+    public String getApplyGroup() {
+        return applyGroup;
+    }
+
+    public void setApplyGroup(String applyGroup) {
+        this.applyGroup = applyGroup;
+    }
+
     @Basic
     @Column(name = "PLAN", length = 512)
     @Size(max = 512)
@@ -141,12 +171,12 @@ public class RepairBusinessEntity {
 
     @Basic
     @Column(name = "PAY_MONEY")
-    public BigDecimal getPayMoney() {
-        return payMoney;
+    public BigDecimal getBudgetMoney() {
+        return budgetMoney;
     }
 
-    public void setPayMoney(BigDecimal payMoney) {
-        this.payMoney = payMoney;
+    public void setBudgetMoney(BigDecimal payMoney) {
+        this.budgetMoney = payMoney;
     }
 
     @Basic
@@ -179,6 +209,7 @@ public class RepairBusinessEntity {
         this.saveMoney = saveMoney;
     }
 
+
     @Basic
     @Column(name = "URGENT", nullable = false)
     public boolean isUrgent() {
@@ -189,6 +220,14 @@ public class RepairBusinessEntity {
         this.urgent = urgent;
     }
 
+    @Column(name = "BUDGET", nullable = false)
+    public boolean isBudget() {
+        return budget;
+    }
+
+    public void setBudget(boolean budget) {
+        this.budget = budget;
+    }
 
     @Version
     @Column(name = "VERSION")
@@ -211,6 +250,16 @@ public class RepairBusinessEntity {
         this.splitType = splitType;
     }
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "CALC_TYPE", nullable = false, length = 16)
+    @NotNull
+    public RoundingMode getCalcType() {
+        return calcType;
+    }
+
+    public void setCalcType(RoundingMode calcType) {
+        this.calcType = calcType;
+    }
 
     @OneToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "ID")
@@ -221,6 +270,94 @@ public class RepairBusinessEntity {
 
     public void setBusiness(BusinessEntity businessEntity) {
         this.business = businessEntity;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true,mappedBy = "repairBusiness")
+    public Set<RepairJoinHouseEntity> getRepairJoinHouses() {
+        return repairJoinHouses;
+    }
+
+    public void setRepairJoinHouses(Set<RepairJoinHouseEntity> repairJoinHouses) {
+        this.repairJoinHouses = repairJoinHouses;
+    }
+
+    @Transient
+    public List<RepairJoinHouseEntity> getRepairJoinHouseList(){
+        return SetLinkList.instance(getRepairJoinHouses());
+    }
+
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true,mappedBy = "repairBusiness")
+    public Set<FixingPayEntity> getFixingPays() {
+        return fixingPays;
+    }
+
+    public void setFixingPays(Set<FixingPayEntity> fixingPays) {
+        this.fixingPays = fixingPays;
+    }
+
+    @Transient
+    public List<FixingPayEntity> getFixingPayList(){
+        return SetLinkList.instance(getFixingPays());
+    }
+
+    /***
+     * 根据状态得到总維修金额
+     *
+     * @return 总金额
+     */
+    @Transient
+    public BigDecimal getTotalMoney(){
+        if (isBudget()){
+            return getBudgetMoney();
+        }else{
+            return getApplyMoney();
+        }
+    }
+
+    /***
+     *
+     * @return 已支付金额
+     */
+    @Transient
+    public BigDecimal getPaymentMoney(){
+        BigDecimal result = BigDecimal.ZERO;
+        for(FixingPayEntity pay: getFixingPays()){
+            result = result.add(pay.getPayMoney());
+        }
+        return result;
+    }
+
+    /***
+     *
+     * @return 未支付金额 不包含保证金
+     */
+    @Transient
+    public BigDecimal getDebtMoney(){
+        return getTotalMoney().subtract(getSaveMoney()).subtract(getPaymentMoney());
+    }
+
+    /***
+     *
+     * @return 未支付金额 含保证金
+     */
+    @Transient
+    public BigDecimal getAllDebitMoney(){
+        return getTotalMoney().subtract(getPaymentMoney());
+    }
+
+    /***
+     *
+     * @return 正在进行支付的操作
+     */
+    @Transient
+    public FixingPayEntity getPaying(){
+        for(FixingPayEntity pay: getFixingPays()){
+            if (FixingPayEntity.Status.CREATING.equals(pay)){
+                return pay;
+            }
+        }
+        return null;
     }
 
     @Override

@@ -9,6 +9,8 @@ public class TaskSubscribe extends TaskAction implements java.io.Serializable{
 
 
     private String page;
+    private String header;
+    private String footer;
     private Map<String,String> params = new HashMap<>();
     private Set<String> dependencies = new HashSet<>();
 
@@ -36,6 +38,19 @@ public class TaskSubscribe extends TaskAction implements java.io.Serializable{
         this.dependencies = dependencies;
     }
 
+    public String getHeader() {
+        return header;
+    }
 
+    public void setHeader(String header) {
+        this.header = header;
+    }
 
+    public String getFooter() {
+        return footer;
+    }
+
+    public void setFooter(String footer) {
+        this.footer = footer;
+    }
 }

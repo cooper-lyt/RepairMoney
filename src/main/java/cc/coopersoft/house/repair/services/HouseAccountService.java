@@ -41,6 +41,9 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
         return houseAccountRepository.queryLastChangeDate(houseCode);
     }
 
+    public HouseAccountEntity getAccountByHouseCode(String houseCode){
+        return houseAccountRepository.findOptionalByHouseCode(houseCode);
+    }
 
     public List<HouseAccountEntity> search(HouseMapId houseMapId){
         return houseAccountRepository.queryByMapId(
@@ -182,4 +185,6 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
             return useTypeCounts;
         }
     }
+
+
 }

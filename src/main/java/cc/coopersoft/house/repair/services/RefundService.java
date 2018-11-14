@@ -34,7 +34,7 @@ public class RefundService implements java.io.Serializable{
         refundBusiness.getAccountDetails().setHouseAccount(account);
         refundBusiness.getAccountDetails().setStatus(AccountDetailsEntity.Status.RUNNING);
         refundBusiness.setOperationTime(new Date());
-        refundBusiness.setPaymentType(systemParamService.getEnumParam(PaymentType.class,"business.preferredPaymentType"));
+        refundBusiness.setPaymentType(systemParamService.getEnumParam(PaymentType.class,"wxzj.preferredPaymentType"));
     }
 
     public BigDecimal getRefundFullMoney(RefundBusinessEntity refundBusiness){

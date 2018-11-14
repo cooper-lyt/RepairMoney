@@ -70,7 +70,11 @@ public class BusinessOperationController  implements java.io.Serializable {
     @Inject @Param(name = "assignTo")
     private String assignToEmpId;
 
+    //TODO 测试 在处理一个业务的同时，操作其它业务，会不会引起数据的混乱
+    /*
+        在 RequestScoped 作业域的Bean 中 使用 PostConstruct 来加载参数不会混乱，因为 一个 Request 中的参数不会改变
 
+     */
     @PostConstruct
     public void initFromParam(){
         String defineId = facesContext.getExternalContext().getRequestParameterMap().get(BUSINESS_DEFINE_ID_PARAM_NAME);
@@ -87,6 +91,8 @@ public class BusinessOperationController  implements java.io.Serializable {
                 facesContext.getExternalContext().getRequestParameterMap().get(BUSINESS_DEFINE_ID_PARAM_NAME),
                 BusinessOperationService.CREATE_TASK_NAME);
     }
+
+
 
     public String getBusinessId() {
         return businessId;
@@ -227,15 +233,20 @@ public class BusinessOperationController  implements java.io.Serializable {
             }catch (MissingResourceException e){
                 summary = msg.getSummary();
             }
-            String detail;
-            try {
-                detail=bundle.getString(msg.getDetail());
-            }catch (MissingResourceException e){
-                detail = msg.getDetail();
+            String detail = null;
+            if (msg.getDetail() != null) {
+                try {
+                    detail = bundle.getString(msg.getDetail());
+                } catch (MissingResourceException e) {
+                    detail = msg.getDetail();
+                }
             }
-            if (msg.getParams() != null){
+
+            if (msg.getParams() != null) {
                 summary = MessageFormat.format(summary, msg.getParams());
-                detail = MessageFormat.format(detail,msg.getParams());
+                if (detail != null) {
+                    detail = MessageFormat.format(detail, msg.getParams());
+                }
             }
 
             logger.config("add " + msg.getLevel() + " message to:" + severity + summary);
@@ -267,6 +278,13 @@ public class BusinessOperationController  implements java.io.Serializable {
         } catch (IOException e) {
             logger.log(Level.WARNING,e.getMessage(),e);
         }
+    }
+
+    public Class<? extends ViewConfig> createBegin(){
+        businessOperationService.createInstance(
+                facesContext.getExternalContext().getRequestParameterMap().get(BUSINESS_DEFINE_ID_PARAM_NAME),
+                BusinessOperationService.CREATE_TASK_NAME);
+        return taskBegin();
     }
 
     public Class<? extends ViewConfig> taskBegin(){

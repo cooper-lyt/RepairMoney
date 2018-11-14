@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <c:forEach items="#{repairUseController.repairBusiness.fixingPayList}" var="_pay">
+
+
+    <b:row styleClass="details-info">
+
+        <b:column span="12">
+
+            <label>支付类型</label>
+            <h:outputText value="#{enumHelper.getLabel(_pay.type)}"/>
+        </b:column>
+
+
+        <b:column span="12">
+
+            <label>支付金额</label>
+            <h:outputText value="#{_pay.payMoney}">
+                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+            </h:outputText>
+        </b:column>
+
+
+        <b:column span="12">
+
+            <label>支付方式</label>
+            <h:outputText value="#{enumHelper.getLabel(_pay.paymentType)}"/>
+        </b:column>
+
+        <b:column span="12">
+
+            <label>收款人</label>
+            <h:outputText value="#{_pay.receivePerson}"/>
+        </b:column>
+
+        <b:column span="12">
+
+            <label>收款账号</label>
+            <h:outputText value="#{_pay.receiveNumber}"/>
+        </b:column>
+
+        <b:column span="12">
+
+            <label>收款账号开户行</label>
+            <h:outputText value="#{_pay.receiveBank}"/>
+        </b:column>
+
+        <b:column span="12">
+
+            <label>支付时间</label>
+            <h:outputText value="#{_pay.payTime}">
+                <f:convertDateTime locale="#{i18n.locale}" timeZone="#{i18n.timeZone}"/>
+            </h:outputText>
+        </b:column>
+
+
+        <b:column span="12">
+
+            <label>支付状态</label>
+            <h:outputText value="#{enumHelper.getLabel(_pay.status)}"/>
+        </b:column>
+
+        <b:column span="12">
+
+            <label>支付说明</label>
+            <h:outputText value="#{_pay.description}"/>
+        </b:column>
+
+    </b:row>
+
+        <table class="table table-bordered details-table">
+            <thead>
+                <tr>
+                    <th>
+                       编号
+                    </th>
+                    <th>
+                        房屋
+                    </th>
+                    <th>
+                        金额
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="#{_pay.accountDetails}" var="_operation">
+            <tr>
+                <td>
+                    <h:outputText value="#{_operation.house.houseCode}"/>
+                </td>
+                <td>
+                    <h:outputText value="#{_operation.house.houseAddress}"/>
+                </td>
+                <td>
+                    <h:outputText value="#{_operation.money}">
+                        <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                    </h:outputText>
+                </td>
+
+            </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+
+
+
+    </c:forEach>
+
+
+</ui:composition>

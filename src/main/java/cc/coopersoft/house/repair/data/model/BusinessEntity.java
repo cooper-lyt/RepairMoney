@@ -29,6 +29,7 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
 
     private PaymentEntity payment;
     private RefundBusinessEntity refund;
+    private RepairBusinessEntity repair;
 
 
     private Set<AccountDetailsEntity> accountDetails = new HashSet<>(0);
@@ -251,6 +252,16 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
 
     public void setRefund(RefundBusinessEntity refund) {
         this.refund = refund;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    public RepairBusinessEntity getRepair() {
+        return repair;
+    }
+
+    public void setRepair(RepairBusinessEntity repair) {
+        this.repair = repair;
     }
 
     @Override

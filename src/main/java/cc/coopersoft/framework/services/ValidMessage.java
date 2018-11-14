@@ -3,6 +3,7 @@ package cc.coopersoft.framework.services;
 public class ValidMessage {
 
     public enum Level{
+
         INFO(1), //信息级
         WARN(2), //警告级，
         SERVER(3),//服务级, 可从系统参数设置是否可以通过

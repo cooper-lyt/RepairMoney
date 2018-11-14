@@ -6,15 +6,23 @@
         </subscribe>
 
         <subscribe id="refundInfo" name="退款业务信息" page="/subscribe/view/refund.xhtml"/>
+
+        <subscribe id="repair" name="维修业务" page="/subscribe/view/repair.xhtml"/>
+        <subscribe id="repairPay" name="维修划款" page="/subscribe/view/repairPay.xhtml"/>
+        <subscribe id="repairRange" name="维修列支范围" page="/subscribe/view/repairRange.xhtml"/>
     </view>
 
     <editor>
-        <subscribe id="payment.info" name="交款信息" page="/subscribe/editor/chargeInfo.xhtml" class="cc.coopersoft.house.repair.services.PaymentInfoService">
+        <subscribe id="payment.info" name="交款信息" header="" page="/subscribe/editor/chargeInfo.xhtml"  class="cc.coopersoft.house.repair.services.PaymentInfoService">
             <!-- params -->
         </subscribe>
-        <subscribe id="payment.money" name="交款金额" page="/subscribe/editor/chargeMoney.xhtml" class="cc.coopersoft.house.repair.services.PaymentMoneyService"/>
+        <subscribe id="payment.money" name="交款金额" header="" page="/subscribe/editor/chargeMoney.xhtml"  class="cc.coopersoft.house.repair.services.PaymentMoneyService"/>
 
-        <subscribe id="refund.info" name="退款信息" page="/subscribe/editor/refundInfo.xhtml" class="cc.coopersoft.house.repair.services.RefundInfoService"/>
+        <subscribe id="refund.info" name="退款信息" header="" page="/subscribe/editor/refundInfo.xhtml" class="cc.coopersoft.house.repair.services.RefundInfoService"/>
+
+        <subscribe id="repair.info" name="维修信息(补录)" header="" page="/subscribe/editor/repairInfo.xhtml" class="cc.coopersoft.house.repair.services.RepairMakeupInfoService"/>
+        <subscribe id="repair.house" name="维修范围(补录)" header="/subscribe/editor/repairRange.xhtml" page="" class="cc.coopersoft.house.repair.services.RepairMakeupSplitService"/>
+
     </editor>
 
     <action>
@@ -27,6 +35,10 @@
 
         <subscribe id="refund.complete" name="完成退款业务" class="cc.coopersoft.house.repair.services.RefundCompleteService"/>
         <subscribe id="refund.summary" name="退款业务摘要和查询生成" class="cc.coopersoft.house.repair.services.RefundSummaryGenerator"/>
+
+        <subscribe id="repair.create" name="初始化维修业务(补录)" class="cc.coopersoft.house.repair.services.RepairCreateService"/>
+        <subscribe id="repair.summary" name="维修业务摘要和查询生成" class="cc.coopersoft.house.repair.services.RepairSummaryGenerator"/>
+        <subscribe id="repair.payComplete" name="维修业务支付完成" class="cc.coopersoft.house.repair.services.RepairPayService"/>
 
     </action>
 

@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+            <table class="table table-bordered details-table">
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>房号</th>
+                    <th>首缴</th>
+                    <th>余额</th>
+                    <th>分摊</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="#{repairUseController.repairBusiness.repairJoinHouseList}" var="_house">
+                    <tr>
+                        <td> <h:outputText value="#{_house.houseEntity.houseCode}" /></td>
+                        <td> <h:outputText value="#{_house.houseEntity.houseOrder}" /></td>
+                        <td>
+                            <h:outputText value="#{_house.mustMoney}" >
+                                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                            </h:outputText>
+                        </td>
+                        <td>
+                            <h:outputText value="#{_house.balance}" >
+                                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                            </h:outputText>
+                        </td>
+                        <td>
+                            <h:outputText value="#{repairUseController.repairBusiness.budget ? _house.money : _house.applyMoney}" >
+                                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                            </h:outputText>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+
+
+</ui:composition>

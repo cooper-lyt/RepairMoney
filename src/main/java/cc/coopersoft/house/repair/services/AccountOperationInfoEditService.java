@@ -21,6 +21,8 @@ public abstract class AccountOperationInfoEditService<T extends AccountMoneyOper
         return getOperationBusiness(details.getBusiness()).getOperationTime();
     }
 
+
+
     @Override
     public List<ValidMessage> valid(BusinessEntity businessInstance) {
         T operation = getOperationBusiness(businessInstance);

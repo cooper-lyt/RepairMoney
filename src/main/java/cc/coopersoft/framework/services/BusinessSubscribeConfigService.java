@@ -108,6 +108,7 @@ public class BusinessSubscribeConfigService  implements java.io.Serializable{
                                         logger.config("load view subscribe:" + subscribe);
                                     }else if ("EDITOR".equals(typeName)){
                                         subscribe.setClassName(regNode.getAttributes().getNamedItem("class").getNodeValue());
+                                        subscribe.setHeader(regNode.getAttributes().getNamedItem("header").getNodeValue());
                                         editors.put(subscribe.getId(),subscribe);
                                         logger.config("load editor subscribe:" + subscribe);
                                     }

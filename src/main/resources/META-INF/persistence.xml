@@ -31,7 +31,7 @@
         <class>cc.coopersoft.house.repair.data.model.FixingEntity</class>
         <class>cc.coopersoft.house.repair.data.model.ModifyBusinessEntity</class>
         <class>cc.coopersoft.house.repair.data.model.RepairVoteEntity</class>
-        <class>cc.coopersoft.house.repair.data.model.SplitHouseEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.RepairJoinHouseEntity</class>
         <class>cc.coopersoft.house.repair.data.model.FixingTypeEntity</class>
         <class>cc.coopersoft.house.repair.data.model.OwnerPersonEntity</class>
         <class>cc.coopersoft.house.repair.data.model.PutAccountBookEntity</class>

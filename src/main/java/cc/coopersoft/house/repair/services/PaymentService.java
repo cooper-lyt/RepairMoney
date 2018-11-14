@@ -49,7 +49,7 @@ public class PaymentService implements java.io.Serializable {
         payment.setOperationTime(new Date());
         payment.setSectionName(house.getSectionName());
         payment.setSectionCode(house.getSectionCode());
-        payment.setPaymentType(systemParamService.getEnumParam(PaymentType.class,"business.preferredPaymentType"));
+        payment.setPaymentType(systemParamService.getEnumParam(PaymentType.class,"wxzj.preferredPaymentType"));
         HouseAccountEntity houseAccountEntity = houseAccountRepository.findOptionalByHouseCode(house.getHouseCode());
         PaymentBusinessEntity.Type type = ((houseAccountEntity == null) || (HouseAccountEntity.Status.DESTROY.equals(houseAccountEntity.getStatus()))) ? PaymentBusinessEntity.Type.FIRST : PaymentBusinessEntity.Type.ADD;
         PaymentBusinessEntity paymentBusinessEntity = new PaymentBusinessEntity(
@@ -76,7 +76,7 @@ public class PaymentService implements java.io.Serializable {
         business.getPayment().setOperationTime(new Date());
         business.getPayment().setMustMoney(paymentNotice.getMustMoney());
         business.getPayment().setMoney(paymentNotice.getMoney());
-        business.getPayment().setPaymentType(systemParamService.getEnumParam(PaymentType.class,"business.preferredPaymentType"));
+        business.getPayment().setPaymentType(systemParamService.getEnumParam(PaymentType.class,"wxzj.preferredPaymentType"));
         int itemCount = paymentNotice.getNoticeItems().size();
         int i = 0;
         for(PaymentNoticeItemEntity item: paymentNotice.getNoticeItems()){

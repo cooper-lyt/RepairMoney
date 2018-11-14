@@ -13,7 +13,7 @@ ul, ol {
     margin-bottom: 0;
 }
 
-body.intent-mouse [role=button]:focus, body.intent-mouse button:focus, body.intent-mouse summary:focus {
+body.intent-mouse [role=button]:focus, body.intent-mouse button:focus,body.intent-mouse button:active:focus, body.intent-mouse summary:focus {
     outline: none;
 }
 
@@ -110,6 +110,11 @@ label.bf-error {
 
 .btn{
     border-radius: 3px;
+}
+
+.btn.btn-link{
+    padding: 0;
+    border: 0;
 }
 
 .btn-reversal:not([disabled]):not(:hover):not(:focus){
@@ -895,7 +900,6 @@ table.floatThead-table {
 }
 
 .repo-list-description {
-    max-width: 550px;
     margin-top: 8px;
     margin-bottom: 0;
     font-size: 14px;
@@ -1431,4 +1435,47 @@ h2 {
 }
 
 
+.member-list {
+    list-style: none;
+}
 
+.member-list .list-item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    position: relative;
+}
+
+.member-list-avatar {
+    float: left;
+    margin-right: 10px;
+}
+
+.member-list-avatar .octicon,  .member-list-avatar .fa, .member-list-avatar .fas ,.member-list-avatar glyphicon {
+    color: #959da5;
+    width: 40px;
+}
+
+.member-list .member-content {
+    margin-left: 50px;
+}
+
+
+.member-container .member-name {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.description-note label{
+    font-weight: bold;
+    padding-right: 5px;
+}
+.description-note span{
+    padding: 0;
+}
+
+.description-note .field-block.right{
+    padding-left: 5px;
+}

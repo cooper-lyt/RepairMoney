@@ -9,6 +9,7 @@ public interface BusinessInstance {
         BUSINESS //业务
         ,IMPORT //导入
         ,BEFORE_INPUT //补录
+        //TODO 在业务定义中加入是否补录
         ,OUT_SIDE //外部建立
     }
 

@@ -13,8 +13,8 @@
 
             <b:column span="3" ng:role="main">
 
-
-                  <b:panel look="primary" title="住宅专项维修资金管理系统">
+                  <h:form>
+                  <b:panel look="primary" title="住宅专项维修资金">
                         <b:listLinks>
                               <b:navLink header="基础数据" />
                               <b:navLink href="#" value="房屋数据管理"
@@ -31,8 +31,12 @@
                               <b:navLink header="资金使用"/>
                               <b:navLink value="使用申请" outcome="/collect/collect.xhtml"
                                          icon="tag" iconAlign="right"/>
-                              <b:navLink value="使用录入" outcome="/collect/repairMakeup.xhtml"
-                                         icon="tag" iconAlign="right"/>
+
+
+                              <b:navCommandLink value="使用录入" icon="tag" action="#{businessOperationController.createBegin}">
+                                    <f:param name="businessDefineId" value="BU"/>
+                              </b:navCommandLink>
+
                               <b:navLink></b:navLink>
 
                               <b:navLink header="综合收益"/>
@@ -70,6 +74,7 @@
 
                         </b:listLinks>
                   </b:panel>
+                  </h:form>
             </b:column>
 
 

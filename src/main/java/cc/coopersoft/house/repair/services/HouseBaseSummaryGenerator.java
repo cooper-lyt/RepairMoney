@@ -63,12 +63,11 @@ public class HouseBaseSummaryGenerator {
             putSearchKey(house);
             for (OwnerPersonEntity o : house.getOwnerPersonList()) {
                 searchKey += " " + o.getName() + " " + o.getCredentialsNumber();
-                if (summary.length() < MAX_SUMMARY_LENGTH) {
-                    summary += padding(details , house.getHouseOrder() + "[" + house.getOwnerPersonList().get(0).getName() + "]") + "、";
-                } else {
-                    summary += "等 ";
-                }
-
+            }
+            if (summary.length() < MAX_SUMMARY_LENGTH) {
+                summary += padding(details , house.getHouseOrder() + "[" + (house.getOwnerPersons().isEmpty() ? "" : house.getOwnerPersonList().get(0).getName()) + "]") + "、";
+            } else {
+                summary += "等 ";
             }
         }
         if (summary.endsWith("、")){

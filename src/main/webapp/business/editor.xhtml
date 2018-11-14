@@ -11,6 +11,7 @@
 
     <h:outputStylesheet library="bootstrap-select" name="css/bootstrap-select.min.css"/>
     <h:outputStylesheet library="bootstrap-select" name="css/bootstrap-select-plug.css"/>
+    <h:outputStylesheet name="style.css"/>
 
 
     <b:modal id="cancel_confirm" title="放弃任务确认" size="modal-sm">
@@ -62,13 +63,25 @@
                     <c:forEach items="#{businessOperationController.editorDependencies}" var="_dependency">
                         <ui:include src="#{_dependency}"/>
                     </c:forEach>
+                    <c:forEach items="#{businessOperationController.editor}" var="_editor">
+                        <c:if test="#{not empty _editor.header}">
+                            <ui:include src="#{_editor.header}">
+                                <c:forEach items="#{_editor.params.entrySet()}" var="_page_param">
+                                    <ui:param name="#{_page_param.key}" value="#{_page_param.value}"/>
+                                </c:forEach>
+                            </ui:include>
+                        </c:if>
+                    </c:forEach>
+
                     <o:form acceptcharset="UTF-8" >
                         <c:forEach items="#{businessOperationController.editor}" var="_editor">
+                            <c:if test="#{not empty _editor.page}">
                             <ui:include src="#{_editor.page}">
                                 <c:forEach items="#{_editor.params.entrySet()}" var="_page_param">
                                     <ui:param name="#{_page_param.key}" value="#{_page_param.value}"/>
                                 </c:forEach>
                             </ui:include>
+                            </c:if>
                         </c:forEach>
 
 
@@ -93,6 +106,7 @@
 
                         </div>
                     </o:form>
+
                 </b:column>
 
             </b:row>

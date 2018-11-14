@@ -14,14 +14,14 @@ import java.math.BigDecimal;
 public class PaymentCompleteService  implements TaskActionComponent<BusinessEntity> {
 
     @Inject
-    private HouseAccountRepository houseAccountRepository;
+    private HouseAccountService houseAccountService;
 
 
     @Override
     public void doAction(BusinessEntity businessInstance,boolean persistent) {
         PaymentEntity paymentEntity =businessInstance.getPayment();
         for(PaymentBusinessEntity pb: paymentEntity.getPaymentBusinesses()){
-            HouseAccountEntity account = houseAccountRepository.findOptionalByHouseCode(pb.getAccountDetails().getHouse().getHouseCode());
+            HouseAccountEntity account = houseAccountService.getAccountByHouseCode(pb.getAccountDetails().getHouse().getHouseCode());
             if (account == null){
                 account = new HouseAccountEntity();
                 account.setAccountNumber(UUIDGenerator.getUUID());
