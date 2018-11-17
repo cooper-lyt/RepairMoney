@@ -30,6 +30,7 @@ public class RepairPayService implements TaskActionComponent<BusinessEntity> {
                 if (account.getBalance().compareTo(BigDecimal.ZERO) < 0 ){
                     throw new SubscribeFailException("账户余额不足!" , "账户:" +  account.getHouseCode() + "余额不足.");
                 }
+                details.setStatus(AccountDetailsEntity.Status.REG);
                 details.setBalance(account.getBalance());
             }
         }
