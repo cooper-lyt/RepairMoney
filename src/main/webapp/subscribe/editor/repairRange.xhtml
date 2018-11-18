@@ -16,13 +16,11 @@
     <b:row >
         <h:form>
         <b:column id="condition" span="12">
+
             <div class="form-group">
+
+                <h:outputLabel for="split_type_input" styleClass="control-label" value="分摊计算方式"/>
                 <div class="input-group">
-
-                    <div class="form-group">
-
-                        <h:outputLabel for="split_type_input" styleClass="control-label" value="分摊计算方式"/>
-                        <div class="input-group">
                     <span class="input-group-btn">
                     <h:selectOneMenu id="split_type_input" required="true" label="分摊方式" styleClass="selectpicker form-control"
                                      value="#{repairUseController.repairBusiness.splitType}">
@@ -32,16 +30,18 @@
                         <f:ajax render="join_list" execute="@this" event="change" listener="#{repairUseController.splitMoney}"  />
                     </h:selectOneMenu>
                     </span>
-                            <h:selectOneMenu required="true" label="舍入方式" styleClass="selectpicker edit-select form-control"
-                                             value="#{repairUseController.repairBusiness.calcType}">
-                                <f:selectItems value="#{splitCalcType}" var="_type"
-                                               itemLabel="#{enumHelper.getLabel(_type)}"
-                                               itemValue="${_type}"/>
-                                <f:ajax render="join_list" execute="@this" listener="#{repairUseController.splitMoney}"  event="change" />
-                            </h:selectOneMenu>
-                        </div>
-                    </div>
-
+                    <h:selectOneMenu required="true" label="舍入方式" styleClass="selectpicker edit-select form-control"
+                                     value="#{repairUseController.repairBusiness.calcType}">
+                        <f:selectItems value="#{splitCalcType}" var="_type"
+                                       itemLabel="#{enumHelper.getLabel(_type)}"
+                                       itemValue="${_type}"/>
+                        <f:ajax render="join_list" execute="@this" listener="#{repairUseController.splitMoney}"  event="change" />
+                    </h:selectOneMenu>
+                </div>
+            </div>
+            <p:outputPanel autoUpdate="false" deferred="false" id="join-condition">
+            <div class="form-group">
+                <div class="input-group">
                     <h:outputText styleClass="input-group-addon search-mbbh-input" value="图"/>
                     <b:inputText label="图号" placeholder="图号" renderLabel="false"
                                  required="true" autocomplete="off" styleClass="form-control search-mbbh-input" value="#{repairUseController.houseMapId.map}"/>
@@ -56,14 +56,14 @@
                             autocomplete="off" styleClass="form-control search-mbbh-input" value="#{repairUseController.houseMapId.house}"/>
                     <span class="input-group-btn">
                         <b:commandButton look="info" process="@form" ajax="true" value="添加"
-                                         action="#{repairUseController.join}" update="join_list condition" >
+                                         action="#{repairUseController.join}" update="join_list join-condition" >
 
                         </b:commandButton>
                     </span>
                 </div>
             </div>
             <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true" id="leftmessages"/>
-
+            </p:outputPanel>
         </b:column>
         </h:form>
 
@@ -97,13 +97,17 @@
                             </span>
 
                         <p class="row note description-note">
-                            <span class="col-md-4 col-lg-4 col-sm-4 d-inline-block">
+                            <span class="col-md-3 col-lg-3 col-sm-6 d-inline-block">
+                                <label>建筑面积</label><h:outputText value="#{_item.houseEntity.houseArea}"><f:convertNumber pattern="#0.00"/> </h:outputText>
+                            </span>
+
+                            <span class="col-md-3 col-lg-3 col-sm-6 d-inline-block">
                                 <label>首缴金额</label><h:outputText value="#{_item.mustMoney}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
                             </span>
-                            <span class="col-md-4 col-lg-4 col-sm-4 d-inline-block">
+                            <span class="col-md-3 col-lg-3 col-sm-6 d-inline-block">
                                 <label>可用余额</label><h:outputText value="#{_item.balance}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
                             </span>
-                            <span class="col-md-4 col-lg-4 col-sm-4 d-inline-block">
+                            <span class="col-md-3 col-lg-3 col-sm-6 d-inline-block">
                                 <label>分摊金额</label><h:outputText value="#{_item.applyMoney}"><f:convertNumber type="currency" locale="#{i18n.locale}"/> </h:outputText>
                             </span>
 

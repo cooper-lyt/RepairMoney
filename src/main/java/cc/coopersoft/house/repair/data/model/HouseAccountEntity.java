@@ -26,7 +26,7 @@ public class HouseAccountEntity {
     private Date createTime;
     private Status status;
     private String memo;
-    private Integer version;
+    private int version;
     private BigDecimal mustMoney;
     private String houseCode;
 
@@ -134,12 +134,12 @@ public class HouseAccountEntity {
     }
 
     @Version
-    @Column(name = "VERSION")
-    public Integer getVersion() {
+    @Column(name = "VERSION", nullable = false)
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

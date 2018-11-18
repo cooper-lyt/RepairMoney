@@ -23,7 +23,7 @@ public class PaymentNoticeEntity implements java.io.Serializable {
     private String empName;
     private Date noticeTime;
     private Source source;
-    private Integer version;
+    private int version;
 
 
     private Set<PaymentEntity> payments = new HashSet<PaymentEntity>(0);
@@ -114,12 +114,12 @@ public class PaymentNoticeEntity implements java.io.Serializable {
     }
 
     @Version
-    @Column(name = "VERSION")
-    public Integer getVersion() {
+    @Column(name = "VERSION", nullable = false)
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

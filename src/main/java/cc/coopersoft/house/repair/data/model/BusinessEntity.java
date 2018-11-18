@@ -14,7 +14,7 @@ import java.util.Set;
 public class BusinessEntity implements java.io.Serializable, BusinessInstance {
 
     private String id;
-    private Integer version;
+    private int version;
     private Source source;
     private String memo;
     private String defineName;
@@ -62,12 +62,12 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
     }
 
     @Version
-    @Column(name = "VERSION")
-    public Integer getVersion() {
+    @Column(name = "VERSION", nullable = false)
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
@@ -187,8 +187,8 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
     }
 
 
-    @Column(name = "SEARCH_KEY",length = 1024)
-    @Size(max = 1024)
+    @Column(name = "SEARCH_KEY",length = 16384)
+    @Size(max = 16384)
     public String getSearchKey() {
         return searchKey;
     }
@@ -197,8 +197,8 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
         this.searchKey = searchKey;
     }
 
-    @Column(name = "SUMMARY",length = 1024)
-    @Size(max = 1024)
+    @Lob
+    @Column(name = "SUMMARY",columnDefinition = "TEXT")
     public String getSummary() {
         return summary;
     }

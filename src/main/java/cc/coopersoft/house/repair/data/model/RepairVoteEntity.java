@@ -13,7 +13,7 @@ public class RepairVoteEntity {
     private BigDecimal acceptArea;
     private int ownerCount;
     private int acceptOwner;
-    private Integer version;
+    private int version;
     private int round;
 
     @Id
@@ -79,12 +79,12 @@ public class RepairVoteEntity {
     }
 
     @Basic
-    @Column(name = "VERSION")
-    public Integer getVersion() {
+    @Column(name = "VERSION", nullable = false)
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

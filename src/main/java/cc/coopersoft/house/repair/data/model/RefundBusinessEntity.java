@@ -29,7 +29,7 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
     private BigDecimal money;
     private String reason;
     private Type type;
-    private Integer version;
+    private int version;
     private Date operationTime;
     private PaymentType paymentType;
 
@@ -96,12 +96,12 @@ public class RefundBusinessEntity implements AccountMoneyOperation,java.io.Seria
 
 
     @Version
-    @Column(name = "VERSION")
-    public Integer getVersion() {
+    @Column(name = "VERSION", nullable = false)
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

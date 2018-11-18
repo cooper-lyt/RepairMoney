@@ -16,7 +16,7 @@ public class PaymentBusinessEntity implements java.io.Serializable{
 
     private long id;
 
-    private Integer version;
+    private int version;
     private String memo;
     private BigDecimal money;
     private BigDecimal mustMoney;
@@ -58,12 +58,12 @@ public class PaymentBusinessEntity implements java.io.Serializable{
 
 
     @Version
-    @Column(name = "VERSION")
-    public Integer getVersion() {
+    @Column(name = "VERSION", nullable = false)
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

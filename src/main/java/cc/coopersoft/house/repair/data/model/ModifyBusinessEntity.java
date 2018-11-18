@@ -10,7 +10,7 @@ public class ModifyBusinessEntity {
     //private String oldHouse;
     //private String newHouse;
     private String type;
-    private Integer version;
+    private int version;
     private String reason;
     private String memo;
     private String operOrder;
@@ -39,11 +39,11 @@ public class ModifyBusinessEntity {
 
     @Basic
     @Column(name = "VERSION")
-    public Integer getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
@@ -96,7 +96,7 @@ public class ModifyBusinessEntity {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
+
         if (reason != null ? !reason.equals(that.reason) : that.reason != null) return false;
         if (memo != null ? !memo.equals(that.memo) : that.memo != null) return false;
         if (operOrder != null ? !operOrder.equals(that.operOrder) : that.operOrder != null) return false;
@@ -109,7 +109,7 @@ public class ModifyBusinessEntity {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
+
         result = 31 * result + (reason != null ? reason.hashCode() : 0);
         result = 31 * result + (memo != null ? memo.hashCode() : 0);
         result = 31 * result + (operOrder != null ? operOrder.hashCode() : 0);

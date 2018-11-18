@@ -90,36 +90,16 @@
             <b:message/>
 
 
-            <b:inputText autocomplete="off" required="true" value="#{repairUseController.repairBusiness.applyMoney}" label="结算金额" renderLabel="true">
+            <b:inputText autocomplete="off" required="true" value="#{repairUseController.repairBusiness.applyMoney}"
+                         label="预算金额" renderLabel="true">
                 <f:convertNumber type="currency" locale="#{i18n.locale}" groupingUsed="false" currencySymbol=""/>
             </b:inputText>
             <b:message/>
 
-            <div class="form-group">
 
-                <h:outputLabel for="split_type_input" styleClass="control-label" value="分摊计算方式"/>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                    <h:selectOneMenu id="split_type_input" required="true" label="分摊方式" styleClass="selectpicker form-control"
-                                     value="#{repairUseController.repairBusiness.splitType}">
-                        <f:selectItems value="#{splitTypes}" var="_type"
-                                       itemLabel="#{enumHelper.getLabel(_type)}"
-                                       itemValue="${_type}"/>
-                    </h:selectOneMenu>
-                    </span>
-                    <h:selectOneMenu required="true" label="舍入方式" styleClass="selectpicker edit-select form-control"
-                                     value="#{repairUseController.repairBusiness.calcType}">
-                        <f:selectItems value="#{splitCalcType}" var="_type"
-                                       itemLabel="#{enumHelper.getLabel(_type)}"
-                                       itemValue="${_type}"/>
-                    </h:selectOneMenu>
-                </div>
-            </div>
-
-            <b:message/>
             <b:inputTextarea value="#{repairUseController.repairBusiness.plan}" label="维修方案" renderLabel="true"
                              maxlength="512" rows="3" />
-
+            <b:message/>
 
         </b:column>
     </b:row>

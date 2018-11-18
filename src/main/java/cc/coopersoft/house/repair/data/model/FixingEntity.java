@@ -18,7 +18,7 @@ public class FixingEntity {
     private String inType;
     private String inCode;
     private String memo;
-    private Integer version;
+    private int version;
     private String status;
 
     @Id
@@ -142,12 +142,12 @@ public class FixingEntity {
     }
 
     @Basic
-    @Column(name = "VERSION")
-    public Integer getVersion() {
+    @Column(name = "VERSION", nullable = false)
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
@@ -180,7 +180,7 @@ public class FixingEntity {
         if (inType != null ? !inType.equals(that.inType) : that.inType != null) return false;
         if (inCode != null ? !inCode.equals(that.inCode) : that.inCode != null) return false;
         if (memo != null ? !memo.equals(that.memo) : that.memo != null) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
+
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
         return true;
@@ -200,7 +200,7 @@ public class FixingEntity {
         result = 31 * result + (inType != null ? inType.hashCode() : 0);
         result = 31 * result + (inCode != null ? inCode.hashCode() : 0);
         result = 31 * result + (memo != null ? memo.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
+
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }

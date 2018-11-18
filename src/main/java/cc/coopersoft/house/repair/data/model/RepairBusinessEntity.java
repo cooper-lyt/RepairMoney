@@ -39,7 +39,7 @@ public class RepairBusinessEntity {
     private BigDecimal superviseMoney;
     private BigDecimal saveMoney;
     private boolean urgent;
-    private Integer version;
+    private int version;
     private SplitType splitType;
     private RoundingMode calcType;
     private boolean budget;
@@ -230,12 +230,12 @@ public class RepairBusinessEntity {
     }
 
     @Version
-    @Column(name = "VERSION")
-    public Integer getVersion() {
+    @Column(name = "VERSION",nullable = false)
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

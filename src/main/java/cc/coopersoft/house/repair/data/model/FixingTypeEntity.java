@@ -9,7 +9,7 @@ public class FixingTypeEntity {
     private String name;
     private String memo;
     private String parent;
-    private Integer version;
+    private int version;
 
     @Id
     @Column(name = "ID")
@@ -53,11 +53,11 @@ public class FixingTypeEntity {
 
     @Basic
     @Column(name = "VERSION")
-    public Integer getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
@@ -72,7 +72,7 @@ public class FixingTypeEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (memo != null ? !memo.equals(that.memo) : that.memo != null) return false;
         if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
+
 
         return true;
     }
@@ -83,7 +83,6 @@ public class FixingTypeEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (memo != null ? memo.hashCode() : 0);
         result = 31 * result + (parent != null ? parent.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
         return result;
     }
 }

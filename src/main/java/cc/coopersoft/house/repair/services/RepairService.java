@@ -10,6 +10,7 @@ import cc.coopersoft.house.repair.data.model.RepairJoinHouseEntity;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,21 +46,27 @@ public class RepairService {
 
         for(RepairJoinHouseEntity house: business.getRepairJoinHouses()){
 
-            BigDecimal scale;
+            //BigDecimal scale;
+            double scale;
             if (RepairBusinessEntity.SplitType.AREA.equals(business.getSplitType())) {
-                scale = house.getHouseEntity().getHouseArea().divide(total,2, business.getCalcType());
+                scale = house.getHouseEntity().getHouseArea().doubleValue() / total.doubleValue();
+
             }else if (RepairBusinessEntity.SplitType.MONEY.equals(business.getSplitType())){
-                scale = house.getMustMoney().divide(total,2, business.getCalcType());
+
+                scale = house.getMustMoney().doubleValue() / total.doubleValue();
+
             }else{
                 throw new IllegalArgumentException("unknown split type : " + business.getSplitType());
             }
 
             BigDecimal money;
             if (business.isBudget()){
-                house.setMoney(business.getBudgetMoney().multiply(scale));
+                house.setMoney(new BigDecimal(business.getBudgetMoney().doubleValue() * scale));
+                house.setMoney(house.getMoney().setScale(2,business.getCalcType()));
                 money = house.getMoney();
             }else{
-                house.setApplyMoney(business.getApplyMoney().multiply(scale));
+                house.setApplyMoney(new BigDecimal(business.getApplyMoney().doubleValue() * scale));
+                house.setApplyMoney(house.getApplyMoney().setScale(2,business.getCalcType()));
                 money = house.getApplyMoney();
             }
 

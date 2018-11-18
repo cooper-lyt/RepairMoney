@@ -2,6 +2,16 @@ body {
     font-family: "microsoft yahei", 宋体, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.ui-widget{
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button{
+    font-family: inherit;
+    font-size: 14px;
+}
+
 label {
     font-size: 13px;
     font-weight: bold;
