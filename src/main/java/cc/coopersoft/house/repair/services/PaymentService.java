@@ -66,7 +66,7 @@ public class PaymentService implements java.io.Serializable {
         paymentBusinessEntity.setAccountDetails(accountDetailsEntity);
         if (houseAccountEntity != null){
             accountDetailsEntity.setHouseAccount(houseAccountEntity);
-            houseAccountEntity.getAccountDetails().add(accountDetailsEntity);
+            //houseAccountEntity.getAccountDetails().add(accountDetailsEntity);
         }
     }
 
@@ -77,8 +77,8 @@ public class PaymentService implements java.io.Serializable {
         business.getPayment().setMustMoney(paymentNotice.getMustMoney());
         business.getPayment().setMoney(paymentNotice.getMoney());
         business.getPayment().setPaymentType(systemParamService.getEnumParam(PaymentType.class,"wxzj.preferredPaymentType"));
-        int itemCount = paymentNotice.getNoticeItems().size();
-        int i = 0;
+        //int itemCount = paymentNotice.getNoticeItems().size();
+        //int i = 0;
         for(PaymentNoticeItemEntity item: paymentNotice.getNoticeItems()){
             if(DataHelper.empty(business.getPayment().getSectionCode())){
                 business.getPayment().setSectionCode(item.getHouse().getSectionCode());

@@ -35,6 +35,7 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
     private Set<AccountDetailsEntity> accountDetails = new HashSet<>(0);
     private Set<BankAccountDetailsEntity> bankAccountDetails = new HashSet<>(0);
     private Set<PutAccountBookEntity> putAccountBooks = new HashSet<>(0);
+    private Set<BusinessLogEntity> logs = new HashSet<>(0);
 
     public BusinessEntity() {
     }
@@ -232,6 +233,15 @@ public class BusinessEntity implements java.io.Serializable, BusinessInstance {
 
     public void setPutAccountBooks(Set<PutAccountBookEntity> putAccountBooks) {
         this.putAccountBooks = putAccountBooks;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
+    public Set<BusinessLogEntity> getLogs() {
+        return logs;
+    }
+
+    public void setLogs(Set<BusinessLogEntity> logs) {
+        this.logs = logs;
     }
 
     @OneToOne(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)

@@ -6,10 +6,10 @@ import java.util.EnumSet;
 public interface BusinessOperationLog {
 
     public enum Type{
-        CREATE,CHECK_ACCEPT,CHECK_BACK,NEXT,BACK,TERMINATION,SUSPEND,CONTINUE,ASSIGN;
+        CREATE,CHECK_ACCEPT,CHECK_BACK,NEXT,BACK,ABORT,DELETE,SUSPEND,CONTINUE,ASSIGN;
 
         public boolean isManager(){
-            return EnumSet.of(TERMINATION,SUSPEND,CONTINUE,ASSIGN).contains(this);
+            return EnumSet.of(ABORT,DELETE,SUSPEND,CONTINUE,ASSIGN).contains(this);
         }
 
     }
@@ -28,9 +28,9 @@ public interface BusinessOperationLog {
     void setEmpName(String empName);
 
 
-    Date getOperTime();
+    Date getOperationTime();
 
-    void setOperTime(Date operTime);
+    void setOperationTime(Date time);
 
 
     String getComments();

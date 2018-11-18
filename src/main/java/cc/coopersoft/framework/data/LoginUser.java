@@ -1,5 +1,8 @@
 package cc.coopersoft.framework.data;
 
+import javax.enterprise.inject.Alternative;
+
+@Alternative
 public class LoginUser implements java.io.Serializable {
 
 

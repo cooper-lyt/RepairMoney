@@ -12,7 +12,7 @@
 
         <class>cc.coopersoft.house.repair.data.model.PaymentEntity</class>
         <class>cc.coopersoft.house.repair.data.model.PaymentNoticeEntity</class>
-        <class>cc.coopersoft.house.repair.data.model.BusinessEmpEntity</class>
+        <class>cc.coopersoft.house.repair.data.model.BusinessLogEntity</class>
         <class>cc.coopersoft.house.repair.data.model.BankAccountEntity</class>
         <class>cc.coopersoft.house.repair.data.model.BusinessEntity</class>
         <class>cc.coopersoft.house.repair.data.model.HouseEntity</class>

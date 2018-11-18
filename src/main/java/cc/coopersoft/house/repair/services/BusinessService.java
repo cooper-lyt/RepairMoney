@@ -8,6 +8,7 @@ import cc.coopersoft.framework.data.KeyAndCount;
 import cc.coopersoft.framework.data.model.BusinessDefineEntity;
 import cc.coopersoft.framework.services.BusinessDefineService;
 import cc.coopersoft.framework.services.BusinessInstanceService;
+import cc.coopersoft.house.repair.data.model.BusinessLogEntity;
 import cc.coopersoft.house.repair.data.model.BusinessEntity;
 import cc.coopersoft.house.repair.data.repository.BusinessRepository;
 
@@ -30,12 +31,15 @@ public class BusinessService implements BusinessInstanceService {
 
     @Override
     public void putOperationLog(BusinessInstance business, BusinessOperationLog log) {
-
+        BusinessEntity businessEntity = (BusinessEntity) business;
+        BusinessLogEntity logEntity = (BusinessLogEntity) log;
+        logEntity.setBusiness(businessEntity);
+        businessEntity.getLogs().add(logEntity);
     }
 
     @Override
     public BusinessOperationLog createOperationLog() {
-        return null;
+        return new BusinessLogEntity();
     }
 
     @Override

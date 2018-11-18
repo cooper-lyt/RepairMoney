@@ -46,6 +46,9 @@ public class BusinessOperationService implements java.io.Serializable {
     @Inject
     private SystemParamService systemParamService;
 
+    @Inject
+    private LoginUser loginUser;
+
     //private String defineId;
 
     private String taskName;
@@ -316,6 +319,7 @@ public class BusinessOperationService implements java.io.Serializable {
         if (result.isPass()){
             doActionComponent(getActions(TaskActionEntity.Type.ACTION,TaskActionEntity.Position.ABORT),true);
             businessInstance.setStatus(BusinessInstance.BusinessStatus.ABORT);
+            putLog(BusinessOperationLog.Type.ABORT);
             businessInstanceService.saveEntity(businessInstance);
         }
         return result;
@@ -328,6 +332,7 @@ public class BusinessOperationService implements java.io.Serializable {
             doActionComponent(getActions(TaskActionEntity.Type.ACTION,TaskActionEntity.Position.REVOKE),true);
             businessInstance.setStatus(BusinessInstance.BusinessStatus.DELETED);
             businessInstance.setReg(false);
+            putLog(BusinessOperationLog.Type.DELETE);
             businessInstanceService.saveEntity(businessInstance);
         }
         return result;
@@ -344,6 +349,17 @@ public class BusinessOperationService implements java.io.Serializable {
         return result;
     }
 
+    private BusinessOperationLog putLog(BusinessOperationLog.Type type){
+        BusinessOperationLog log = businessInstanceService.createOperationLog();
+        log.setOperationTime(new Date());
+        log.setEmpCode(loginUser.getUseId());
+        log.setEmpName(loginUser.getName());
+        log.setTaskName(taskName);
+        log.setType(type);
+        businessInstanceService.putOperationLog(businessInstance,log);
+        return log;
+    }
+
     @Transactional
     public SubscribeValidResult taskComplete() throws SubscribeFailException {
         SubscribeValidResult result = doValidationsComponent(getActions(TaskActionEntity.Type.VALID,TaskActionEntity.Position.AFTER));
@@ -354,7 +370,17 @@ public class BusinessOperationService implements java.io.Serializable {
             if (DataHelper.empty(businessDefine.getWfName())) {
                 businessInstance.setStatus(BusinessInstance.BusinessStatus.COMPLETE);
             }
+
+
+            if (isPersistent()) {
+                //TODO IS CHECK pass, check fail , back , task continue;
+            }else {
+                putLog(BusinessOperationLog.Type.CREATE);
+
+            }
             businessInstanceService.saveEntity(businessInstance);
+
+
 
             if (!isPersistent()) {
                 persistentEditor();

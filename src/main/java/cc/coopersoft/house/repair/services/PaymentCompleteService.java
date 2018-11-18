@@ -45,7 +45,7 @@ public class PaymentCompleteService  implements TaskActionComponent<BusinessEnti
 
             account.setBalance(pb.getAccountDetails().getBalance());
             account.setHouse(pb.getAccountDetails().getHouse());
-            account.getAccountDetails().add(pb.getAccountDetails());
+            //account.getAccountDetails().add(pb.getAccountDetails());
             pb.getAccountDetails().setHouseAccount(account);
 
         }

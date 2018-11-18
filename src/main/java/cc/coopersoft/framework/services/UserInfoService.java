@@ -4,6 +4,7 @@ import cc.coopersoft.framework.data.LoginUser;
 import org.apache.deltaspike.core.api.common.DeltaSpike;
 
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;

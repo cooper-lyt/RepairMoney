@@ -8,15 +8,15 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
-@Table(name = "BUSINESS_EMP", schema = "WXZJ")
-public class BusinessEmpEntity implements java.io.Serializable, BusinessOperationLog {
+@Table(name = "BUSINESS_LOG")
+public class BusinessLogEntity implements java.io.Serializable, BusinessOperationLog {
 
 
     private long id;
     private Type type;
     private String empCode;
     private String empName;
-    private Date operTime;
+    private Date operationTime;
     private String comments;
     private String taskName;
     private String taskDescription;
@@ -24,10 +24,10 @@ public class BusinessEmpEntity implements java.io.Serializable, BusinessOperatio
 
     private BusinessEntity business;
 
-    public BusinessEmpEntity() {
+    public BusinessLogEntity() {
     }
 
-    public BusinessEmpEntity(BusinessEntity business) {
+    public BusinessLogEntity(BusinessEntity business) {
         this.business = business;
     }
 
@@ -84,16 +84,14 @@ public class BusinessEmpEntity implements java.io.Serializable, BusinessOperatio
         this.empName = empName;
     }
 
-    @Override
     @Basic
     @Column(name = "OPER_TIME",nullable = false)
-    public Date getOperTime() {
-        return operTime;
+    public Date getOperationTime() {
+        return operationTime;
     }
 
-    @Override
-    public void setOperTime(Date operTime) {
-        this.operTime = operTime;
+    public void setOperationTime(Date operTime) {
+        this.operationTime = operTime;
     }
 
     @Override
@@ -162,7 +160,7 @@ public class BusinessEmpEntity implements java.io.Serializable, BusinessOperatio
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BusinessEmpEntity that = (BusinessEmpEntity) o;
+        BusinessLogEntity that = (BusinessLogEntity) o;
 
         if (that.id != id) return false;
 
