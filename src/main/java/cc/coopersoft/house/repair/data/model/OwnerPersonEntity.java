@@ -61,8 +61,8 @@ public class OwnerPersonEntity {
     }
 
     @Basic
-    @Column(name = "NAME", length = 64, nullable = false)
-    @Size(max = 64)
+    @Column(name = "NAME", length = 128, nullable = false)
+    @Size(max = 128)
     @NotNull
     public String getName() {
         return name;

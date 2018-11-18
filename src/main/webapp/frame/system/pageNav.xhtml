@@ -16,10 +16,10 @@
         <nav>
             <ul class="pagination">
                 <li class="#{pageResultData.havePrevious ? '' : 'disabled'}">
-                    <h:outputLink pt:aria-label="上一页"  >
+                    <h:link pt:aria-label="上一页" includeViewParams="true" >
                         <span aria-hidden="true">#{messages.left}#{messages.left}</span>
-                        <f:param name="firstResult" value="#{pageResultData.previousFirstResult}"/>
-                    </h:outputLink>
+                        <f:param name="offset" value="#{pageResultData.previousFirstResult}"/>
+                    </h:link>
                 </li>
 
                 <c:forEach items="#{pageResultData.pages}" var="_page">
@@ -27,18 +27,17 @@
                         <h:link includeViewParams="true">
 
                             #{_page.title} <span class="sr-only">(current)</span>
-                            <o:param name="firstResult" value="#{_page.firstResult}"/>
+                            <f:param name="offset" value="#{_page.firstResult}"/>
                         </h:link>
                     </li>
 
                 </c:forEach>
 
                 <li class="#{pageResultData.haveNext ? '' : 'disabled'}">
-                    <h:outputLink pt:aria-label="下一页">
-
-                        <f:param name="firstResult" value="#{pageResultData.nextFirstResult}"/>
+                    <h:link includeViewParams="true" pt:aria-label="下一页">
+                        <f:param name="offset" value="#{pageResultData.nextFirstResult}"/>
                         <span aria-hidden="true">#{messages.right}#{messages.right}</span>
-                    </h:outputLink>
+                    </h:link>
 
                 </li>
             </ul>

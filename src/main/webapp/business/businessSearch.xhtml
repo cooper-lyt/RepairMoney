@@ -17,7 +17,7 @@
             <b:inputText autocomplete="false" placeholder="请输入业务关键字" value="#{businessListController.condition}"/>
         </div>
         <div class="flex-table-item">
-            <b:commandButton value="搜  索" action="/business/businessSearch?faces-redirect=true&amp;includeViewParams=true">
+            <b:commandButton value="搜  索" action="/business/businessSearch?faces-redirect=true&amp;offset=0&amp;categoryId=null&amp;defineId=null&amp;includeViewParams=true">
                 <f:param name="offset" value="0"/>
                 <f:param name="categoryId" value="#{null}"/>
                 <f:param name="defineId" value="#{null}"/>

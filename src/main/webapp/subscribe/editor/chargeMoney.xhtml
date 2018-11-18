@@ -42,6 +42,8 @@
                     <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true"/>
                 </div>
 
+            <b:inputText required="true" label="票号" renderLabel="true" value="#{_payment.receiptNumber}"/>
+            <b:message/>
         </ui:repeat>
 
 
@@ -65,7 +67,15 @@
             </h:outputText>
         </div>
 
+        <ui:repeat value="#{paymentBusinessController.paymentItem}" var="_payment">
+            <b:inputText required="true" label="票号" renderLabel="true" value="#{_payment.receiptNumber}"/>
+            <b:message/>
+        </ui:repeat>
+
     </c:if>
+
+
+
 
 
 </ui:composition>

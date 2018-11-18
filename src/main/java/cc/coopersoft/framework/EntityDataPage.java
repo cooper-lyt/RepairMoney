@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class EntityDataPage<E> {
 
-    private static final int PAGE_MAX_COUNT = 15;
+    private static final int DEFAULT_PAGE_MAX_COUNT = 13;
 
     public static class DataPage{
 
@@ -26,6 +26,10 @@ public class EntityDataPage<E> {
             return title;
         }
 
+        private void setTitle(String title){
+            this.title = title;
+        }
+
         public int getPage() {
             return page;
         }
@@ -35,11 +39,13 @@ public class EntityDataPage<E> {
         }
     }
 
+    private int displayPageCount = DEFAULT_PAGE_MAX_COUNT;
+
     private List<E> dataList;
 
     private int page;
 
-    private List<DataPage> pages;
+    //private List<DataPage> pages;
 
     private int firstResult;
 
@@ -54,7 +60,7 @@ public class EntityDataPage<E> {
         this.firstResult = firstResult;
         this.dataCount = dataCount;
         this.pageSize = pageSize;
-        pages = new ArrayList<>();
+        //pages = new ArrayList<>();
         pageCount = dataCount/pageSize;
         if (dataCount%pageSize > 0){
             pageCount++;
@@ -64,10 +70,18 @@ public class EntityDataPage<E> {
         }else
             page = (firstResult / pageSize) + 1;
 
-        for (int i = 1; i <= pageCount ; i++){
-            pages.add(new DataPage(String.valueOf(i),i, (i - 1) * pageSize));
-        }
+//        for (int i = 1; i <= pageCount ; i++){
+//            pages.add(new DataPage(String.valueOf(i),i, (i - 1) * pageSize));
+//        }
 
+    }
+
+    public int getDisplayPageCount() {
+        return displayPageCount;
+    }
+
+    public void setDisplayPageCount(int displayPageCount) {
+        this.displayPageCount = displayPageCount;
     }
 
     public boolean isHaveNext(){
@@ -95,6 +109,31 @@ public class EntityDataPage<E> {
     }
 
     public List<DataPage> getPages() {
+        List<DataPage> pages = new ArrayList<>();
+        int p = getPage() - 1;
+        int a = getPage() + 1;
+        pages.add(new DataPage(String.valueOf(getPage()),getPage(), (getPage() - 1) * pageSize));
+        while (pages.size()<= getDisplayPageCount()){
+            if (p > 0){
+
+                pages.add(0,new DataPage(String.valueOf(p),p, (p - 1) * pageSize));
+                p--;
+            }
+            if (a <= pageCount){
+                pages.add(new DataPage(String.valueOf(a),a, (a - 1) * pageSize));
+                a++;
+            }
+        }
+
+        DataPage first = pages.get(0);
+        if ((first != null) &&  (first.getPage() != getPage()) && (first.getPage() > 1) ){
+            first.setTitle("...");
+        }
+        DataPage last = pages.get(pages.size()-1);
+        if ((last != null) && (last.getPage() != getPage()) && (last.getPage() < pageCount)){
+            last.setTitle("...");
+        }
+
         return pages;
     }
 

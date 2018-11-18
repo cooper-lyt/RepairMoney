@@ -32,6 +32,7 @@ public class PaymentBusinessSummaryGenerator extends HouseBaseSummaryGenerator i
             List<AccountDetailsEntity> accountDetails = new ArrayList<>();
             for(PaymentBusinessEntity p : payment.getPaymentBusinesses()){
                 accountDetails.add(p.getAccountDetails());
+                searchKey += " " + p.getReceiptNumber();
             }
             summary += multiHouse(accountDetails);
 
@@ -44,10 +45,12 @@ public class PaymentBusinessSummaryGenerator extends HouseBaseSummaryGenerator i
         }else if (!payment.getPaymentBusinesses().isEmpty()){
 
             PaymentBusinessEntity p = payment.getPaymentBusinesses().iterator().next();
+            searchKey += " " + p.getReceiptNumber();
             singleHouse(p.getAccountDetails());
-            summaryList.add(BusinessSummary.factorySummary(enumHelper.getLabel(p.getType()),1));
-            summaryList.add(BusinessSummary.factorySummary("应缴金额",i18n.currencyDisplay(p.getMustMoney()),3));
-            summaryList.add(BusinessSummary.factorySummary("实缴金额",i18n.currencyDisplay(p.getMoney()),3));
+            summaryList.add(BusinessSummary.factorySummary(enumHelper.getLabel(p.getType()) + "票号",p.getReceiptNumber(),3));
+            summaryList.add(BusinessSummary.factorySummary("应缴金额",i18n.currencyDisplay(p.getMustMoney()),2));
+            summaryList.add(BusinessSummary.factorySummary("实缴金额",i18n.currencyDisplay(p.getMoney()),2));
+
         }
 
 

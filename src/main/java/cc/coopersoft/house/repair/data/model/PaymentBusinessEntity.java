@@ -21,6 +21,7 @@ public class PaymentBusinessEntity implements java.io.Serializable{
     private BigDecimal money;
     private BigDecimal mustMoney;
     private String calcDetails;
+    private String receiptNumber;
     private Type type;
 
     private PaymentEntity paymentEntity;
@@ -130,6 +131,17 @@ public class PaymentBusinessEntity implements java.io.Serializable{
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    @Column(name = "RECEIPT_NUMBER", nullable = false, length = 32)
+    @NotNull
+    @Size(max = 32)
+    public String getReceiptNumber() {
+        return receiptNumber;
+    }
+
+    public void setReceiptNumber(String receiptNumber) {
+        this.receiptNumber = receiptNumber;
     }
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
