@@ -2,6 +2,7 @@ package cc.coopersoft.house.repair.data.repository;
 
 import cc.coopersoft.framework.ConditionAdapter;
 import cc.coopersoft.framework.ConditionQuery;
+import cc.coopersoft.framework.tools.DataHelper;
 import cc.coopersoft.house.repair.data.UseTypeCount;
 import cc.coopersoft.house.repair.data.model.HouseAccountEntity;
 import cc.coopersoft.house.repair.data.model.HouseEntity;
@@ -55,8 +56,15 @@ public abstract class HouseAccountRepository extends AbstractEntityRepository<Ho
 
     public List<UseTypeCount> queryByKeyGroupUseType(List<ConditionAdapter> conditions){
         ConditionQuery conditionQuery = ConditionQuery.instance(conditions,fields);
+        String where = conditionQuery.where();
+        if (DataHelper.empty(where)){
+            where = " WHERE ";
+        }else{
+            where += " AND ";
+        }
+        where += " h.useType is not null ";
         TypedQuery<UseTypeCount> query = entityManager().createQuery("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o" +
-                conditionQuery.where() + " group by h.useType",UseTypeCount.class);
+                where + "  group by h.useType",UseTypeCount.class);
 
         return conditionQuery.parameterization(query).getResultList();
     }
@@ -70,65 +78,65 @@ public abstract class HouseAccountRepository extends AbstractEntityRepository<Ho
     @Query("SELECT max(ad.operationTime) FROM AccountDetailsEntity ad where ad.houseAccount.houseCode = ?1 and ad.status <> 'DELETED'" )
     public abstract Date queryLastChangeDate(String houseCode);
 
-    @Query("SELECT DISTINCT(a) FROM HouseAccountEntity a left join fetch a.house h left join h.ownerPersons o  where o.credentialsType = 'MASTER_ID' and (o.credentialsNumber = ?1 or o.credentialsNumber = ?2) and h.useType in (?3) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
-    public abstract List<HouseAccountEntity> queryByIdCard(String number, String oldNumber, List<HouseEntity.UseType> useTypes, @FirstResult int offset, @MaxResults int count);
+    @Query("SELECT DISTINCT(a) FROM HouseAccountEntity a left join fetch a.house h left join h.ownerPersons o  where o.credentialsType = 'MASTER_ID' and (o.credentialsNumber = ?1 or o.credentialsNumber = ?2) and (h.useType in (?3) or (true = ?4)) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
+    public abstract List<HouseAccountEntity> queryByIdCard(String number, String oldNumber, List<HouseEntity.UseType> useTypes,boolean allUseType, @FirstResult int offset, @MaxResults int count);
 
-    @Query("SELECT COUNT(DISTINCT a.accountNumber) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o  where o.credentialsType = 'MASTER_ID' and (o.credentialsNumber = ?1 or o.credentialsNumber = ?2) and h.useType in (?3) ")
-    public abstract Long queryCountByIdCard(String number, String oldNumber, List<HouseEntity.UseType> useTypes);
+    @Query("SELECT COUNT(DISTINCT a.accountNumber) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o  where o.credentialsType = 'MASTER_ID' and (o.credentialsNumber = ?1 or o.credentialsNumber = ?2) and (h.useType in (?3) or (true = ?4)) ")
+    public abstract Long queryCountByIdCard(String number, String oldNumber, List<HouseEntity.UseType> useTypes,boolean allUseType);
 
-    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM  HouseAccountEntity a left join a.house h left join h.ownerPersons o  where o.credentialsType = 'MASTER_ID' and (o.credentialsNumber = ?1 or o.credentialsNumber = ?2) group by h.useType")
+    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM  HouseAccountEntity a left join a.house h left join h.ownerPersons o  where o.credentialsType = 'MASTER_ID' and (o.credentialsNumber = ?1 or o.credentialsNumber = ?2) and h.useType is not null group by h.useType")
     public abstract List<UseTypeCount> queryByIdCardGroupUseType(String number, String oldNumber);
 
 
-    @Query("SELECT DISTINCT(a) FROM HouseAccountEntity a left join fetch a.house h left join h.ownerPersons o where o.name like ?1 and h.useType in (?2) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
-    public abstract List<HouseAccountEntity> queryByOwnerName(String name, List<HouseEntity.UseType> useTypes, @FirstResult int offset, @MaxResults int count);
+    @Query("SELECT DISTINCT(a) FROM HouseAccountEntity a left join fetch a.house h left join h.ownerPersons o where o.name like ?1 and  (h.useType in (?2) or (true = ?3)) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
+    public abstract List<HouseAccountEntity> queryByOwnerName(String name, List<HouseEntity.UseType> useTypes,boolean allUseType, @FirstResult int offset, @MaxResults int count);
 
-    @Query("SELECT COUNT(DISTINCT a.accountNumber) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o where o.name like ?1 and h.useType in (?2) ")
-    public abstract Long queryCountByOwnerName(String name, List<HouseEntity.UseType> useTypes);
+    @Query("SELECT COUNT(DISTINCT a.accountNumber) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o where o.name like ?1 and  (h.useType in (?2) or (true = ?3)) ")
+    public abstract Long queryCountByOwnerName(String name, List<HouseEntity.UseType> useTypes,boolean allUseType);
 
-    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o where o.name like ?1 group by h.useType")
+    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o where o.name like ?1 and h.useType is not null group by h.useType")
     public abstract List<UseTypeCount> queryByOwnerNameGroupUseType(String name);
 
     @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
     public abstract List<HouseAccountEntity> queryByMapId(String mapNumber, boolean hasMapNumber, String blockNumber, boolean hasBlockNumber, String buildNumber, boolean hasBuildNumber, String houseOrder, boolean hasHouseOrder);
 
-    @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) and h.useType in (?9) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
-    public abstract List<HouseAccountEntity> queryByMapId(String mapNumber, boolean hasMapNumber, String blockNumber, boolean hasBlockNumber, String buildNumber, boolean hasBuildNumber, String houseOrder, boolean hasHouseOrder, List<HouseEntity.UseType> useTypes , @FirstResult int offset , @MaxResults int count);
+    @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) and (h.useType in (?9) or (true = ?10)) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
+    public abstract List<HouseAccountEntity> queryByMapId(String mapNumber, boolean hasMapNumber, String blockNumber, boolean hasBlockNumber, String buildNumber, boolean hasBuildNumber, String houseOrder, boolean hasHouseOrder, List<HouseEntity.UseType> useTypes,boolean allUseType , @FirstResult int offset , @MaxResults int count);
 
-    @Query("SELECT COUNT(a) FROM HouseAccountEntity a left join a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) and h.useType in (?9) ")
-    public abstract Long queryCountByMapId(String mapNumber, boolean hasMapNumber, String blockNumber, boolean hasBlockNumber, String buildNumber, boolean hasBuildNumber, String houseOrder, boolean hasHouseOrder, List<HouseEntity.UseType> useTypes);
+    @Query("SELECT COUNT(a) FROM HouseAccountEntity a left join a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) and (h.useType in (?9) or (true = ?10)) ")
+    public abstract Long queryCountByMapId(String mapNumber, boolean hasMapNumber, String blockNumber, boolean hasBlockNumber, String buildNumber, boolean hasBuildNumber, String houseOrder, boolean hasHouseOrder, List<HouseEntity.UseType> useTypes,boolean allUseType);
 
-    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(a.accountNumber)) FROM HouseAccountEntity a left join a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) group by h.useType")
+    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(a.accountNumber)) FROM HouseAccountEntity a left join a.house h where (h.mapNumber = ?1 or false = ?2) and (h.blockNumber = ?3 or false = ?4) and (h.buildNumber = ?5 or false = ?6) and (h.houseOrder = ?7 or false = ?8) and (h.useType is not null) group by h.useType")
     public abstract List<UseTypeCount> queryByMapIdGroupUseType(String mapNumber, boolean hasMapNumber, String blockNumber, boolean hasBlockNumber, String buildNumber, boolean hasBuildNumber, String houseOrder, boolean hasHouseOrder);
 
 
-    @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where a.houseCode = ?1 and h.useType in (?2) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
-    public abstract List<HouseAccountEntity> queryByHouseCode(String code, List<HouseEntity.UseType> useTypes, @FirstResult int offset, @MaxResults int count);
+    @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where a.houseCode = ?1 and (h.useType in (?2) or (true = ?3)) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
+    public abstract List<HouseAccountEntity> queryByHouseCode(String code, List<HouseEntity.UseType> useTypes,boolean allUseType, @FirstResult int offset, @MaxResults int count);
 
-    @Query("SELECT COUNT(a) FROM HouseAccountEntity a left join a.house h where a.houseCode = ?1 and h.useType in (?2)")
-    public abstract Long queryCountByHouseCode(String code, List<HouseEntity.UseType> useTypes);
+    @Query("SELECT COUNT(a) FROM HouseAccountEntity a left join a.house h where a.houseCode = ?1 and (h.useType in (?2) or (true = ?3))")
+    public abstract Long queryCountByHouseCode(String code, List<HouseEntity.UseType> useTypes,boolean allUseType);
 
-    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(a.accountNumber)) FROM HouseAccountEntity a left join a.house h where a.houseCode = ?1  group by h.useType")
+    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(a.accountNumber)) FROM HouseAccountEntity a left join a.house h where a.houseCode = ?1 and  (h.useType is not null) group by h.useType")
     public abstract List<UseTypeCount> queryByHouseCodeGroupUseType(String code);
 
 
-    @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where h.houseAddress like ?1 and h.useType in (?2) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
-    public abstract List<HouseAccountEntity> queryByAddress(String address, List<HouseEntity.UseType> useTypes, @FirstResult int offset, @MaxResults int count);
+    @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h where h.houseAddress like ?1 and (h.useType in (?2) or (true = ?3)) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
+    public abstract List<HouseAccountEntity> queryByAddress(String address, List<HouseEntity.UseType> useTypes,boolean allUseType, @FirstResult int offset, @MaxResults int count);
 
-    @Query("SELECT COUNT(a) FROM HouseAccountEntity a left join a.house h where h.houseAddress like ?1 and h.useType in (?2)")
-    public abstract Long queryCountByAddress(String address, List<HouseEntity.UseType> useTypes);
+    @Query("SELECT COUNT(a) FROM HouseAccountEntity a left join a.house h where h.houseAddress like ?1 and (h.useType in (?2) or (true = ?3))")
+    public abstract Long queryCountByAddress(String address, List<HouseEntity.UseType> useTypes,boolean allUseType);
 
-    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(a.accountNumber)) FROM HouseAccountEntity a left join a.house h where h.houseAddress like ?1  group by h.useType")
+    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(a.accountNumber)) FROM HouseAccountEntity a left join a.house h where h.houseAddress like ?1  and  not (h.useType is null) group by h.useType")
     public abstract List<UseTypeCount> queryByAddressGroupUseType(String address);
 
 
-    @Query("SELECT DISTINCT(a) FROM HouseAccountEntity a left join fetch a.house h left join h.ownerPersons o  where o.tel like ?1 and h.useType in (?2) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
-    public abstract List<HouseAccountEntity> queryByTel(String tel, List<HouseEntity.UseType> useTypes, @FirstResult int offset, @MaxResults int count);
+    @Query("SELECT DISTINCT(a) FROM HouseAccountEntity a left join fetch a.house h left join h.ownerPersons o  where o.tel like ?1 and (h.useType in (?2) or (true = ?3) ) order by a.createTime desc, h.dataTime desc ,  a.accountNumber")
+    public abstract List<HouseAccountEntity> queryByTel(String tel, List<HouseEntity.UseType> useTypes,boolean allUseType, @FirstResult int offset, @MaxResults int count);
 
-    @Query("SELECT COUNT(DISTINCT a.accountNumber) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o  where o.tel like ?1 and h.useType in (?2) ")
-    public abstract Long queryCountByTel(String tel, List<HouseEntity.UseType> useTypes);
+    @Query("SELECT COUNT(DISTINCT a.accountNumber) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o  where o.tel like ?1 and (h.useType in (?2) or (true = ?3))")
+    public abstract Long queryCountByTel(String tel, List<HouseEntity.UseType> useTypes, boolean allUseType);
 
-    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o  where o.tel like ?1 group by h.useType")
+    @Query("SELECT new cc.coopersoft.house.repair.data.UseTypeCount(h.useType, COUNT(DISTINCT a.accountNumber)) FROM HouseAccountEntity a left join a.house h left join h.ownerPersons o  where o.tel like ?1 and  (h.useType is not null)  group by h.useType")
     public abstract List<UseTypeCount> queryByTelGroupUseType(String tel);
 
 

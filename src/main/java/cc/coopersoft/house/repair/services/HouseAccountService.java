@@ -71,8 +71,11 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
             );
             result.useTypeCounts = houseAccountRepository.queryByKeyGroupUseType(ConditionAdapter.instance(condition,"\\s+"));
         }else{
+
             List<HouseEntity.UseType> useTypeList = useTypes;
+            boolean alluseType = false;
             if (useTypeList == null || useTypeList.isEmpty()){
+                alluseType = true;
                 useTypeList = new ArrayList<>(EnumSet.allOf(HouseEntity.UseType.class));
             }
             switch (type){
@@ -86,9 +89,9 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                         number2 = IdCardUtils.conver18CardTo15(number1);
                     }
                     result.entityDataPage = new EntityDataPage<>(
-                            houseAccountRepository.queryByIdCard(number1,number2,useTypeList,offset,count),
+                            houseAccountRepository.queryByIdCard(number1,number2,useTypeList,alluseType,offset,count),
                             offset,
-                            houseAccountRepository.queryCountByIdCard(number1,number2,useTypeList),
+                            houseAccountRepository.queryCountByIdCard(number1,number2,useTypeList,alluseType),
                             count
                     );
                     result.useTypeCounts = houseAccountRepository.queryByIdCardGroupUseType(number1,number2);
@@ -96,9 +99,9 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                 case PERSON_NAME:
                     String personName = ConditionAdapter.instance(condition).getContains();
                     result.entityDataPage = new EntityDataPage<>(
-                            houseAccountRepository.queryByOwnerName(personName,useTypeList,offset,count),
+                            houseAccountRepository.queryByOwnerName(personName,useTypeList,alluseType,offset,count),
                             offset,
-                            houseAccountRepository.queryCountByOwnerName(personName,useTypeList),
+                            houseAccountRepository.queryCountByOwnerName(personName,useTypeList,alluseType),
                             count
                     );
                     result.useTypeCounts = houseAccountRepository.queryByOwnerNameGroupUseType(personName);
@@ -111,12 +114,12 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                                     mapId.getBlock(),!mapId.isEmptyBlock(),
                                     mapId.getBuild(),!mapId.isEmptyBuild(),
                                     mapId.getHouse(),!mapId.isEmptyHouse()
-                                    ,useTypeList,offset,count),
+                                    ,useTypeList,alluseType,offset,count),
                             offset,
                             houseAccountRepository.queryCountByMapId(mapId.getMap(),!mapId.isEmptyMap(),
                                     mapId.getBlock(),!mapId.isEmptyBlock(),
                                     mapId.getBuild(),!mapId.isEmptyBuild(),
-                                    mapId.getHouse(),!mapId.isEmptyHouse(),useTypeList),
+                                    mapId.getHouse(),!mapId.isEmptyHouse(),useTypeList,alluseType),
                             count
                     );
                     result.useTypeCounts = houseAccountRepository.queryByMapIdGroupUseType(mapId.getMap(),!mapId.isEmptyMap(),
@@ -126,9 +129,9 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                     break;
                 case HOUSE_CODE:
                     result.entityDataPage = new EntityDataPage<>(
-                            houseAccountRepository.queryByHouseCode(condition.trim(),useTypeList,offset,count),
+                            houseAccountRepository.queryByHouseCode(condition.trim(),useTypeList,alluseType,offset,count),
                             offset,
-                            houseAccountRepository.queryCountByHouseCode(condition.trim(),useTypeList),
+                            houseAccountRepository.queryCountByHouseCode(condition.trim(),useTypeList,alluseType),
                             count
                     );
                     result.useTypeCounts = houseAccountRepository.queryByHouseCodeGroupUseType(condition.trim());
@@ -136,9 +139,9 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                 case HOUSE_ADDRESS:
                     String address = ConditionAdapter.instance(condition).getContains();
                     result.entityDataPage = new EntityDataPage<>(
-                            houseAccountRepository.queryByAddress(address,useTypeList,offset,count),
+                            houseAccountRepository.queryByAddress(address,useTypeList,alluseType,offset,count),
                             offset,
-                            houseAccountRepository.queryCountByAddress(address,useTypeList),
+                            houseAccountRepository.queryCountByAddress(address,useTypeList,alluseType),
                             count
                     );
                     result.useTypeCounts = houseAccountRepository.queryByAddressGroupUseType(address);
@@ -146,9 +149,9 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
                 case TEL:
                     String tel = ConditionAdapter.instance(condition).getEndWith();
                     result.entityDataPage = new EntityDataPage<>(
-                            houseAccountRepository.queryByTel(tel,useTypeList,offset,count),
+                            houseAccountRepository.queryByTel(tel,useTypeList,alluseType,offset,count),
                             offset,
-                            houseAccountRepository.queryCountByTel(tel,useTypeList),
+                            houseAccountRepository.queryCountByTel(tel,useTypeList,alluseType),
                             count
                     );
                     result.useTypeCounts = houseAccountRepository.queryByTelGroupUseType(tel);

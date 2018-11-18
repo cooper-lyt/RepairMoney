@@ -16,10 +16,12 @@
                   <h:form>
                   <b:panel look="primary" title="住宅专项维修资金">
                         <b:listLinks>
+                              <!--
                               <b:navLink header="基础数据" />
                               <b:navLink href="#" value="房屋数据管理"
                                          icon="globe" iconAlign="right"/>
                               <b:navLink></b:navLink>
+                              -->
 
                               <b:navLink header="资金交存"/>
                               <b:navLink outcome="/collect/payment.xhtml"  value="交款" icon="link">
@@ -27,11 +29,13 @@
                               </b:navLink>
                               <b:navLink outcome="/collect/refund.xhtml" value="退款" icon="link"></b:navLink>
 
+
                               <b:navLink></b:navLink>
                               <b:navLink header="资金使用"/>
+                              <!--
                               <b:navLink value="使用申请" outcome="/collect/collect.xhtml"
                                          icon="tag" iconAlign="right"/>
-
+                              -->
 
                               <b:navCommandLink value="使用录入" icon="tag" action="#{businessOperationController.createBegin}">
                                     <f:param name="businessDefineId" value="BU"/>
@@ -44,11 +48,15 @@
                                          icon="tag" iconAlign="right"/>
                               <b:navLink></b:navLink>
 
+                              <!--
                               <b:navLink header="资金核算"/>
                               <b:navLink value="过账" outcome="/collect/collect.xhtml"
                                          icon="tag" iconAlign="right"/>
-                              <b:navLink></b:navLink>
 
+                              <b:navLink></b:navLink>
+                              -->
+
+                              <!--
                               <b:navLink header="统计分析"/>
                               <b:navLink value="综合统计" outcome="/collect/collect.xhtml"
                                          icon="tag" iconAlign="right"/>
@@ -59,6 +67,7 @@
                                          icon="tag" iconAlign="right"/>
                               <b:navLink></b:navLink>
 
+                              -->
                               <!-- 公共服务 -->
 
 

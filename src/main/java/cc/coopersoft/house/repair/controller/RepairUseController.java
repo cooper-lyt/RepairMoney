@@ -104,4 +104,8 @@ public class RepairUseController implements java.io.Serializable{
         repairService.splitRepairMoney(getRepairBusiness());
     }
 
+    public void splitMoney(){
+        repairService.splitRepairMoney(getRepairBusiness());
+    }
+
 }

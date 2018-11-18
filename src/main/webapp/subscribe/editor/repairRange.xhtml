@@ -19,6 +19,29 @@
             <div class="form-group">
                 <div class="input-group">
 
+                    <div class="form-group">
+
+                        <h:outputLabel for="split_type_input" styleClass="control-label" value="分摊计算方式"/>
+                        <div class="input-group">
+                    <span class="input-group-btn">
+                    <h:selectOneMenu id="split_type_input" required="true" label="分摊方式" styleClass="selectpicker form-control"
+                                     value="#{repairUseController.repairBusiness.splitType}">
+                        <f:selectItems value="#{splitTypes}" var="_type"
+                                       itemLabel="#{enumHelper.getLabel(_type)}"
+                                       itemValue="${_type}"/>
+                        <f:ajax render="join_list" execute="@this" event="change" listener="#{repairUseController.splitMoney}"  />
+                    </h:selectOneMenu>
+                    </span>
+                            <h:selectOneMenu required="true" label="舍入方式" styleClass="selectpicker edit-select form-control"
+                                             value="#{repairUseController.repairBusiness.calcType}">
+                                <f:selectItems value="#{splitCalcType}" var="_type"
+                                               itemLabel="#{enumHelper.getLabel(_type)}"
+                                               itemValue="${_type}"/>
+                                <f:ajax render="join_list" execute="@this" listener="#{repairUseController.splitMoney}"  event="change" />
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+
                     <h:outputText styleClass="input-group-addon search-mbbh-input" value="图"/>
                     <b:inputText label="图号" placeholder="图号" renderLabel="false"
                                  required="true" autocomplete="off" styleClass="form-control search-mbbh-input" value="#{repairUseController.houseMapId.map}"/>
