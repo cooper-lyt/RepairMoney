@@ -312,6 +312,7 @@ public class BusinessOperationController  implements java.io.Serializable {
             SubscribeValidResult result = businessOperationService.taskComplete();
             sendMessage(result);
             if (result.isPass()){
+
                 endConversation();
                 return Business.Completed.class;
             }else{

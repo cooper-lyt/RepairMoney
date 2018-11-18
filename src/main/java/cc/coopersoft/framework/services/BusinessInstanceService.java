@@ -13,6 +13,7 @@ public interface BusinessInstanceService extends EntityService<BusinessInstance,
 
     BusinessOperationLog createOperationLog();
 
+
     EntityDataPage<BusinessInstance> search(String condition, List<String> defineIds, int offset , int count);
 
     List<KeyAndCount> searchDefineCount(String condition);

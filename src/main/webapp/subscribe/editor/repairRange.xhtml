@@ -75,6 +75,30 @@
     <h:form id="join_list">
     <b:row style="margin-bottom: -20px">
         <b:column span="12">
+            <div class="input-block description-note" style="margin-top: -10px">
+
+            <span class="right field-block">
+                <label>分摊金额</label>
+                <h:outputText value="#{repairUseController.totalMoney}">
+                    <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                </h:outputText>
+            </span>
+                <span class="right">
+                <label>预算金额</label>
+                <h:outputText value="#{repairUseController.repairBusiness.applyMoney}">
+                    <f:convertNumber type="currency" locale="#{i18n.locale}"/>
+                </h:outputText>
+            </span>
+
+                <span class="field-block">
+                <label>户数</label>
+                <h:outputText value="#{repairUseController.joinCount}">
+                    <f:convertNumber groupingUsed="true" pattern="#0"/>
+                </h:outputText>
+            </span>
+
+            </div>
+            <div style="clear:both;"/>
         <ul class="repair-house-list member-list">
             <c:forEach items="#{repairUseController.joinHouseAccount}" var="_item">
                 <li class="list-item">
@@ -118,24 +142,6 @@
         </ul>
         </b:column>
     </b:row>
-        <hr/>
-        <div class="input-block description-note" style="margin-top: -10px">
-
-        <span class="right field-block">
-            <label>分摊金额</label>
-            <h:outputText value="#{repairUseController.totalMoney}">
-                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
-            </h:outputText>
-        </span>
-            <span class="right">
-            <label>预算金额</label>
-            <h:outputText value="#{repairUseController.repairBusiness.applyMoney}">
-                <f:convertNumber type="currency" locale="#{i18n.locale}"/>
-            </h:outputText>
-        </span>
-
-        </div>
-        <div style="clear:both;"/>
 
     </h:form>
 

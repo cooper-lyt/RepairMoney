@@ -55,6 +55,10 @@ public class RepairUseController implements java.io.Serializable{
         return joinHouses;
     }
 
+    public int getJoinCount(){
+        return getJoinHouseAccount().size();
+    }
+
     public BigDecimal getTotalMoney(){
         BigDecimal result = BigDecimal.ZERO;
         for(RepairJoinHouseEntity house: getJoinHouseAccount()){
