@@ -386,12 +386,7 @@ public class HouseEntity {
     @Transient
     public List<OwnerPersonEntity> getOwnerPersonList(){
         List<OwnerPersonEntity> result = new ArrayList<OwnerPersonEntity>(getOwnerPersons());
-        result.sort(new Comparator<OwnerPersonEntity>() {
-            @Override
-            public int compare(OwnerPersonEntity o1, OwnerPersonEntity o2) {
-                return Integer.valueOf(o1.getPri()).compareTo(o2.getPri());
-            }
-        });
+        result.sort((o1, o2) -> Integer.valueOf(o1.getPri()).compareTo(o2.getPri()));
         return result;
     }
 

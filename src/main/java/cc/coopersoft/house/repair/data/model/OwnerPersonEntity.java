@@ -112,6 +112,9 @@ public class OwnerPersonEntity {
         OwnerPersonEntity that = (OwnerPersonEntity) o;
 
         if (that.ownerId != ownerId) return false;
+        if (credentialsType != null ? !credentialsType.equals(that.credentialsType) : that.credentialsType != null) return false;
+        if (credentialsNumber != null ? !credentialsNumber.equals(that.credentialsNumber) : that.credentialsNumber != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
 
         return true;
@@ -120,6 +123,9 @@ public class OwnerPersonEntity {
     @Override
     public int hashCode() {
         int result = Long.valueOf(ownerId).hashCode();
+        result = 31 * result + (credentialsType != null ? credentialsType.hashCode() : 0);
+        result = 31 * result + (credentialsNumber != null ? credentialsNumber.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
 
         return result;
     }
