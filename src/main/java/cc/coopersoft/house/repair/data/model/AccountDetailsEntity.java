@@ -15,7 +15,7 @@ public class AccountDetailsEntity implements java.io.Serializable{
     public enum Status{
         RUNNING, // 具体情况参见BusinessStatus
         REG, //已生效
-        USEING, //正在使用此业务做其它业务
+        USING, //正在使用此业务做其它业务
         CANCEL, // 此业务已经不在生效了
         DELETED // 此业务逻辑上相当于不存在了
     }

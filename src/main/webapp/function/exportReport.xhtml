@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/pageTemplate.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <b:row styleClass="page-form">
+    <b:column offsetLg="2" offsetMd="2" offsetSm="1" offsetXs="0" colLg="8" colMd="8" colSm="10" colXs="12">
+
+        <b:row>
+
+            <b:column span="12">
+                <div class="subhead">
+                    <h2 class="subhead-heading">报表导出</h2>
+                    <p class="subhead-description">
+                        选择要导出的报表, 将会导出MicroSoft Excel格式的报表.
+                    </p>
+                </div>
+            </b:column>
+            <b:column span="12">
+                <b:messages globalOnly="true" styleClass="top-messages"/>
+            </b:column>
+        </b:row>
+
+
+        <b:row>
+            <b:panel span="12">
+                <f:facet name="heading">
+                    <i class="glyphicon glyphicon-equalizer" style="padding-right:20px" />
+                    <h:outputText value="维修资金收缴日报表" />
+                </f:facet>
+                <h:form>
+
+
+                <b:dateTimePicker format="YYYY-MM-DD" placeholder="日期" span="10"
+                                  required="true" showDate="true" useCurrent="true" allowInputToggle="true" iconPosition="left"
+                                  value="#{paymentReportController.searchDate}" label="维修资金收缴日报表" renderLabel="false">
+
+                </b:dateTimePicker>
+                    <b:message/>
+
+                    <b:commandButton  look="success" action="#{paymentReportController.paymentDayReport}" span="2" value="导出"/>
+
+                </h:form>
+
+            </b:panel>
+        </b:row>
+    </b:column>
+
+
+
+    </b:row>
+
+
+
+    <h:outputScript library="github" name="locale/moment-with-zh.js"  />
+
+</ui:composition>

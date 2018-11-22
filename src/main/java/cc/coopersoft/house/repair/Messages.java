@@ -32,4 +32,7 @@ public interface Messages {
 
     @MessageTemplate("{account_not_found")
     String accountNotFound();
+
+    @MessageTemplate("{report_export_error}")
+    String reportError();
 }
