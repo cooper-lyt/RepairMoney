@@ -104,7 +104,7 @@ public class PaymentService implements java.io.Serializable {
             paymentBusinessEntity.setAccountDetails(accountDetailsEntity);
             if (houseAccountEntity != null){
                 accountDetailsEntity.setHouseAccount(houseAccountEntity);
-                houseAccountEntity.getAccountDetails().add(accountDetailsEntity);
+                //houseAccountEntity.getAccountDetails().add(accountDetailsEntity);
             }
 
         }

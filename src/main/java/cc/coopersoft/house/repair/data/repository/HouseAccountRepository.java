@@ -72,6 +72,9 @@ public abstract class HouseAccountRepository extends AbstractEntityRepository<Ho
 
     public abstract HouseAccountEntity findOptionalByHouseCode(String code);
 
+    @Query("SELECT a FROM HouseAccountEntity a left join fetch a.house h  where h.mapNumber = ?1 and h.blockNumber = ?2 and h.buildNumber =?3 and a.status <> 'DESTROY'" )
+    public abstract List<HouseAccountEntity> queryHouseAccountList(String mapNumber,String blockNumber,String buildNumber);
+
     @Query("SELECT max(ad.operationTime) FROM AccountDetailsEntity ad where ad.houseAccount.houseCode in (?1) and ad.status <> 'DELETED'" )
     public abstract Date queryLastChangeDate(List<String> houseCodes);
 

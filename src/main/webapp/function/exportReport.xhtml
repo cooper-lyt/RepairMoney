@@ -6,7 +6,7 @@
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:o="http://omnifaces.org/ui"
-                xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
@@ -51,6 +51,44 @@
 
             </b:panel>
         </b:row>
+
+        <b:row>
+            <b:panel span="12">
+                <f:facet name="heading">
+                    <i class="glyphicon glyphicon-equalizer" style="padding-right:20px" />
+                    <h:outputText value="账户列表" />
+                </f:facet>
+                <h:form>
+
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                图
+                            </span>
+                            <h:inputText  styleClass="form-control" label="图号" value="#{accountListReportController.mapNumber}" pt:placeholder="图号" required="true"/>
+                            <span class="input-group-addon">
+                                丘
+                            </span>
+                            <h:inputText styleClass="form-control" label="丘号" value="#{accountListReportController.blockNumber}" pt:placeholder="丘号" required="true"/>
+                            <span class="input-group-addon">
+                                幢
+                            </span>
+                            <h:inputText styleClass="form-control" label="幢号" value="#{accountListReportController.buildNumber}" pt:placeholder="幢号" required="true"/>
+
+                            <span class="input-group-btn">
+                                    <h:commandButton  styleClass="btn btn-success" action="#{accountListReportController.reportHouseAccount}" value="导出"/>
+                            </span>
+                        </div>
+                    </div>
+
+                    <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true" id="leftmessages"/>
+                </h:form>
+
+            </b:panel>
+        </b:row>
+
+
     </b:column>
 
 

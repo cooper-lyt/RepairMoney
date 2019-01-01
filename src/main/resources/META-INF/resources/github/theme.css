@@ -27,7 +27,7 @@ body.intent-mouse [role=button]:focus, body.intent-mouse button:focus,body.inten
     outline: none;
 }
 
-.fa, .fab, .fal, .far, .fas {
+.fa, .fab, .fal, .far, .fas ,.glyphicon {
     line-height: inherit !important;
 }
 

@@ -33,6 +33,10 @@ public class HouseAccountService extends SimpleEntityService<HouseAccountEntity,
         return new HouseAccountEntity();
     }
 
+    public List<HouseAccountEntity> listHouseAccount(String mapNumber,String blockNumber,String buildNumber){
+        return houseAccountRepository.queryHouseAccountList(mapNumber,blockNumber,buildNumber);
+    }
+
     public Date lastChangeTime(List<String> houseCodes){
         return houseAccountRepository.queryLastChangeDate(houseCodes);
     }
