@@ -18,7 +18,9 @@
         
         <ui:repeat value="#{paymentBusinessController.paymentItem}" var="_payment">
 
+
                 <div class="form-group">
+                    <h:outputLabel styleClass="control-label" value="#{enumHelper.getLabel(_payment.type)}"/>
                     <div class="input-group">
 
                         <span class="input-group-addon">应缴</span>
